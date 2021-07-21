@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-char *original = "FWUP0024.DAT";
+char *original = "hs20exr.DAT";
 
 // Length of header (before xored payload)
 #define HEADERLEN 4 + 512 + 16
@@ -21,6 +22,9 @@ void unpack() {
 	fread(&version, 1, 4, f);
 	fread(key, 1, 512, f);
 	fread(firmver, 1, 16, f);
+
+	printf("Hardware version: %x\n", version);
+	printf("Firmware Version: %d.%d\n", firmver[0], firmver[4]);
 
 	// Payload data is bit flipped
 	FILE *o = fopen("output", "w");
@@ -76,6 +80,10 @@ void pack() {
 }
 
 int main(int argc, char *argv[]) {
+	if (argc != 2) {
+		return 1;
+	}
+
 	switch (argv[1][0]) {
 		case 'p':
 			pack();
@@ -84,4 +92,6 @@ int main(int argc, char *argv[]) {
 			unpack();
 			break;
 	}
+
+	return 0;
 }
