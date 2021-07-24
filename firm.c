@@ -1,27 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-char *outputFile = "/media/daniel/disk/FPUPDATE.DAT";
-char *tempFile = "output";
-char *inputFile = "hs20exr.DAT";
-
-unsigned int start = 0x01008094;
-unsigned char inject[] = {
-	'H', 0,
-	'A', 0,
-	'C', 0,
-	'K', 0,
-	'E', 0,
-	'D', 0,
-	' ', 0,
-	'B', 0,
-	'Y', 0,
-	' ', 0,
-	'D', 0,
-	'A', 0,
-	'N', 0,
-	0, 0, 0, 0, 0
-};
+#ifndef ARGS
+	#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
+	#define TEMP_FILE "output"
+	#define INPUT_FILE "hs20exr.DAT"
+	#define ASM_FILE "dump.o"
+	#define START_ADDR 0x0040679c
+#endif
 
 struct Header {
 	// Some kind of OS/Hardware version
@@ -30,6 +17,7 @@ struct Header {
 	// Proprietary model ID (same across different
 	// firmware versions, different for different models)
 	unsigned char model[512];
+
 	// Printed as hex in the camera. X.X
 	unsigned int version1;
 	unsigned int version2;
@@ -44,7 +32,8 @@ struct Header {
 void unpack() {
 	struct Header header;
 
-	FILE *f = fopen(inputFile, "r");
+	FILE *f = fopen(INPUT_FILE, "r");
+	if (!f) {puts("Bad input file."); return;}
 	fread(&header, 1, sizeof(header), f);
 
 	printf("Hardware version: %x\n", header.os);
@@ -55,49 +44,44 @@ void unpack() {
 	unsigned int offset = 0;
 
 	// Payload data is bit flipped
-	FILE *o = fopen(tempFile, "w");
+	FILE *o = fopen(TEMP_FILE, "w");
+	if (!o) {puts("Bad temp file."); return;}
 	while (1) {
 		int c = fgetc(f);
 		if (c == EOF) {
 			break;
 		}
 
-#if 1
-		if (offset == start) {
-			unsigned char temp[sizeof(inject)];
+		// Main injection code
+		if (offset == START_ADDR) {
+			// Load up assembly output
+			unsigned char inject[1024];
+			FILE *a = fopen(ASM_FILE, "r");
+			if (!a) {puts("Bad asm file."); return;}
+			unsigned int injectLen = fread(inject, 1, 1024, a);
 
+			printf("%u\n", injectLen);
+		
+			unsigned char temp[injectLen];
 			unsigned int checksum1 = 0;
 			unsigned int checksum2 = 0;
 
-			for (unsigned int i = 0; i < sizeof(inject); i++) {
+			for (unsigned int i = 0; i < injectLen; i++) {
 				temp[i] = (unsigned char)~c;
 				checksum1 += temp[i];
 				c = fgetc(f);
 				offset++;
 			}
 
-			for (unsigned int i = 0; i < sizeof(inject); i++) {
+			for (unsigned int i = 0; i < injectLen; i++) {
 				fputc(inject[i], o);
 				checksum2 += inject[i];
 			}
 
 			printf("Size: %lx %lx\n", sizeof(inject), sizeof(temp));
 			printf("Checksums: %x %x\n", checksum2, checksum1);
-
-#if 0
-			// Write the bytes in reverse
-			unsigned int i = end - start - 1;
-			while (1) {
-				fputc(temp[i], o);
-				if (i == 0) {
-					break;
-				}
-
-				i--;
-			}
-#endif
 		}
-#endif
+
 		fputc((unsigned char)~c, o);
 		offset++;
 	}
@@ -106,13 +90,15 @@ void unpack() {
 }
 
 void pack() {
-	FILE *f = fopen(outputFile, "wr");
+	FILE *f = fopen(OUTPUT_FILE, "wr");
+	if (!f) {puts("Bad output file."); return;}
 
 	unsigned int checksum1 = 0;
 	unsigned int checksum2 = 0;
 
 	// Read the original header
-	FILE *p = fopen(inputFile, "r");
+	FILE *p = fopen(INPUT_FILE, "r");
+	if (!p) {puts("Bad input file."); return;}
 	struct Header header;
 	fread(&header, 1, sizeof(header), p);
 
@@ -129,7 +115,8 @@ void pack() {
 	fclose(p);
 
 	// Get modified file checksum
-	FILE *o = fopen(tempFile, "r");
+	FILE *o = fopen(TEMP_FILE, "r");
+	if (!o) {puts("Bad temp file."); return;}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -161,7 +148,8 @@ void pack() {
 	fwrite(&header, 1, sizeof(header), f);
 
 	// Copy payload from output
-	o = fopen(tempFile, "r");
+	o = fopen(TEMP_FILE, "r");
+	if (!o) {puts("Bad temp file."); return;}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -177,13 +165,10 @@ void pack() {
 
 int main(int argc, char *argv[]) {
 	argc = argc;
-	switch (argv[1][0]) {
-		case 'p':
-			pack();
-			break;
-		case 'u':
-			unpack();
-			break;
+	if (!strcmp(argv[1], "pack")) {
+		pack();
+	} else if (!strcmp(argv[1], "unpack")) {
+		unpack();
 	}
 
 	return 0;
