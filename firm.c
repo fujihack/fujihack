@@ -2,13 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef ARGS
-	#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
-	#define TEMP_FILE "output"
-	#define INPUT_FILE "hs20exr.DAT"
-	#define ASM_FILE "dump.o"
-	#define START_ADDR 0x0040679c
-#endif
+#define MODEL "hs20exr"
+#define ARMCC "arm-none-eabi"
+
+//#define OUTPUT_FILE "FPUPDATE.DAT"
+#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
+#define INPUT_FILE "../fujifilm/hs20exr.DAT"
+#define TEMP_FILE "output"
+
+char include[1024];
+char asmflag[1024];
+char command[2048];
 
 struct Header {
 	// Some kind of OS/Hardware version
@@ -29,6 +33,28 @@ struct Header {
 	unsigned int noIdea;
 };
 
+void run(char string[]) {
+	//printf("______ %s\n", string);
+	if (system(string)) {
+		exit(0);
+	}
+}
+
+void inject(unsigned long addr, char input[]) {
+	char file[5000];
+
+	// Load up assembly output
+	FILE *a = fopen(input, "r");
+	if (!a) {puts("Bad inject file."); return;}
+	unsigned long length = fread(file, 1, sizeof(file), a);
+	fclose(a);
+	
+	FILE *f = fopen(TEMP_FILE, "r+w");
+	fseek(f, addr, SEEK_SET);
+	fwrite(file, 1, length, f);
+	fclose(f);
+}
+
 void unpack() {
 	struct Header header;
 
@@ -41,8 +67,6 @@ void unpack() {
 
 	printf("Checksum: %x\n", header.checksum);
 
-	unsigned int offset = 0;
-
 	// Payload data is bit flipped
 	FILE *o = fopen(TEMP_FILE, "w");
 	if (!o) {puts("Bad temp file."); return;}
@@ -52,41 +76,11 @@ void unpack() {
 			break;
 		}
 
-		// Main injection code
-		if (offset == START_ADDR) {
-			// Load up assembly output
-			unsigned char inject[1024];
-			FILE *a = fopen(ASM_FILE, "r");
-			if (!a) {puts("Bad asm file."); return;}
-			unsigned int injectLen = fread(inject, 1, 1024, a);
-
-			printf("%u\n", injectLen);
-		
-			unsigned char temp[injectLen];
-			unsigned int checksum1 = 0;
-			unsigned int checksum2 = 0;
-
-			for (unsigned int i = 0; i < injectLen; i++) {
-				temp[i] = (unsigned char)~c;
-				checksum1 += temp[i];
-				c = fgetc(f);
-				offset++;
-			}
-
-			for (unsigned int i = 0; i < injectLen; i++) {
-				fputc(inject[i], o);
-				checksum2 += inject[i];
-			}
-
-			printf("Size: %lx %lx\n", sizeof(inject), sizeof(temp));
-			printf("Checksums: %x %x\n", checksum2, checksum1);
-		}
-
 		fputc((unsigned char)~c, o);
-		offset++;
 	}
 
 	fclose(o);
+	fclose(f);
 }
 
 void pack() {
@@ -99,6 +93,7 @@ void pack() {
 	// Read the original header
 	FILE *p = fopen(INPUT_FILE, "r");
 	if (!p) {puts("Bad input file."); return;}
+
 	struct Header header;
 	fread(&header, 1, sizeof(header), p);
 
@@ -163,13 +158,79 @@ void pack() {
 	fclose(f);
 }
 
+void injectAssembly(char file[], unsigned long location) {
+	sprintf(include, "--include \"%s.h\"", MODEL);
+	strcpy(asmflag, "-c -marm");
+
+	sprintf(
+		command,
+		"%s-gcc %s %s -o inject.o %s",
+		ARMCC, asmflag, include, file
+	); run(command);
+	sprintf(
+		command,
+		"%s-ld -Bstatic inject.o -Ttext 0x%lx -o inject.elf",
+		ARMCC, location
+	); run(command);
+	sprintf(
+		command,
+		"%s-objcopy -O binary inject.elf inject.o",
+		ARMCC
+	); run(command);
+
+	run("hexdump -C inject.o");
+
+	inject(location, "inject.o");
+}
+
+void lay() {
+	puts("HS20EXR ONLY");
+	
+	// Tried to recreate what would be in memory.
+	// I found these addresses by referring to
+	// the open-source SQLite code, which is
+	// included in the camera. I first matched
+	// up code from the firmware and the SQLite
+	// repository, and then looked for a string
+	// to calculate the offset from.
+	
+	FILE *f = fopen("output", "r+w");
+
+	char *block = malloc(33850236 + 100);
+	fread(block, 1, 33850236, f);
+
+	for (int i = 0; i < 1000000; i++) {
+		block[0x00db6568 - 10000 + i] = block[0x0074e5b0 - 10000 + i];
+	}
+
+	fseek(f, 0, SEEK_SET);
+	fwrite(block, 1, 33850236, f);
+	fclose(f);
+}
+
 int main(int argc, char *argv[]) {
 	argc = argc;
+
+	sprintf(
+		command,
+		"touch %s %s",
+		TEMP_FILE, OUTPUT_FILE
+	); run(command);
+
 	if (!strcmp(argv[1], "pack")) {
 		pack();
 	} else if (!strcmp(argv[1], "unpack")) {
 		unpack();
+	} else if (!strcmp(argv[1], "lay")) {
+		lay();
+	} else if (!strcmp(argv[1], "asm")) {
+		unpack();
+		injectAssembly("dump.S", 0x0040674c);
+		injectAssembly("usb.S", 0x00386a10);
+		pack();
 	}
+
+	run("rm -rf *.o *.out *.elf output *.DAT");
 
 	return 0;
 }
