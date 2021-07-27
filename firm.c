@@ -34,7 +34,6 @@ struct Header {
 };
 
 void run(char string[]) {
-	//printf("______ %s\n", string);
 	if (system(string)) {
 		exit(0);
 	}
@@ -184,8 +183,6 @@ void injectAssembly(char file[], unsigned long location) {
 }
 
 void lay() {
-	puts("HS20EXR ONLY");
-	
 	// Tried to recreate what would be in memory.
 	// I found these addresses by referring to
 	// the open-source SQLite code, which is
@@ -226,7 +223,6 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "asm")) {
 		unpack();
 		injectAssembly("dump.S", 0x0040674c);
-		injectAssembly("usb.S", 0x00386a10);
 		pack();
 	}
 
