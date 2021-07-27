@@ -1,21 +1,21 @@
 # fujifilm-firmware
-Fujifilm firmware unpacker
+Fujifilm firmware unpacker, repacker, and code injector.
 
-This will only work on modern Fujifilm cameras,  
-such as the HS20EXR or the X-T4. It seems like  
-Fujifilm has been using this firmware format  
-since [2005](https://fujifilm-x.com/en-us/support/download/procedure-finepix-z/).
+This will only work on modern Fujifilm cameras, such as the HS20EXR or the X-T4.  
+It seems like Fujifilm has been using this firmware format since [2005](https://fujifilm-x.com/en-us/support/download/procedure-finepix-z/).  
 
-For PTP stuff, see my my [sequoia-ptp research](https://github.com/petabyt/fujiptp).
+For PTP research, see my my [sequoia-ptp research](https://github.com/petabyt/fujiptp).
+
+![img](https://petabyt.dev/filedump/IMG_0010.JPG)
 
 ## Notes, Interesting Findings:
 - Once you update to the latest version, you won't be able  
 to install the same firmware file. (there is a workaround)  
 
-- You can modify `HEADER_V1` and `HEADER_V2` to set the  
-firmware update version. When I incremented `HEADER_V2` by  
+- You can modify the header to set the  
+firmware update version. When I incremented tje number by  
 one, I could update a new firmware, but the new version doesn't  
-update the internal number.
+update the internal number, which is a plus.  
 - Additionally, the firmware numbers (X.XX) are printed in hex on  
 the camera. The firmware is invalid if the hex number has any letters.  
 - Both firmware numbers cannot be bigger than `0x99`.  
@@ -25,15 +25,12 @@ via the [internet archive](https://web.archive.org/web/20110318083436if_/http://
 It seems to include many things that could help reverse engineer  
 Fujifilm's PTP commands.  
 
-- The bootloader seems to refer to pointers starting at the address  
-`0x40000000`, and the main code seems to refer to mostly `0xF0000000`.  
-
 - Code is 32 bit ARM (not thumb)  
 
 - The firmware includes SQLite and some sql code. Not sure why.  
 
 - Unlike the cameras described in https://chdk.setepontos.com/index.php?topic=6484.0, the camera I have  
-does not appear to have any batch scripting or hidden menu.  
+does not appear to have any batch scripting or hidden menu, as far as I know.  
 
 - The code includes "A:\DCAA\auto_act.scr". Is this some kind of script? Making the file on the SD  
 card doesn't seem to do anything.  
