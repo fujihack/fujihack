@@ -2,12 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MODEL "hs20exr"
+#ifndef MODEL_NAME
+	#include "hs20exr.h"
+#endif
+
 #define ARMCC "arm-none-eabi"
 
-//#define OUTPUT_FILE "FPUPDATE.DAT"
-#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
-#define INPUT_FILE "../fujifilm/hs20exr.DAT"
+#ifndef OUTPUT_FILE
+	#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
+#endif
+#ifndef INPUT_FILE
+	#define INPUT_FILE "../fujifilm/hs20exr.DAT"
+#endif
 #define TEMP_FILE "output"
 
 char include[1024];
@@ -191,17 +197,30 @@ void lay() {
 	// repository, and then looked for a string
 	// to calculate the offset from.
 	
-	FILE *f = fopen("output", "r+w");
+	FILE *f = fopen(TEMP_FILE, "r+w");
 
-	char *block = malloc(33850236 + 100);
-	fread(block, 1, 33850236, f);
+	fseek(f, 0, SEEK_END);
+	unsigned long length = ftell(f);
+	fseek(f, 0, SEEK_SET);
 
-	for (int i = 0; i < 1000000; i++) {
-		block[0x00db6568 - 10000 + i] = block[0x0074e5b0 - 10000 + i];
+	printf("Offset: 0x%x\n", MEM_START - TEXT_START);
+	printf("Will copy text: %x - %x\n", TEXT_START, TEXT_START + COPY_LENGTH);
+	printf("To:             %x - %x\n", MEM_START, MEM_START + COPY_LENGTH);
+
+	char *block = malloc(length);
+	fread(block, 1, length, f);
+
+	for (int i = 0; i < COPY_LENGTH; i++) {
+		block[MEM_START + i] = block[TEXT_START + i];
+	}
+
+	// Cover up old spots (to prevent string duplicates)
+	for (int i = 0; i < COPY_LENGTH; i++) {
+		block[TEXT_START + i] = 'A';
 	}
 
 	fseek(f, 0, SEEK_SET);
-	fwrite(block, 1, 33850236, f);
+	fwrite(block, 1, length, f);
 	fclose(f);
 }
 

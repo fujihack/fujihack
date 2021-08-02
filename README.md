@@ -1,10 +1,11 @@
 # fujifilm-firmware
-Fujifilm firmware unpacker, repacker, and code injector.
+Fujifilm firmware unpacker, repacker, and code injector.  
+**If you break it, you get to keep both pieces.**  
 
 This will only work on modern Fujifilm cameras, such as the HS20EXR or the X-T4.  
 It seems like Fujifilm has been using this firmware format since [2005](https://fujifilm-x.com/en-us/support/download/procedure-finepix-z/).  
 
-For PTP research, see my my [sequoia-ptp research](https://github.com/petabyt/fujiptp).
+For PTP research, see my my [sequoia-ptp fork](https://github.com/petabyt/fujiptp).
 
 ![img](https://petabyt.dev/filedump/IMG_0010.JPG)
 
