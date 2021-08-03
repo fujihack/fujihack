@@ -5,10 +5,6 @@ In case this hack will be ported.
 
 #define MODEL_NAME "Fujifilm HS20EXR"
 
-// Where payload starts relative to the firmware,
-// and where all of the addresses here start
-#define PAYLOAD_START 4 + 512 + 16
-
 // Prints some text into an image when
 // it is taken. Around 400 bytes long.
 #define MEM_INJECTION 0x0040674c
