@@ -221,6 +221,23 @@ void lay() {
 		block[TEXT_START + i] = 'A';
 	}
 
+	// Second data transfer if needed
+	#ifdef COPY_LENGTH2
+		puts("Doing a second copy.");
+		printf("Offset: 0x%x\n", MEM_START2 - TEXT_START2);
+		printf("Will copy text: %x - %x\n", TEXT_START2, TEXT_START2 + COPY_LENGTH2);
+		printf("To:             %x - %x\n", MEM_START2, MEM_START2 + COPY_LENGTH2);
+	
+		for (int i = 0; i < COPY_LENGTH2; i++) {
+			block[MEM_START2 + i] = block[TEXT_START2 + i];
+		}
+	
+		// Cover up old spots (to prevent string duplicates)
+		for (int i = 0; i < COPY_LENGTH2; i++) {
+			block[TEXT_START2 + i] = 'A';
+		}
+	#endif
+
 	fseek(f, 0, SEEK_SET);
 	fwrite(block, 1, length, f);
 	fclose(f);

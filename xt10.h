@@ -22,3 +22,14 @@ Fujifilm X-T10
 #define MEM_START OUT_OF_MEMORY_REF - 10000
 #define TEXT_START OUT_OF_MEMORY_REAL - 10000
 #define COPY_LENGTH 10000 + 6052
+
+/*
+
+Where fw thinks "OSD DEBUG MODE SCREEN SELECT" is: 0x01b59bd4
+Where it actually is:                              0x007f9c1c
+
+*/
+
+#define MEM_START2 0x01b59bd4 - 4960
+#define TEXT_START2 0x007f9c1c - 4960
+#define COPY_LENGTH2 79024 + 4960
