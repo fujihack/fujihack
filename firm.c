@@ -193,6 +193,21 @@ void injectAssembly(char file[], unsigned long location) {
 	inject(location, "inject.o");
 }
 
+void laySection(char block[], unsigned long mem, unsigned long text, unsigned long length) {
+	printf("Offset: 0x%lx\n", mem - text);
+	printf("Will copy text: %lx - %lx\n", text, text + length);
+	printf("To:             %lx - %lx\n", mem, mem + length);
+
+	for (int i = 0; i < length; i++) {
+		block[mem + i] = block[text + i];
+	}
+
+	// Cover up old spots (to prevent string duplicates)
+	for (int i = 0; i < length; i++) {
+		block[text + i] = 'A';
+	}
+}
+
 void lay() {
 	// Tried to recreate what would be in memory.
 	// I found these addresses by referring to
@@ -212,39 +227,21 @@ void lay() {
 	unsigned long length = ftell(f);
 	fseek(f, 0, SEEK_SET);
 
-	printf("Offset: 0x%x\n", MEM_START - TEXT_START);
-	printf("Will copy text: %x - %x\n", TEXT_START, TEXT_START + COPY_LENGTH);
-	printf("To:             %x - %x\n", MEM_START, MEM_START + COPY_LENGTH);
-
-	printf("%lu\n", length);
-
 	char *block = malloc(length);
 	fread(block, 1, length, f);
 
-	for (int i = 0; i < COPY_LENGTH; i++) {
-		block[MEM_START + i] = block[TEXT_START + i];
-	}
-
-	// Cover up old spots (to prevent string duplicates)
-	for (int i = 0; i < COPY_LENGTH; i++) {
-		block[TEXT_START + i] = 'A';
-	}
+	#ifdef COPY_LENGTH
+		laySection(block, MEM_START, TEXT_START, COPY_LENGTH);
+	#endif
 
 	// Second data transfer if needed
 	#ifdef COPY_LENGTH2
-		puts("Doing a second copy.");
-		printf("Offset: 0x%x\n", MEM_START2 - TEXT_START2);
-		printf("Will copy text: %x - %x\n", TEXT_START2, TEXT_START2 + COPY_LENGTH2);
-		printf("To:             %x - %x\n", MEM_START2, MEM_START2 + COPY_LENGTH2);
-	
-		for (int i = 0; i < COPY_LENGTH2; i++) {
-			block[MEM_START2 + i] = block[TEXT_START2 + i];
-		}
-	
-		// Cover up old spots (to prevent string duplicates)
-		for (int i = 0; i < COPY_LENGTH2; i++) {
-			block[TEXT_START2 + i] = 'A';
-		}
+		laySection(block, MEM_START2, TEXT_START2, COPY_LENGTH2);
+	#endif
+
+	// Second data transfer if needed
+	#ifdef COPY_LENGTH3
+		laySection(block, MEM_START3, TEXT_START3, COPY_LENGTH3);
 	#endif
 
 	fseek(f, 0, SEEK_SET);
