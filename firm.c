@@ -20,30 +20,26 @@ char include[1024];
 char asmflag[1024];
 char command[2048];
 
-struct Header {
+struct HeaderV2 {
 	// Some kind of OS/Hardware version
+	// Firmware layout version?
 	unsigned int os;
 
 	// Proprietary model ID (same across different
 	// firmware versions, different for different models)
-	unsigned char model[512];
+	// On older models (Z3), this is 128 bytes long. (?)
+	unsigned char model[128];
 
 	// Printed as hex in the camera. X.X
 	unsigned int version1;
 	unsigned int version2;
 
-	// File checksum, may have an offset
+	// File checksum
 	unsigned int checksum;
 
-	// ???
+	// Generally just 1 (?)
 	unsigned int noIdea;
 };
-
-void run(char string[]) {
-	if (system(string)) {
-		exit(0);
-	}
-}
 
 void inject(unsigned long addr, char input[]) {
 	char file[5000];
@@ -68,7 +64,7 @@ void unpack() {
 	fread(&header, 1, sizeof(header), f);
 
 	printf("Hardware version: %x\n", header.os);
-	printf("Firmware Version: %d.%x\n", header.version1, header.version2);
+	printf("Firmware Version: %u.%x\n", header.version1, header.version2);
 
 	printf("Checksum: %x\n", header.checksum);
 
@@ -163,6 +159,12 @@ void pack() {
 	fclose(f);
 }
 
+void run(char string[]) {
+	if (system(string)) {
+		exit(0);
+	}
+}
+
 void injectAssembly(char file[], unsigned long location) {
 	sprintf(include, "--include \"%s.h\"", MODEL);
 	strcpy(asmflag, "-c -marm");
@@ -240,6 +242,7 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "lay")) {
 		lay();
 	} else if (!strcmp(argv[1], "asm")) {
+		// Customize to your liking.
 		unpack();
 		injectAssembly("dump.S", 0x0040674c);
 		pack();

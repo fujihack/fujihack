@@ -5,6 +5,10 @@ Fujifilm X-T10
 
 #define MODEL_NAME "Fujifilm X-T10"
 
+// This only works for SQLite code. Other code relies
+// on strings somewhere else. HS20EXR firmware can be
+// looked at in order to correctly align other strings.
+
 // Where the code that references "out of memory" is
 #define OUT_OF_MEMORY_CODE 0x00bd8954
 

@@ -1,8 +1,8 @@
 MODEL ?= hs20exr
-INPUT_FILE ?= /home/daniel/Downloads/FWUP0024.DAT
+INPUT_FILE ?= ~/Downloads/FPUPDATE.DAT
 OUTPUT_FILE ?= FPUPDATE.DAT
 
-
+# Send makefile flags into cflags
 FLAG := -include "${MODEL}.h"
 FLAG += '-D OUTPUT_FILE="${OUTPUT_FILE}"'
 FLAG += '-D INPUT_FILE="${INPUT_FILE}"'
@@ -27,3 +27,6 @@ unpack:
 	@${CC} ${FLAG} firm.c -o firm
 	@./firm unpack
 	@rm firm
+
+clean:
+	@rm -rf output* firm *.o *.out *.DAT *.elf
