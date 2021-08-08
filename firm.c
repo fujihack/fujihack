@@ -18,9 +18,9 @@
 
 char include[1024];
 char asmflag[1024];
-char command[2048];
+char command[4096];
 
-struct HeaderV2 {
+struct Header {
 	// Some kind of OS/Hardware version
 	// Firmware layout version?
 	unsigned int os;
@@ -28,7 +28,7 @@ struct HeaderV2 {
 	// Proprietary model ID (same across different
 	// firmware versions, different for different models)
 	// On older models (Z3), this is 128 bytes long. (?)
-	unsigned char model[128];
+	unsigned char model[512];
 
 	// Printed as hex in the camera. X.X
 	unsigned int version1;
@@ -200,6 +200,10 @@ void lay() {
 	// to calculate the offset from.
 	
 	FILE *f = fopen(TEMP_FILE, "r+w");
+	if (!f) {
+		puts("Could not open temp file.");
+		return;
+	}
 
 	fseek(f, 0, SEEK_END);
 	unsigned long length = ftell(f);
@@ -208,6 +212,8 @@ void lay() {
 	printf("Offset: 0x%x\n", MEM_START - TEXT_START);
 	printf("Will copy text: %x - %x\n", TEXT_START, TEXT_START + COPY_LENGTH);
 	printf("To:             %x - %x\n", MEM_START, MEM_START + COPY_LENGTH);
+
+	printf("%lu\n", length);
 
 	char *block = malloc(length);
 	fread(block, 1, length, f);
@@ -241,6 +247,8 @@ void lay() {
 	fseek(f, 0, SEEK_SET);
 	fwrite(block, 1, length, f);
 	fclose(f);
+	
+	free(block);
 }
 
 int main(int argc, char *argv[]) {
@@ -257,6 +265,7 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "unpack")) {
 		unpack();
 	} else if (!strcmp(argv[1], "lay")) {
+		unpack();
 		lay();
 	} else if (!strcmp(argv[1], "asm")) {
 		// Customize to your liking.
@@ -265,7 +274,7 @@ int main(int argc, char *argv[]) {
 		pack();
 	}
 
-	run("rm -rf *.o *.out *.elf output *.DAT");
+	run("rm -rf *.o *.out *.elf *.DAT");
 
 	return 0;
 }
