@@ -1,5 +1,5 @@
 /*
-Z3 firmware is useful because it is an older revision.
+Studying Z3 firmware is useful since it's an older revision.
 
 where /jobEndReason is on HS20EXR: 00e87bac
 
@@ -12,6 +12,8 @@ cmp r2, #0x71000000 or `71 04 52 e3`
 */
 
 #define MODEL_NAME "Fujifilm Z3"
+
+#define MODEL_SIZE 128
 
 #define MEM_START 0x0030d4f4 - 10000
 #define TEXT_START 0x00307524 - 10000

@@ -27,7 +27,10 @@ struct Header {
 
 	// Proprietary model ID (same across different
 	// firmware versions, different for different models)
-	// On older models (Z3), this is 128 bytes long. (?)
+	// 512 by default, may need to be 128 (On Z3 for example)
+	#ifndef MODEL_SIZE
+		#define MODEL_SIZE 512
+	#endif
 	unsigned char model[512];
 
 	// Printed as hex in the camera. X.X
