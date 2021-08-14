@@ -2,3 +2,5 @@ output
 *.DAT
 *.o
 *.out
+emulator/unicorn-arm.min.js
+unicorn*.js

@@ -9,6 +9,11 @@ For Fujifilm PTP research, see my my [sequoia-ptp fork](https://github.com/petab
 ![img](https://petabyt.dev/filedump/IMG_0010.JPG)
 
 Remember that updating to custom firmware files is  
-very dangerous. The only reason I am doing it is so  
-that you don't have to. And remember...   
-**If you break it, you get to keep both pieces.** 
+very dangerous. I'm a [Canon DSLR](https://github.com/petabyt/mlinstall) fan. I'm just hacking  
+Fujifilm cameras for fun.  
+
+And remember...   
+**If you break it, you get to keep both pieces.**  
+
+If you would like to support my work on this project,  
+you can do so here: [https://petabyt.dev/donate.html](https://petabyt.dev/donate.html)  

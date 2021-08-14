@@ -5,6 +5,10 @@ In case this hack will be ported.
 
 #define MODEL_NAME "Fujifilm HS20EXR"
 
+#define MEM_STRNCPY 0x001e1af8
+#define MEM_SUBTRING 0x001e1af8
+#define MEM_STRNCMP 0x001e1e38
+
 // Prints some text into an image when
 // it is taken. Around 400 bytes long.
 #define MEM_INJECTION 0x0040674c
