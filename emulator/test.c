@@ -1,4 +1,5 @@
 asm(".code 32");
+asm(".arm");
 asm(".global _start");
 
 // Entry trampoline for functions under
@@ -8,28 +9,16 @@ void _start() {
 	start();
 }
 
-// Jump to a function in Fujifilm code
-unsigned int test();
-__asm__(
-	".global test\n"
-	"test:\n"
-	"b 0x001e16a0\n"
-);
+#define VERIFY_PTP_STRING_CODE 0x0037b444
+int ptp_verify_string_code(unsigned short x);
 
-static struct C {
-	char a[100];
-	int b;
-	int d;
-	char c[50];
-}c = {
-	"Hello",
-	'A', 'A',
-	"Goodbye"
-};
+unsigned int test();
+__asm__(".global test\ntest:\n"
+		"b 0x0037b444\n");
 
 // Code booter
 unsigned long start() {
-	test(c.a, c.c);
+	unsigned int b = test(0xb802);
 	
-	return c.a;
+	return b;
 }

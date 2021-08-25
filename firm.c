@@ -3,17 +3,11 @@
 #include <string.h>
 
 #ifndef MODEL_NAME
-	#include "hs20exr.h"
+	#include "model/hs20exr.h"
 #endif
 
 #define ARMCC "arm-none-eabi"
 
-#ifndef OUTPUT_FILE
-	#define OUTPUT_FILE "/media/daniel/disk/FPUPDATE.DAT"
-#endif
-#ifndef INPUT_FILE
-	#define INPUT_FILE "../fujifilm/hs20exr.DAT"
-#endif
 #define TEMP_FILE "output"
 
 char include[1024];
@@ -44,7 +38,7 @@ struct Header {
 	unsigned int noIdea;
 };
 
-void inject(unsigned long addr, char input[]) {
+void inject(unsigned long addr, char input[], int max) {
 	char file[5000];
 
 	// Load up assembly output
@@ -52,8 +46,17 @@ void inject(unsigned long addr, char input[]) {
 	if (!a) {puts("Bad inject file."); return;}
 	unsigned long length = fread(file, 1, sizeof(file), a);
 	fclose(a);
+
+	puts(INPUT_FILE);
+
+	printf("Size: %lu\n", length);
+	if (length > max) {
+		puts("ASSEMBLY OUTPUT OVERFLOWS MAXIMUM SPECIFIED OUTPUT!");
+		exit(1);
+	}
 	
 	FILE *f = fopen(TEMP_FILE, "r+w");
+	if (!f) {puts("Bad temp file"); exit(1);}
 	fseek(f, addr, SEEK_SET);
 	fwrite(file, 1, length, f);
 	fclose(f);
@@ -168,7 +171,7 @@ void run(char string[]) {
 	}
 }
 
-void injectAssembly(char file[], unsigned long location) {
+void injectAssembly(char file[], unsigned long location, int max) {
 	sprintf(include, "--include \"%s.h\"", MODEL);
 	strcpy(asmflag, "-c -marm");
 
@@ -190,7 +193,7 @@ void injectAssembly(char file[], unsigned long location) {
 
 	run("hexdump -C inject.o");
 
-	inject(location, "inject.o");
+	inject(location, "inject.o", max);
 }
 
 void laySection(char block[], unsigned long mem, unsigned long text, unsigned long length) {
@@ -270,11 +273,11 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "asm")) {
 		// Customize to your liking.
 		unpack();
-		injectAssembly("dump.S", 0x0040674c);
+		injectAssembly("dump.S", 0x00516c90, 236);
 		pack();
 	}
 
-	run("rm -rf *.o *.out *.elf *.DAT");
+	run("rm -rf *.o *.out *.elf");
 
 	return 0;
 }

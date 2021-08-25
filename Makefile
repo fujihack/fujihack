@@ -1,9 +1,9 @@
-MODEL ?= hs20exr
-INPUT_FILE ?= ~/Downloads/FPUPDATE.DAT
-OUTPUT_FILE ?= FPUPDATE.DAT
+MODEL ?= xf1
+INPUT_FILE ?= ${shell echo ~/Downloads/FPUPDATE-xf1.DAT}
+OUTPUT_FILE ?= /media/daniel/disk/FPUPDATE.DAT
 
 # Send makefile flags into cflags
-FLAG := -include "${MODEL}.h"
+FLAG := -include "model/${MODEL}.h"
 FLAG += '-D OUTPUT_FILE="${OUTPUT_FILE}"'
 FLAG += '-D INPUT_FILE="${INPUT_FILE}"'
 FLAG += '-D MODEL="${MODEL}"'

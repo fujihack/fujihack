@@ -4,3 +4,5 @@ output
 *.out
 emulator/unicorn-arm.min.js
 unicorn*.js
+temp/
+temp/*

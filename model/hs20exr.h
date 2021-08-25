@@ -1,6 +1,5 @@
 /*
-This is an information file for the Fujifilm HS20EXR,
-In case this hack will be ported.
+This is an information file for the Fujifilm HS20EXR.
 */
 
 #define MODEL_NAME "Fujifilm HS20EXR"

@@ -49,3 +49,8 @@ https://www.dpreview.com/forums/thread/430068
 http://www.digsys.com.au/S602Z/S602Z.html  
 Modern Fuji cameras seem to also make references  
 to .S3 files.  
+
+- The first few lines of assembly in the firmware file  
+do not seem to be executed in the firmware menu.  
+It might during firmware updating process, but that is a  
+brick garuntee if it doesn't work.  
