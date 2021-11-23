@@ -172,7 +172,7 @@ void run(char string[]) {
 }
 
 void injectAssembly(char file[], unsigned long location, int max) {
-	sprintf(include, "--include \"%s.h\"", MODEL);
+	sprintf(include, "--include \"model/%s.h\"", MODEL);
 	strcpy(asmflag, "-c -marm");
 
 	sprintf(
@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "asm")) {
 		// Customize to your liking.
 		unpack();
-		injectAssembly("dump.S", 0x00516c90, 236);
+		injectAssembly("test.S", 0x00516c90, 236);
 		pack();
 	}
 
