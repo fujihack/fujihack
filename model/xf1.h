@@ -32,3 +32,20 @@ is included on newer models.
 
 // How much data should be copied
 #define COPY_LENGTH 0x500000
+
+#define PRINTIM 0x00516c90
+
+#define PTP_INFO 0x00e5dabc
+
+/*
+
+0x0974b978
+found '\AUTO_ACT.SCR'
+
+0x0083b684
+found 'p: 1.0; '
+
+0x83b684
+found 'ot.b' (ffboot.bin)
+
+*/
