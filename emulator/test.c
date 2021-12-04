@@ -12,6 +12,7 @@ void _start() {
 #define VERIFY_PTP_STRING_CODE 0x0037b444
 int ptp_verify_string_code(unsigned short x);
 
+// Test a function in firmware
 unsigned int test();
 __asm__(".global test\ntest:\n"
 		"b 0x0037b444\n");

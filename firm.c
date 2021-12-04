@@ -14,6 +14,7 @@ char include[1024];
 char asmflag[1024];
 char command[4096];
 
+// Standard header for all Fujifilm firmware
 struct Header {
 	// Some kind of OS/Hardware version
 	// Firmware layout version?
@@ -50,7 +51,7 @@ void inject(unsigned long addr, char input[], int max) {
 	puts(INPUT_FILE);
 
 	printf("Size: %lu\n", length);
-	if (length > max) {
+	if (length > (unsigned long)max) {
 		puts("ASSEMBLY OUTPUT OVERFLOWS MAXIMUM SPECIFIED OUTPUT!");
 		exit(1);
 	}
@@ -271,9 +272,9 @@ int main(int argc, char *argv[]) {
 		unpack();
 		lay();
 	} else if (!strcmp(argv[1], "asm")) {
-		// Customize to your liking.
+		puts("DANGER! Writing code to the firmware!");
 		unpack();
-		injectAssembly("test.S", 0x00516c90, 236);
+		injectAssembly("main.S", FIRMWARE_PRINTIM, 236);
 		pack();
 	}
 

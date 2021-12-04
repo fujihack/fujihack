@@ -1,13 +1,17 @@
-// hs20exr
+// Fujifilm XF-1 ONLY test
+// Memcpy hijack syncing memory dumper (firmware injection)
+
 .global _start
 _start:
 	push  {r4, r5, r6, r7, r8, lr}
 
 	// Hijack a memcpy function
+	// First copy whatever is at address "hack:",
+	// and move backwards r5 * 4 bytes
 
 	ldr r4, =0x0072fe14
 	adr r6, hack
-	mov r5, #25 // how many insts
+	mov r5, #25 // how many insts to copy backwards
 
 	top:
 		ldr r7, [r6]
@@ -30,7 +34,7 @@ _start:
 		adr r4, a
 		ldr r4, [r4]
 
-		// Syncing mechanism. Slower, but
+		// Syncing mechanism. Very slow, but
 		// dont want to loose any bytes
 		ldrb r5, [r4]
 		add r5, #1

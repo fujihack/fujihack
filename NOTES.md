@@ -40,7 +40,7 @@ activated code (ARM)?
 "SCREEN   <UP/DOWN>    : "  
 "WARNING  <RIGHT/LEFT> : "  
 ```
-I tried calling the function that uses it and nothing happened.
+I tried calling the function that references it and nothing happened.
 
 - https://www.fujix-forum.com/threads/strange-folder-on-card.14120/
 

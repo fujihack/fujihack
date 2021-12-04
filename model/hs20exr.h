@@ -2,6 +2,12 @@
 This is an information file for the Fujifilm HS20EXR.
 */
 
+// Custom firmware seems to work (Just reverse a word in FPUPDATE.DAT)
+#define CAN_CUSTOM_FIRMWARE
+
+// Can inject and execute code in the printim function
+#define PRINTIM_HACK_WORKS
+
 #define MODEL_NAME "Fujifilm HS20EXR"
 
 #define MEM_STRNCPY 0x001e1af8

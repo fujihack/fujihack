@@ -22,6 +22,9 @@ make asm MODEL=xf1 \
   OUTPUT_FILE=/media/MY_CARD/FPUPDATE.DAT
 ```
 
+The resulting firmware should have md5sum:  
+`3f3b6cafdeaa87ae5ca084135ebb54a6`
+
 ![img](https://petabyt.dev/filedump/IMG_0010.JPG)
 
 Remember that updating to custom firmware files is  

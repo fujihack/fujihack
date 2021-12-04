@@ -6,3 +6,5 @@ emulator/unicorn-arm.min.js
 unicorn*.js
 temp/
 temp/*
+build.sh
+*.elf
