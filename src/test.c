@@ -6,7 +6,15 @@
 
 #include <string.h>
 
+extern int i2;
+
 void entry() {
+	unsigned char *addr = (unsigned char *)0x00000000;
+
 	char *model = (char *)MEM_MODEL_TEXT;
-	strcpy(model, "Hello World");
+
+	for (int i = 0; i < 20; i++) {
+		model[i] = addr[i2];
+		i2++;
+	}
 }

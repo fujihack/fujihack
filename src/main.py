@@ -16,13 +16,21 @@ with camera.session():
         else:
             print("Sending", hex(i))
             camera.custom2(0x100a, [5, i])
-    camera.custom2(0x100a, [6])
 
-    print(camera.get_device_info().VendorExtensionDesc)
-
-    '''
-    a = camera.get_device_infob()
     f2 = open("dump", "wb")
-    f2.write(a.Data)
+    counter = 0
+
+    while True:
+        camera.custom2(0x100a, [6])
+    
+        a = camera.get_device_infob().Data
+        i2 = 9
+        for i in range(20):
+            f2.write( (a[i2]).to_bytes(1, "little") )
+            i2 += 2
+
+        f2.flush()
+        print(counter)
+        counter += 20
+
     f2.close()
-    '''
