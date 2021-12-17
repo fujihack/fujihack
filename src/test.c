@@ -5,56 +5,44 @@
 #endif
 
 #include <string.h>
-#include "hijack.h"
 #include "sqlite.h"
 
-#if 0
-#define BUF 0x1cef200 - 0x20
+int dump_test();
+char get_drive();
+int fuji_fopen();
+
+// screen buffer testing
+#define BUF_3 0x1cef200 - 0x82 - (640 * 4)
+#define BUF_2 0x1cee77e + ((648 * 480) * -1) + 50 - 3 + 1800 - 22
+
+#define BUF 0x1cee77e + ((648 * 480) * -1)
+
+#define WIDTH 640
 
 void pixel(int x, int y) {
 	int *buf = (int *)BUF;
-	buf[640 * y + x] = 0;
+	buf[WIDTH * y + 1 + x] = 0x0;
 }
 
-void rect(int x, int y, int w, int h) {
-	for (; x < w; x++) {
-		for (; y < h; y++) {
+void rect(int x1, int y1, int w1, int h1) {
+	for (int x = x1; x < w1+x1; x++) {
+		for (int y = y1; y < h1+y1; y++) {
 			pixel(x, y);
 		}
 	}
 }
 
-void writeUni(char *s, char *d) {
-	while (*s) {
-		*d = *s;
-		s++;
-		d += 2;
+void entry() {
+	char *model = (char *)MEM_MODEL_TEXT;
+	sqlite_snprintf(0x20, model, "Test: 0x%x", ((unsigned int *)0x01628656)[0]); // 0x28b00d8
+
+	int *fudge = (int *)BUF;
+
+	for (int i = 0; i < 640 * 480; i++) {
+		fudge[i] = 0xffffffff;
 	}
 
-	*d = 0;
-}
-#endif
-
-void temp(int a, int b, int c) {
-	char *model = (char *)MEM_MODEL_TEXT;
-	sqlite_snprintf(0x20, model, "Test: %u, %u, %u", a, b, c);
-}
-
-int dump_test();
-char get_drive();
-
-
-#define FUJI_FILE_ERR 2
-#define FUJI_FILE_EXIST 1
-int fuji_fopen();
-void fuji_fread();
-
-
-void entry() {
-	int a = fuji_fopen(&temp, "C:\\ASD", 0);
-
-	fuji_fread(&temp, a, 10, 0x43e6ff0);
-
-	char *model = (char *)MEM_MODEL_TEXT;
-	sqlite_snprintf(0x20, model, "Test: %d", dump_test());
+	rect(0, 50, 100, 100);
+	rect(0, 200, 100, 100);
+	rect(300, 300, 100, 100);
 }
