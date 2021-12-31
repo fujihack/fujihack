@@ -1,32 +1,36 @@
-MODEL ?= xf1
-INPUT_FILE ?= ${shell echo ~/Downloads/FPUPDATE-xf1.DAT}
-OUTPUT_FILE ?= /media/daniel/disk/FPUPDATE.DAT
+MODEL?=xf1
 
-# Send makefile flags into cflags
-FLAG := -include "model/${MODEL}.h"
-FLAG += '-D OUTPUT_FILE="${OUTPUT_FILE}"'
-FLAG += '-D INPUT_FILE="${INPUT_FILE}"'
-FLAG += '-D MODEL="${MODEL}"'
+# Tell linker code is at some address
+ADDR=0x00e572e8
 
-asm:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm asm
-	@rm firm
+# These are set in order for the linker
+FILES=entry.o test.o lib.o stub.o
 
-lay:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm lay
-	@rm firm
+CC=arm-none-eabi-
+CFLAG=-include ../model/$(MODEL).h -nostdlib -c
+LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
 
-pack:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm pack
-	@rm firm
+all: main.o
 
-unpack:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm unpack
-	@rm firm
+# output rule for C files
+%.o: %.c
+	$(CC)gcc $(CFLAG) $< -o $@
+
+# output rule for assembly files
+%.o: %.S
+	$(CC)gcc $(CFLAG) $< -o $@
+
+# only stub.S is compiled with stubs
+stub.o: stub.S
+	$(CC)gcc -D STUBS $(CFLAG) $< -o $@
+
+main.o: $(FILES)
+	$(CC)ld $(LDFLAGS) -o main.elf
+	$(CC)objcopy -O binary main.elf main.o
+	@ls -l main.o
+
+hack: main.o
+	python3 main.py
 
 clean:
-	@rm -rf output* firm *.o *.out *.DAT *.elf
+	rm -rf *.elf *.o

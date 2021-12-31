@@ -278,7 +278,5 @@ int main(int argc, char *argv[]) {
 		pack();
 	}
 
-	run("rm -rf *.o *.out *.elf");
-
 	return 0;
 }
