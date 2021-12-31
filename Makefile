@@ -1,36 +1,20 @@
 MODEL?=xf1
+INPUT_FILE?=$(shell echo ~/Downloads/FPUPDATE-xf1.DAT)
+OUTPUT_FILE?= /media/daniel/disk/FPUPDATE.DAT
 
-# Tell linker code is at some address
-ADDR=0x00e572e8
+# Send makefile flags into cflags
+CFLAGS=-include "model/$(MODEL).h"
+CFLAGS+='-D OUTPUT_FILE="$(OUTPUT_FILE)"'
+CFLAGS+='-D INPUT_FILE="$(INPUT_FILE)"'
+CFLAGS+='-D MODEL="$(MODEL)"'
 
-# These are set in order for the linker
-FILES=entry.o test.o lib.o stub.o
+# TODO: asm is built in makefile
 
-CC=arm-none-eabi-
-CFLAG=-include ../model/$(MODEL).h -nostdlib -c
-LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
+firm.o: firm.c
+	@$(CC) $(FLAG) $< -o $@
 
-all: main.o
-
-# output rule for C files
-%.o: %.c
-	$(CC)gcc $(CFLAG) $< -o $@
-
-# output rule for assembly files
-%.o: %.S
-	$(CC)gcc $(CFLAG) $< -o $@
-
-# only stub.S is compiled with stubs
-stub.o: stub.S
-	$(CC)gcc -D STUBS $(CFLAG) $< -o $@
-
-main.o: $(FILES)
-	$(CC)ld $(LDFLAGS) -o main.elf
-	$(CC)objcopy -O binary main.elf main.o
-	@ls -l main.o
-
-hack: main.o
-	python3 main.py
+pack unpack lay asm: firm.o
+	@./firm.o $@
 
 clean:
-	rm -rf *.elf *.o
+	rm -rf output* firm *.o *.out *.DAT *.elf

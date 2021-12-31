@@ -1,16 +1,36 @@
 MODEL?=xf1
 
-CC:=arm-none-eabi-
-CFLAG:=-include ../model/${MODEL}.h
+# Tell linker code is at some address
+ADDR=0x00e572e8
 
-all:
-	${CC}gcc ${CFLAG} -nostdlib -c -o lib.o lib.c
-	${CC}gcc ${CFLAG} -nostdlib -c -o testc.o test.c
-	${CC}gcc ${CFLAG} -nostdlib -c -o test.o test.S
-	${CC}ld -Bstatic test.o testc.o lib.o -Ttext 0x00e572e8 -o test.elf
-	${CC}objcopy -O binary test.elf test.o
+# These are set in order for the linker
+FILES=entry.o test.o lib.o stub.o
 
+CC=arm-none-eabi-
+CFLAG=-include ../model/$(MODEL).h -nostdlib -c
+LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
+
+all: main.o
+
+# output rule for C files
+%.o: %.c
+	$(CC)gcc $(CFLAG) $< -o $@
+
+# output rule for assembly files
+%.o: %.S
+	$(CC)gcc $(CFLAG) $< -o $@
+
+# only stub.S is compiled with stubs
+stub.o: stub.S
+	$(CC)gcc -D STUBS $(CFLAG) $< -o $@
+
+main.o: $(FILES)
+	$(CC)ld $(LDFLAGS) -o main.elf
+	$(CC)objcopy -O binary main.elf main.o
+	@ls -l main.o
+
+hack: main.o
 	python3 main.py
 
 clean:
-	rm *.elf *.o
+	rm -rf *.elf *.o
