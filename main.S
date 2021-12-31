@@ -1,3 +1,4 @@
+// Main code execution hacks - allows code to be loaded in via USB. See src/
 // For XF-1 ONLY!
 
 #ifndef CAN_DO_EXECUTER
