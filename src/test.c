@@ -10,6 +10,7 @@
 int dump_test();
 char get_drive();
 int fuji_fopen();
+unsigned int sqlite_malloc(unsigned int a);
 
 // screen buffer testing
 #define BUF_3 0x1cef200 - 0x82 - (640 * 4)
@@ -34,6 +35,10 @@ void rect(int x1, int y1, int w1, int h1) {
 
 void entry() {
 	char *model = (char *)MEM_MODEL_TEXT;
+	sqlite_snprintf(0x20, model, "Test: 0x%x", 123); // 0x28b00d8
+	//int a = sqlite_malloc(0x64c);
+#if 0
+	char *model = (char *)MEM_MODEL_TEXT;
 	sqlite_snprintf(0x20, model, "Test: 0x%x", ((unsigned int *)0x01628656)[0]); // 0x28b00d8
 
 	int *fudge = (int *)BUF;
@@ -45,4 +50,5 @@ void entry() {
 	rect(0, 50, 100, 100);
 	rect(0, 200, 100, 100);
 	rect(300, 300, 100, 100);
+#endif
 }

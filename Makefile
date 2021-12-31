@@ -1,32 +1,20 @@
-MODEL ?= xf1
-INPUT_FILE ?= ${shell echo ~/Downloads/FPUPDATE-xf1.DAT}
-OUTPUT_FILE ?= /media/daniel/disk/FPUPDATE.DAT
+MODEL?=xf1
+INPUT_FILE?=$(shell echo ~/Downloads/FPUPDATE-xf1.DAT)
+OUTPUT_FILE?= /media/daniel/disk/FPUPDATE.DAT
 
 # Send makefile flags into cflags
-FLAG := -include "model/${MODEL}.h"
-FLAG += '-D OUTPUT_FILE="${OUTPUT_FILE}"'
-FLAG += '-D INPUT_FILE="${INPUT_FILE}"'
-FLAG += '-D MODEL="${MODEL}"'
+CFLAGS=-include "model/$(MODEL).h"
+CFLAGS+='-D OUTPUT_FILE="$(OUTPUT_FILE)"'
+CFLAGS+='-D INPUT_FILE="$(INPUT_FILE)"'
+CFLAGS+='-D MODEL="$(MODEL)"'
 
-asm:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm asm
-	@rm firm
+# TODO: asm is built in makefile
 
-lay:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm lay
-	@rm firm
+firm.o: firm.c
+	@$(CC) $(FLAG) $< -o $@
 
-pack:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm pack
-	@rm firm
-
-unpack:
-	@${CC} ${FLAG} firm.c -o firm
-	@./firm unpack
-	@rm firm
+pack unpack lay asm: firm.o
+	@./firm.o $@
 
 clean:
-	@rm -rf output* firm *.o *.out *.DAT *.elf
+	rm -rf output* firm *.o *.out *.DAT *.elf

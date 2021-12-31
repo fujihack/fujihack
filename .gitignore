@@ -1,6 +1,8 @@
+dump
 output
 *.DAT
 *.o
+*.elf
 *.out
 emulator/unicorn-arm.min.js
 unicorn*.js

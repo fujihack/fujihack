@@ -4,7 +4,7 @@ import ctypes
 
 camera = ptpy.PTPy()
 
-f = open("test.o", "rb")
+f = open("main.o", "rb")
 c = f.read()
 
 with camera.session():
@@ -16,8 +16,9 @@ with camera.session():
         else:
             print("Sending", hex(i))
             camera.custom2(0x100a, [5, i])
+    print("Executing...")
     camera.custom2(0x100a, [6])
-
+    print("MEM_MODEL_TEXT:")
     print(camera.get_device_info().VendorExtensionDesc)
 
     '''

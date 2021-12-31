@@ -72,6 +72,7 @@ custom:
 	// #7 - reset address
 	cmp r6, #7
 	bne n3
+		// store temp_addr into put_addr
 		adr r8, put_addr
 		adr r9, temp_addr
 		ldr r9, [r9]
