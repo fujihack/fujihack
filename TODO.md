@@ -1,2 +1,0 @@
-- rename model macros
-- use it in firm.c
