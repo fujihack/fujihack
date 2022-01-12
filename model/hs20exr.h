@@ -16,7 +16,7 @@ This is an information file for the Fujifilm HS20EXR.
 
 // Prints some text into an image when
 // it is taken. Around 400 bytes long.
-#define MEM_INJECTION 0x0040674c
+#define FIRMWARE_PRINTIM 0x0040674c
 
 #define MEM_START 0x00db6568 - 10000
 #define TEXT_START 0x0074e5b0 - 10000

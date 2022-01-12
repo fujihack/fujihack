@@ -1,4 +1,4 @@
-// Fujifilm XF-1 ONLY test
+// Very hacky janky Fujifilm XF-1 ONLY test
 // Memcpy hijack syncing memory dumper (firmware injection)
 
 .global _start

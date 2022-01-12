@@ -2,17 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Include some things that are sent in by the makefile.
+// Keeps the linter happy.
 #ifndef MODEL_NAME
 	#include "model/hs20exr.h"
 #endif
 
+#ifndef TEMP_FILE
+	#define TEMP_FILE ""
+#endif
+#ifndef OUTPUT_FILE
+	#define OUTPUT_FILE ""
+#endif
+#ifndef INPUT_FILE
+	#define INPUT_FILE ""
+#endif
+#ifndef MODEL
+	#define MODEL ""
+#endif
+
 #define ARMCC "arm-none-eabi"
 
-#define TEMP_FILE "output"
-
 char include[1024];
-char asmflag[1024];
 char command[4096];
+char asmflag[1024];
 
 // Standard header for all Fujifilm firmware
 struct Header {
@@ -44,20 +57,18 @@ void inject(unsigned long addr, char input[], int max) {
 
 	// Load up assembly output
 	FILE *a = fopen(input, "r");
-	if (!a) {puts("Bad inject file."); return;}
+	if (a == NULL) {printf("[ERR] Can't open %s\n", input); exit(1);}
 	unsigned long length = fread(file, 1, sizeof(file), a);
 	fclose(a);
 
-	puts(INPUT_FILE);
-
-	printf("Size: %lu\n", length);
+	printf("[INFO] Injection size is %lu bytes\n", length);
 	if (length > (unsigned long)max) {
-		puts("ASSEMBLY OUTPUT OVERFLOWS MAXIMUM SPECIFIED OUTPUT!");
+		puts("[ERR] assembly output overflows max specified value!");
 		exit(1);
 	}
 	
 	FILE *f = fopen(TEMP_FILE, "r+w");
-	if (!f) {puts("Bad temp file"); exit(1);}
+	if (f == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
 	fseek(f, addr, SEEK_SET);
 	fwrite(file, 1, length, f);
 	fclose(f);
@@ -67,17 +78,17 @@ void unpack() {
 	struct Header header;
 
 	FILE *f = fopen(INPUT_FILE, "r");
-	if (!f) {puts("Bad input file."); return;}
+	if (f == NULL) {printf("[ERR] Can't open %s\n", INPUT_FILE); exit(1);}
 	fread(&header, 1, sizeof(header), f);
 
-	printf("Hardware version: %x\n", header.os);
-	printf("Firmware Version: %u.%x\n", header.version1, header.version2);
+	printf("[INFO] Hardware version: %x\n", header.os);
+	printf("[INFO] Firmware Version: %u.%x\n", header.version1, header.version2);
 
-	printf("Checksum: %x\n", header.checksum);
+	printf("[INFO] Checksum: %x\n", header.checksum);
 
 	// Payload data is bit flipped
 	FILE *o = fopen(TEMP_FILE, "w");
-	if (!o) {puts("Bad temp file."); return;}
+	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
 	while (1) {
 		int c = fgetc(f);
 		if (c == EOF) {
@@ -93,14 +104,14 @@ void unpack() {
 
 void pack() {
 	FILE *f = fopen(OUTPUT_FILE, "wr");
-	if (!f) {puts("Bad output file."); return;}
+	if (f == NULL) {printf("[ERR] Can't open %s\n", OUTPUT_FILE); exit(1);}
 
 	unsigned int checksum1 = 0;
 	unsigned int checksum2 = 0;
 
 	// Read the original header
 	FILE *p = fopen(INPUT_FILE, "r");
-	if (!p) {puts("Bad input file."); return;}
+	if (p == NULL) {printf("[ERR] Can't open %s\n", INPUT_FILE); exit(1);}
 
 	struct Header header;
 	fread(&header, 1, sizeof(header), p);
@@ -119,7 +130,7 @@ void pack() {
 
 	// Get modified file checksum
 	FILE *o = fopen(TEMP_FILE, "r");
-	if (!o) {puts("Bad temp file."); return;}
+	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -131,28 +142,28 @@ void pack() {
 
 	fclose(o);
 
-	printf("Original checksum: %x\n", checksum1);
-	printf("New checksum: %x\n", checksum2);
+	printf("[INFO] Original checksum: %x\n", checksum1);
+	printf("[INFO] New checksum: %x\n", checksum2);
 
 	if (checksum1 < checksum2) {
 		header.checksum -= checksum2 - checksum1;
-		printf("Subtracted %x from checksum.\n", checksum2 - checksum1);
+		printf("[INFO] Subtracted %x from checksum.\n", checksum2 - checksum1);
 	} else if (checksum1 > checksum2) {
 		header.checksum += checksum1 - checksum2;
-		printf("Added %x to checksum.\n", checksum1 - checksum2);
+		printf("[INFO] Added %x to checksum.\n", checksum1 - checksum2);
 	}
 
 	// Change firmware version
 	header.version2++;
 
-	printf("Firmware Version: %d.%d\n", header.version1, header.version2);
+	printf("[INFO] Firmware Version: %d.%d\n", header.version1, header.version2);
 
 	fseek(f, 0, SEEK_SET);
 	fwrite(&header, 1, sizeof(header), f);
 
 	// Copy payload from output
 	o = fopen(TEMP_FILE, "r");
-	if (!o) {puts("Bad temp file."); return;}
+	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -167,11 +178,15 @@ void pack() {
 }
 
 void run(char string[]) {
+	printf("[COMPILING] %s\n", string);
 	if (system(string)) {
+		puts("Command failed");
 		exit(0);
 	}
 }
 
+// Simple function to compile a single assembly file
+// Makefile targets would be overkill, this is fine.
 void injectAssembly(char file[], unsigned long location, int max) {
 	sprintf(include, "--include \"model/%s.h\"", MODEL);
 	strcpy(asmflag, "-c -marm");
@@ -192,22 +207,20 @@ void injectAssembly(char file[], unsigned long location, int max) {
 		ARMCC
 	); run(command);
 
-	run("hexdump -C inject.o");
-
 	inject(location, "inject.o", max);
 }
 
 void laySection(char block[], unsigned long mem, unsigned long text, unsigned long length) {
-	printf("Offset: 0x%lx\n", mem - text);
-	printf("Will copy text: %lx - %lx\n", text, text + length);
-	printf("To:             %lx - %lx\n", mem, mem + length);
+	printf("[INFO] Offset: 0x%lx\n", mem - text);
+	printf("[INFO] Will copy text: %lx - %lx\n", text, text + length);
+	printf("[INFO] To:             %lx - %lx\n", mem, mem + length);
 
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < (int)length; i++) {
 		block[mem + i] = block[text + i];
 	}
 
 	// Cover up old spots (to prevent string duplicates)
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < (int)length; i++) {
 		block[text + i] = 'A';
 	}
 }
@@ -222,10 +235,7 @@ void lay() {
 	// to calculate the offset from.
 	
 	FILE *f = fopen(TEMP_FILE, "r+w");
-	if (!f) {
-		puts("Could not open temp file.");
-		return;
-	}
+	if (f == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
 
 	fseek(f, 0, SEEK_END);
 	unsigned long length = ftell(f);
@@ -256,7 +266,9 @@ void lay() {
 }
 
 int main(int argc, char *argv[]) {
-	argc = argc;
+	if (argc <= 1) {
+		return 1;
+	}
 
 	sprintf(
 		command,
@@ -272,7 +284,7 @@ int main(int argc, char *argv[]) {
 		unpack();
 		lay();
 	} else if (!strcmp(argv[1], "asm")) {
-		puts("DANGER! Writing code to the firmware!");
+		puts("[NOTE] Result firmware should have md5sum 3f3b6cafdeaa87ae5ca084135ebb54a6");
 		unpack();
 		injectAssembly("main.S", FIRMWARE_PRINTIM, 236);
 		pack();

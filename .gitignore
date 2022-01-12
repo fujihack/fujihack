@@ -1,3 +1,4 @@
+firm
 output
 *.DAT
 *.o
@@ -8,3 +9,5 @@ temp/
 temp/*
 build.sh
 *.elf
+*.bin
+*.BIN

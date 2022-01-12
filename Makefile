@@ -1,20 +1,23 @@
-MODEL?=xf1
-INPUT_FILE?=$(shell echo ~/Downloads/FPUPDATE-xf1.DAT)
-OUTPUT_FILE?= /media/daniel/disk/FPUPDATE.DAT
+# Defaults, tweak these via CLI
+model?=xf1
+input?=$(shell echo ~/Downloads/FPUPDATE.DAT)
+output?=FPUPDATE.DAT
+temp_file?=output
+
+# Include model info by default
+HOST_CFLAGS=-include "model/$(model).h"
 
 # Send makefile flags into cflags
-CFLAGS=-include "model/$(MODEL).h"
-CFLAGS+='-D OUTPUT_FILE="$(OUTPUT_FILE)"'
-CFLAGS+='-D INPUT_FILE="$(INPUT_FILE)"'
-CFLAGS+='-D MODEL="$(MODEL)"'
+HOST_CFLAGS+='-D OUTPUT_FILE="$(output)"'
+HOST_CFLAGS+='-D INPUT_FILE="$(input)"'
+HOST_CFLAGS+='-D MODEL="$(model)"'
+HOST_CFLAGS+='-D TEMP_FILE="$(temp_file)"'
 
-# TODO: asm is built in makefile
-
-firm.o: firm.c
-	@$(CC) $(FLAG) $< -o $@
-
-pack unpack lay asm: firm.o
-	@./firm.o $@
+pack unpack lay asm:
+	$(CC) $(HOST_CFLAGS) firm.c -o firm
+	./firm $@
 
 clean:
-	rm -rf output* firm *.o *.out *.DAT *.elf
+	$(RM) output* firm *.o *.out *.DAT *.elf
+
+.PHONY: pack unpack lay asm clean
