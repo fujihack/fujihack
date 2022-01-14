@@ -10,7 +10,7 @@ please send me an email at brikbusters@gmail.com (or create a Github issue)
 
 If you just want to unpack a firmware file:  
 ```
-make asm model=xf1 input=~/Downloads/FPUPDATE.DAT output=FPUPDATE.DAT
+make unpack model=xf1 input=~/Downloads/FPUPDATE.DAT output=FPUPDATE.DAT
 ```
 Type `make help` for some extra info.  
 
