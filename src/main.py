@@ -18,7 +18,6 @@ with camera.session():
             camera.custom2(0x100a, [5, i])
     print("Executing...")
     camera.custom2(0x100a, [6])
-    print("MEM_MODEL_TEXT:")
     print(camera.get_device_info().VendorExtensionDesc)
 
     '''

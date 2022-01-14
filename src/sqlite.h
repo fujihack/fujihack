@@ -3,6 +3,8 @@
 
 void sqlite_snprintf(int size, char *buf, char *fmt, ...);
 
+void sqlite_exec(int *fmt, ...);
+
 // Why not :)
 #define sprintf(buf, fmt, ...) \
 	sqlite_snprintf(-1, buf, fmt, __VA_ARGS__)
