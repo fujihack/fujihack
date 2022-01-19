@@ -19,6 +19,8 @@ help:
 	@echo "  input   Input the stock firmware file downloaded from Fujfilm"
 	@echo "  output  Where you want the modified FPUPDATE.DAT to go."
 
+
+
 pack unpack lay asm:
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
 	./firm $@

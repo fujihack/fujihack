@@ -1,21 +1,28 @@
-// Main code execution hacks - allows code to be loaded in via USB. See src/
-// For XF-1 ONLY!
+// Main code execution hacks - allows code to be loaded in via USB, see src/
+// Tested: XF-1
+
+// This copies a part of itself above the get_thumb PTP function, allowing
+// a basic RAM copying interface between over USB. It hijacks the function
+// header, jumps to the code above, and then returns back, hoping that
+// it preserved everything correctly for the original code.
 
 #ifndef CAN_DO_EXECUTER
 	#error "This model doesn't seem to be able to run the executer!"
 #endif
 
+// This section is copied into the firmware on compile time,
+// preferably by the PrintIM hack.
 .global _start
 _start:
-	push  {r4, r5, r6, r7, r8, lr}
+	push {r4, r5, r6, r7, r8, lr}
 
-	// Hijack a useless PTP function (get thumbnail)
-	// It latches onto it, without destroying the actual
-	// function.
+	// The "top" loop carefully copies instructions starting from
+	// "hack" up to the top of this file into the PTP code. That means
+	// it will probably copy in extra instructions, but I don't care.
 
 	ldr r4, =MEM_PTP_THUMBNAIL
 	adr r6, hack
-	mov r5, #35 // how many insts
+	mov r5, #35 // how many insts to copy
 
 	top:
 		ldr r7, [r6]
@@ -27,10 +34,11 @@ _start:
 		cmp r5, #0
 	bne top
 
-	pop   {r4, r5, r6, r7, r8, pc}
+	pop {r4, r5, r6, r7, r8, pc}
 
-// Where to copy the incoming code
-temp_addr: .long MEM_FREE_SPACE
+// Everything from here on out is code copied meant to be
+// copied into a PTP function
+temp_addr: .long MEM_FREE_SPACE // Used as a c
 put_addr: .long MEM_FREE_SPACE
 custom:
 	// r0 is #0 when returning the header
