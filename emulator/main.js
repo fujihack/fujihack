@@ -1,12 +1,3 @@
-/*
-
-Download Unicorn.js VM:
-wget https://github.com/AlexAltea/unicorn.js/releases/download/v1.0/unicorn-arm.min.js
-
-make lay INPUT_FILE=~/Downloads/FPUPDATE-hs20exr.DAT
-
-*/
-
 var fs = require("fs");
 var cp = require("child_process");
 var process = require("process");

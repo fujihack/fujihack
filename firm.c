@@ -3,11 +3,12 @@
 #include <string.h>
 
 // Include some things that are sent in by the makefile.
-// Keeps the linter happy.
 #ifndef MODEL_NAME
 	#include "model/hs20exr.h"
 #endif
 
+// These things are sent in by the Makefile, declare
+// them to keep linter happy
 #ifndef TEMP_FILE
 	#define TEMP_FILE ""
 #endif
@@ -20,6 +21,10 @@
 #ifndef MODEL
 	#define MODEL ""
 #endif
+#ifndef ASM_FILE
+	#define ASM_FILE "main.S"
+#endif
+
 
 #define ARMCC "arm-none-eabi"
 
