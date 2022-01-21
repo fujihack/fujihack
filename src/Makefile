@@ -1,6 +1,7 @@
 MODEL?=xf1
 
 # Tell linker code is at some address
+# TODO: Load this in from C file
 ADDR=0x00e572e8
 
 # These are set in order for the linker
@@ -13,7 +14,7 @@ LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
 RM=rm -rf
 
 hack: main.o
-	python3 main.py
+	python3 ../ptp/load.py
 
 # output rule for C files
 %.o: %.c
