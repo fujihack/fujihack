@@ -3,6 +3,7 @@ output
 *.DAT
 *.o
 *.out
+__pycache__
 emulator/unicorn-arm.min.js
 unicorn*.js
 temp/
