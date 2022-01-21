@@ -1,8 +1,9 @@
 MODEL?=xf1
 
-# Tell linker code is at some address
-# TODO: Load this in from C file
-ADDR=0x00e572e8
+# Bring C preprocessor macro into Make
+include util.mk
+$(call importMacro, ../model/$(MODEL).h, MEM_FREE_SPACE, %x)
+ADDR=0x$(MEM_FREE_SPACE)
 
 # These are set in order for the linker
 FILES=entry.o test.o lib.o stub.o
