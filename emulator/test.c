@@ -1,7 +1,18 @@
-#include <sqlite.h>
+asm(".code 32");
+asm(".arm");
+asm(".global _start");
 
-int _start() {
-	char buffer[100];
-	sprintf(buffer, "Hello");
-	return 123;
+#include <sqlite.h>
+#include <string.h>
+
+char buffer[10];
+
+void foo();
+
+void _start() {
+	foo();
+}
+
+void foo() {
+	//astrcpy(buffer, "Hello");
 }

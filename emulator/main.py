@@ -1,15 +1,46 @@
 from unicorn import *
 from unicorn.arm_const import *
-import sys
+import sys, multiprocessing
 
-MAX_MEM = 50 * 1024000
+MAX_MEM = 35 * 1024000
+
+# Base addr of firmware, injected code should be
+# position independent
 BASE_ADDR = 0x0
 
+def sanitizeString(e, addr):
+    final = ""
+
+    data = e.mem_read(addr, 100)
+    for b in data:
+        if b == 0:
+            break
+        elif b < 128:
+            final += chr(b)
+    return final
+
 def printRegs(e, length):
-    print("[I]   At PC:", hex(e.reg_read(UC_ARM_REG_PC)))
-    print("[I]   In injection:", hex(e.reg_read(UC_ARM_REG_PC) - length - 0x013fddcc))
-    print("[I]   LR:", hex(e.reg_read(UC_ARM_REG_LR)))
-    print("[I]   R0:", hex(e.reg_read(UC_ARM_REG_R0)), "/", e.reg_read(UC_ARM_REG_R0))
+    r0 = e.reg_read(UC_ARM_REG_R0)
+    pc = e.reg_read(UC_ARM_REG_PC)
+    lr = e.reg_read(UC_ARM_REG_LR)
+
+    print("[I]   At PC:", hex(pc), "/", pc)
+    print("[I]   In injection:", hex(pc - length), " inst #" + str((pc - length) / 4))
+    print("[I]   LR:", hex(lr))
+    print("[I]   R0:", hex(r0), "/", r0)
+    print("[I]   Return String: '" + sanitizeString(e, r0) + "'")
+    #print("[O]   ", (e.read()))
+    #print("[I]   MAX_MEM =", MAX_MEM)
+
+def runEmu(e, start, end, firmware):
+    try:
+        e.emu_start(start, end, 0, 0)
+    except UcError as err:
+        print("[-] Unicorn error:", err)
+        printRegs(e, len(firmware))
+        return
+    print("[+] Success.")
+    printRegs(e, len(firmware))
 
 def start():
     e = Uc(UC_ARCH_ARM, UC_MODE_ARM)
@@ -29,25 +60,40 @@ def start():
     e.mem_write(BASE_ADDR + len(firmware), injection)
     print("[I] Injection is", len(injection), "bytes")
     
-    # Give the code some stack space
-    e.reg_write(UC_ARM_REG_SP, len(firmware) + len(injection));
+    # Give the code some stack space, space it
+    # away from code to limit interference
+    e.reg_write(UC_ARM_REG_SP, len(firmware) + len(injection) + 128);
+    #e.reg_write(UC_ARM_REG_FP, len(firmware) + len(injection) + 128);
 
     start = BASE_ADDR + len(firmware)
-    end = BASE_ADDR + len(firmware) + len(injection) - 4
+    end = BASE_ADDR + len(firmware) + len(injection) + 4
 
     # Function returns to end
     e.reg_write(UC_ARM_REG_LR, end);
 
-    print("[I] Starting emulator...")
-    try:
-        e.emu_start(start, end, 0, 0)
-    except UcError as err:
-        print("[-] Unicorn error:", err)
-        printRegs(e, len(firmware))
-        exit()
+    # Implement a basic stepper
+    step = True
 
-    print("[+] Success.")
-    printRegs(e, len(firmware))
+    if step:
+        while True:
+            try:
+                e.emu_start(start, start + 4, 0, 0)
+            except UcError as err:
+                print(err)
+            printRegs(e, len(firmware))
+            if input() == "e":
+                return
+            start += 4
+    else:
+        print("[I] Starting emulator on new thread...")
+        p = multiprocessing.Process(target = runEmu,
+            args = (e, start, end, firmware))
+        p.start()
+        p.join(1)
+        if p.is_alive():
+            print("[-] Thread timeout! Killing...")
+            p.kill()
+            return 1
+    return 0
 
-
-start()
+sys.exit(start())
