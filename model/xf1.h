@@ -46,4 +46,5 @@ Fujifilm X-F1 Information File
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 	NSTUB(rtos_malloc, 0x0073a2cc)
 	NSTUB(sqlite_exec, 0x014351ec)
+	NSTUB(astrcpy, 0x0072f90c)
 #endif
