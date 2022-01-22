@@ -15,11 +15,12 @@ int ptp_verify_string_code(unsigned short x);
 // Test a function in firmware
 unsigned int test();
 __asm__(".global test\ntest:\n"
-		"b 0x0037b444\n");
+		"b 0x0072f90c\n");
+
+char buffer[10];
 
 // Code booter
 unsigned long start() {
-	unsigned int b = test(0xb802);
-	
-	return b;
+	test(buffer, "asd");
+	return buffer;
 }

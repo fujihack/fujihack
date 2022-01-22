@@ -13,7 +13,7 @@ function system(string) {
 
 function main() {
 	console.log("Loading code...");
-	var memory = fs.readFileSync("../output");
+	var memory = fs.readFileSync("/home/daniel/Desktop/fujifilm-backup/dump/dump_xf1_0x0");
 	var memsize = memory.length;
 
 	// Compile and load test.c directly after output file
