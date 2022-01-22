@@ -1,5 +1,6 @@
 from unicorn import *
 from unicorn.arm_const import *
+import sys
 
 MAX_MEM = 50 * 1024000
 BASE_ADDR = 0x0
@@ -14,10 +15,10 @@ def start():
     e = Uc(UC_ARCH_ARM, UC_MODE_ARM)
 
     print("[I] Loading code...")
-    fp = open("../output", "rb")
+    fp = open(sys.argv[1], "rb")
     firmware = fp.read()
     print("[I] Firmware is", len(firmware), "bytes")
-    
+
     print("[I] Allocating " + str(MAX_MEM / 1000 / 1000) + "mb memory...")
     e.mem_map(BASE_ADDR, MAX_MEM, UC_PROT_ALL)
     e.mem_write(BASE_ADDR, firmware)

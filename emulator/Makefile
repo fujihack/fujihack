@@ -2,12 +2,13 @@
 # pip3 install unicorn
 
 model?=xf1
+dump?=/home/daniel/Desktop/fujifilm-backup/dump/dump_xf1_0x0
 
 ARMCC=arm-none-eabi
 ARMCFLAGS=-c -include ../model/$(model).h -I../src/
 
-all: test.o ../output
-	python3 main.py
+all: test.o $(dump)
+	python3 main.py $(dump)
 
 test.o: test.c stub.o
 	$(ARMCC)-gcc $(ARMCFLAGS) test.c -o test.o
@@ -20,7 +21,7 @@ stub.o:
 	$(ARMCC)-gcc -DSTUB $(ARMCFLAGS) stub.S -o stub.o
 	$(RM) stub.S
 
-../output:
+$(dump):
 	cd ..; make lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
 
 clean:
