@@ -1,11 +1,18 @@
 # Doesn't have compressed firmware
 model?=hs20exr
 
-all: unicorn-arm.min.js ../output
-	node main.js
+ARMCC=arm-none-eabi
 
-unicorn-arm.min.js:
-	curl -ipv4 -O https://github.com/AlexAltea/unicorn.js/releases/download/v1.0/unicorn-arm.min.js
+all: test.o ../output
+	python3 main.py
+
+test.o: test.c
+	$(ARMCC)-gcc -c -include ../model/$(model).h test.c -o test.o
+	$(ARMCC)-ld -Bstatic test.o -o test.elf
+	$(ARMCC)-objcopy -O binary test.elf test.o
 
 ../output:
 	cd ..; make lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
+
+clean:
+	$(RM) *.o *.elf
