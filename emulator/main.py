@@ -34,6 +34,9 @@ def start():
     start = BASE_ADDR + len(firmware)
     end = BASE_ADDR + len(firmware) + len(injection) - 4
 
+    # Function returns to end
+    e.reg_write(UC_ARM_REG_LR, end);
+
     print("[I] Starting emulator...")
     try:
         e.emu_start(start, end, 0, 0)
