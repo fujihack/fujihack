@@ -13,6 +13,7 @@ ARMCFLAGS=-c -include ../model/$(model).h -I../src/
 all: test.o $(dump)
 	python3 main.py $(dump)
 
+# Rebuild when stuff changes
 BUILD_DEPS=../model/$(model).h main.py Makefile link.ld
 
 test.o: $(BUILD_DEPS) test.c stub.o
