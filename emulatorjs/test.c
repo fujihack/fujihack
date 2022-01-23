@@ -7,10 +7,8 @@ asm(".global _start");
 unsigned long start();
 void _start() {
 	start();
+	((char *)0x2101168)[0] = 'A';
 }
-
-#define VERIFY_PTP_STRING_CODE 0x0037b444
-int ptp_verify_string_code(unsigned short x);
 
 // Test a function in firmware
 unsigned int test();
@@ -23,4 +21,9 @@ char buffer[10];
 unsigned long start() {
 	test(buffer, "asd");
 	return buffer;
+}
+
+
+int foo() {
+	
 }

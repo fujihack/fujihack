@@ -71,29 +71,15 @@ def start():
     # Function returns to end
     e.reg_write(UC_ARM_REG_LR, end);
 
-    # Implement a basic stepper
-    step = True
-
-    if step:
-        while True:
-            try:
-                e.emu_start(start, start + 4, 0, 0)
-            except UcError as err:
-                print(err)
-            printRegs(e, len(firmware))
-            if input() == "e":
-                return
-            start += 4
-    else:
-        print("[I] Starting emulator on new thread...")
-        p = multiprocessing.Process(target = runEmu,
-            args = (e, start, end, firmware))
-        p.start()
-        p.join(1)
-        if p.is_alive():
-            print("[-] Thread timeout! Killing...")
-            p.kill()
-            return 1
+    print("[I] Starting emulator on new thread...")
+    p = multiprocessing.Process(target = runEmu,
+        args = (e, start, end, firmware))
+    p.start()
+    p.join(1)
+    if p.is_alive():
+        print("[-] Thread timeout! Killing...")
+        p.kill()
+        return 1
     return 0
 
 sys.exit(start())

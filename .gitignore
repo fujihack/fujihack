@@ -4,7 +4,7 @@ output
 *.o
 *.out
 __pycache__
-emulator/unicorn-arm.min.js
+emulator2/unicorn-arm.min.js
 unicorn*.js
 temp/
 temp/*

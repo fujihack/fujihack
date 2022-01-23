@@ -16,14 +16,6 @@ function main() {
 	var memory = fs.readFileSync("/home/daniel/Desktop/fujifilm-backup/dump/dump_xf1_0x0");
 	var memsize = memory.length;
 
-	// Compile and load test.c directly after output file
-
-	console.log("Compiling test.c ...")
-	system(CC + "-gcc test.c -c -ffreestanding -marm -o test.o");
-	system(CC + "-ld -Bstatic test.o -Ttext 0x" + memsize.toString(16) + " -o test.elf");
-	system(CC + "-objcopy -O binary test.elf test.o");
-	// -Ttext 0x" + memsize.toString(16) + "
-
 	var test = fs.readFileSync("test.o");
 	var newMemory = Buffer.concat([memory, test])
 
