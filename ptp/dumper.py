@@ -4,7 +4,7 @@ import ctypes
 
 camera = ptpy.PTPy()
 
-f = open("test.o", "rb")
+f = open("hack.o", "rb")
 c = f.read()
 
 with camera.session():

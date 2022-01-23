@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import ptpy
 from random import randrange
 

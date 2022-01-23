@@ -6,7 +6,7 @@ $(call importMacro, ../model/$(MODEL).h, MEM_FREE_SPACE, %x)
 ADDR=0x$(MEM_FREE_SPACE)
 
 # These are set in order for the linker
-FILES=entry.o test.o lib.o stub.o
+FILES=entry.o main.o lib.o stub.o
 
 CC=arm-none-eabi
 CFLAG=-include ../model/$(MODEL).h -nostdlib -c
@@ -14,7 +14,7 @@ LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
 
 RM=rm -rf
 
-hack: main.o
+hack: hack.o
 	python3 ../ptp/load.py
 
 # output rule for C files
@@ -30,10 +30,12 @@ hack: main.o
 stub.o: stub.S ../model/$(MODEL).h
 	$(CC)-gcc -D STUBS $(CFLAG) $< -o $@
 
-main.o: $(FILES)
-	$(CC)-ld $(LDFLAGS) -o main.elf
-	$(CC)-objcopy -O binary main.elf main.o
-	$(CC)-size --format=berkeley --target=binary main.o
+hack.o: $(FILES)
+	$(CC)-ld $(LDFLAGS) -o hack.elf
+	$(CC)-objcopy -O binary hack.elf hack.o
+	$(CC)-size --format=berkeley --target=binary hack.o
 
 clean:
 	$(RM) *.elf *.o
+
+.PHONY: clean hack

@@ -21,7 +21,7 @@ test.o: $(BUILD_DEPS) test.c stub.o
 	$(ARMCC)-ld -Ttext 0x20f10e8 test.o stub.o -o test.elf
 	$(ARMCC)-objcopy -O binary test.elf test.o
 
-# Solely for compiling in stubs
+# Solely for compiling in stubs, which are in header file
 stub.o:
 	touch stub.S
 	$(ARMCC)-gcc -DSTUBS $(ARMCFLAGS) stub.S -o stub.o

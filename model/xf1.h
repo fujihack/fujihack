@@ -32,8 +32,6 @@ Fujifilm X-F1 Information File
 // "USB" unicode in when plugged in
 #define MEM_USB_TEXT 0x003276f8
 
-// ---------- Function stubs: ----------
-
 #ifdef STUBS
 	#include "stub.h"
 
@@ -46,4 +44,7 @@ Fujifilm X-F1 Information File
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 	NSTUB(rtos_malloc, 0x0073a2cc)
 	NSTUB(sqlite_exec, 0x014351ec)
+	
+	// Basic testing function
+	NSTUB(_strcpy, 0x0072f90c)
 #endif

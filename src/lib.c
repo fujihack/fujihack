@@ -83,3 +83,5 @@ void *memset(void *dest, int val, int len) {
 	return dest;
 }
 #endif
+
+#endif
