@@ -1,25 +1,21 @@
-asm(".code 32");
-asm(".arm");
-asm(".global _start");
+#include <stdint.h>
 
 // Entry trampoline for functions under
 // start()
-unsigned long start();
+uintptr_t start();
 void _start() {
 	start();
-	((char *)0x2101168)[0] = 'Z';
+	start();
 }
 
-// Test a function in firmware
-unsigned int test();
-__asm__(".global test\ntest:\n"
-		"b 0x0072f90c\n");
+void random_strcpy(char *b, char *i);
 
-char buffer[10];
+char buffer[100];
 
 // Code booter
-unsigned long start() {
-	test(buffer, "asd");
-	return buffer;
+uintptr_t start() {
+	char *buffer1 = "Hello, World";
+	random_strcpy(buffer, buffer1);
+	return (uintptr_t)buffer;
 }
 

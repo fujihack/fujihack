@@ -18,7 +18,7 @@ Fujifilm X-F1 Information File
 #define FIRMWARE_PRINTIM 0x00516c90
 
 // Memory address where code can be copied. Need
-// A bunch of useless bytes that don't seem important
+// A bunch of useless bytes that don't seem important,
 // crashes when I go over 2kb
 #define MEM_FREE_SPACE 0x00e572e8
 
@@ -32,8 +32,6 @@ Fujifilm X-F1 Information File
 // "USB" unicode in when plugged in
 #define MEM_USB_TEXT 0x003276f8
 
-// ---------- Function stubs: ----------
-
 #ifdef STUBS
 	#include "stub.h"
 
@@ -46,5 +44,6 @@ Fujifilm X-F1 Information File
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 	NSTUB(rtos_malloc, 0x0073a2cc)
 	NSTUB(sqlite_exec, 0x014351ec)
-	NSTUB(astrcpy, 0x0072f90c)
+
+	NSTUB(random_strcpy, 0x0072f90c) // nothing much, good testing function
 #endif
