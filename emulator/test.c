@@ -1,16 +1,18 @@
-// Entry trampoline
-void *start();
-void *_start() {
-	return start();
+#include <stdint.h>
+
+// Entry trampoline for functions under
+// start()
+char *main();
+char *_start() {
+	return main();
 }
 
-// Test a function in firmware
-unsigned int _strcpy();
+void random_strcpy(char *b, char *i);
 
-char buffer[10];
+char buffer[100];
 
 // Code booter
-void *start() {
-	_strcpy(buffer, "asd");
+char *main() {
+	random_strcpy(buffer, "hey");
 	return buffer;
 }

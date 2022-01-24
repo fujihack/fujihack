@@ -7,28 +7,27 @@ dump?=/home/daniel/Downloads/dump_0x00e_32mb.bin
 ARMCC=arm-none-eabi
 ARMCFLAGS=-c -include ../model/$(model).h -I../src/
 
-#ARMCFLAGS+=-fpic -mpic-register=r9 -msingle-pic-base
-#ARMCFLAGS+=-mlong-calls
+ARMCFLAGS+=-fpic
 
 all: test.o $(dump)
 	python3 main.py $(dump)
 
-# Rebuild when stuff changes
-BUILD_DEPS=../model/$(model).h main.py Makefile link.ld
+# Recompile when these files are changed
+BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile
 
 test.o: $(BUILD_DEPS) test.c stub.o
 	$(ARMCC)-gcc $(ARMCFLAGS) test.c -o test.o
-	$(ARMCC)-ld -Ttext 0x20f10e8 test.o stub.o -o test.elf
+	$(ARMCC)-ld test.o stub.o -o test.elf
 	$(ARMCC)-objcopy -O binary test.elf test.o
 
-# Solely for compiling in stubs, which are in header file
-stub.o:
+# Solely for compiling in stubs
+stub.o: $(BUILD_DEPS)
 	touch stub.S
-	$(ARMCC)-gcc -DSTUBS $(ARMCFLAGS) stub.S -o stub.o
+	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) stub.S -o stub.o
 	$(RM) stub.S
 
 $(dump):
-	cd ..; make lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
+	cd ..; $(MAKE) lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
 
 clean:
 	$(RM) *.o *.elf stub.S

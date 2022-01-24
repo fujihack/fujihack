@@ -63,10 +63,10 @@ def start():
     # Give the code some stack space, space it
     # away from code to limit interference
     e.reg_write(UC_ARM_REG_SP, len(firmware) + len(injection) + 128);
-    #e.reg_write(UC_ARM_REG_FP, len(firmware) + len(injection) + 128);
+    e.reg_write(UC_ARM_REG_SB, 1);
 
     start = BASE_ADDR + len(firmware)
-    end = BASE_ADDR + len(firmware) + len(injection) + 4
+    end = BASE_ADDR + len(firmware) + len(injection)
 
     # Function returns to end
     e.reg_write(UC_ARM_REG_LR, end);
