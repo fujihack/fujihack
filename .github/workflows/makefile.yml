@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install deps
-      run: sudo apt install gcc make arm gcc-arm-none-eabi wget
+      run: sudo apt install gcc make gcc-arm-none-eabi wget
   
     - name: download firmware xf1
       run: wget https://dl.fujifilm-x.com/support/firmware/xf1YbzzDmLK/FPUPDATE.DAT -O FPUPDATE-xf1.DAT
