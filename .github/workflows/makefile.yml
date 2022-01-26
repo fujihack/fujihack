@@ -1,0 +1,27 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install deps
+      run: sudo apt install gcc make arm gcc-arm-none-eabi wget
+  
+    - name: download firmware xf1
+      run: wget https://dl.fujifilm-x.com/support/firmware/xf1YbzzDmLK/FPUPDATE.DAT -O FPUPDATE-xf1.DAT
+    
+    - name: compile xf1 firmware
+      run: make model=xf1 input=FPUPDATE-xf1.DAT asm_file=main.S asm
+
+    - name: md5sum of result firmware
+      run: md5sum FPUPDATE.DAT
