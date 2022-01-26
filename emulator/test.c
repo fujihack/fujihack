@@ -1,18 +1,14 @@
 #include <stdint.h>
 
-// Entry trampoline for functions under
-// start()
-char *main();
-char *_start() {
-	return main();
-}
-
-void random_strcpy(char *b, char *i);
+#include <sqlite.h>
+#include <fujifilm.h>
 
 char buffer[100];
 
-// Code booter
-char *main() {
-	random_strcpy(buffer, "hey");
+char *_start() {
+	char drive = fuji_drive();
+
+	sqlite_snprintf(100, buffer, "Drive at dump is %c", drive);
+
 	return buffer;
 }

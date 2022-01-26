@@ -53,6 +53,9 @@ def start():
     print("[I] Allocating " + str(MAX_MEM / 1000 / 1000) + "mb memory...")
     e.mem_map(BASE_ADDR, MAX_MEM, UC_PROT_ALL)
     e.mem_write(BASE_ADDR, firmware)
+
+    # Second base address, not sure what it's used for yet
+    e.mem_map(0x40000000, MAX_MEM, UC_PROT_ALL)
     
     # Write test.o right after firmware
     fp = open("test.o", "rb")

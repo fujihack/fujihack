@@ -4,8 +4,8 @@
 /*
 
 Fujifilm uses 4 bytes per pixel, multiple layer display system.
-
-Each pixel is your typical hex code #aabbcc, with the last 2 bytes are transparency (????)
+Each pixel is your typical hex code #aabbcc, with the
+last 2 bytes are transparency (????)
 
 */
 
@@ -16,12 +16,15 @@ Each pixel is your typical hex code #aabbcc, with the last 2 bytes are transpare
 // mode is generally -1
 unsigned int rtos_malloc(int n, void *addr, int mode);
 
+// Returns current drive (DOS style)
+char fuji_drive();
+
+#if 0
 // Posix wrappers around RTOS functions:
-/*
 void malloc(int n) {
 	void *addr;
-	rtos_malloc(n, &addr, 0xffffffff);
+	rtos_malloc(n, &addr, -1);
 }
-*/
+#endif
 
 #endif
