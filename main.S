@@ -36,13 +36,16 @@ _start:
 
 	pop {r4, r5, r6, r7, r8, pc}
 
-// Everything from here on out is code copied meant to be
-// copied into a PTP function
-temp_addr: .long MEM_FREE_SPACE // Used as a c
-put_addr: .long MEM_FREE_SPACE
+// Everything from here on out is code
+// that will be copied into a PTP function
+// The bottom part hijacks the target function
+// header, and the custom code overwrites a
+// some other PTP function (doesn't seem to crash though)
+temp_addr: .long MEM_FREE_SPACE // Used for incrementing
+put_addr: .long MEM_FREE_SPACE // unchanged, copied into put_addr
 custom:
-	// r0 is #0 when returning the header
-	// #1 is used for the actual code
+	// r0 is #0 when returning the PTP header
+ 	// #1 is used for the actual PTP command
 	cmp r0, #1
 	bne nohack
 
@@ -73,9 +76,7 @@ custom:
 	bne n2
 		adr r9, temp_addr
 		ldr r9, [r9]
-		// blx r9
-		// GCC whining about unsupported instructions
-		.byte 0x39, 0xff, 0x2f, 0xe1
+		blx r9
 	n2:
 
 	// #7 - reset address
@@ -91,7 +92,9 @@ custom:
 	mov r6, r1
 	b return
 
-	.byte 0xf0, 0x4d, 0x2d, 0xe9 // raw instruction in the ptp function
+	// Copy in exact function, but replace the "mov r6, r1"
+	// with a jump to above 
+	push {r4, r5, r6, r7, r8, sl, fp, lr}
 	add r11, sp, #0x1c
 	sub sp, sp, #0x1c
 hack:

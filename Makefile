@@ -38,8 +38,10 @@ inject.o: $(asm_file)
 	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_PRINTIM) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
-pack unpack lay asm:
+firm: firm.c
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
+
+pack unpack lay asm: firm
 	./firm $@
 
 clean:
