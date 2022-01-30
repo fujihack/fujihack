@@ -1,7 +1,5 @@
 # Notes/Interesting Findings
 
-Tested on HS20EXR
-
 - Once you update to the latest version, you won't be able  
 to install the same firmware file. (there is a workaround)  
 
