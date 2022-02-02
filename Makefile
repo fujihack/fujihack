@@ -18,6 +18,7 @@ HOST_CFLAGS+='-D ASM_FILE="$(asm_file)"'
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
 $(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x))
+$(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u))
 
 ARMCC=arm-none-eabi
 
@@ -30,18 +31,22 @@ help:
 	@echo "Example:"
 	@echo "  make unpack input=~/Downloads/FPUPDATE.DAT temp_file=output"
 
-# only asm target relies on injection
-asm: inject.o
-
+# Use the firm program to send injection into 
 inject.o: $(asm_file)
 	$(ARMCC)-gcc -c --include model/$(model).h $(asm_file) -o inject.o
 	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_PRINTIM) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
+inject: firm inject.o
+	./firm $@ inject.o 0x$(FIRMWARE_PRINTIM) $(FIRMWARE_PRINTIM_MAX)
+
+asm: unpack inject pack
+
+# Route makefile target into firmware program
 firm: firm.c
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
 
-pack unpack lay asm: firm
+pack unpack lay: firm
 	./firm $@
 
 clean:

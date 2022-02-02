@@ -16,6 +16,7 @@ Fujifilm X-F1 Information File
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
 #define FIRMWARE_PRINTIM 0x00516c90
+#define FIRMWARE_PRINTIM_MAX 236
 
 // Memory address where code can be copied. Need
 // A bunch of useless bytes that don't seem important,

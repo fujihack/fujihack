@@ -187,31 +187,6 @@ void run(char string[]) {
 	}
 }
 
-// Simple function to compile a single assembly file
-// Makefile targets would be overkill, this is fine.
-void injectAssembly(char file[], unsigned long location, int max) {
-	sprintf(include, "--include \"model/%s.h\"", MODEL);
-	strcpy(asmflag, "-c -marm");
-
-	sprintf(
-		command,
-		"%s-gcc %s %s -o inject.o %s",
-		ARMCC, asmflag, include, file
-	); run(command);
-	sprintf(
-		command,
-		"%s-ld -Bstatic inject.o -Ttext 0x%lx -o inject.elf",
-		ARMCC, location
-	); run(command);
-	sprintf(
-		command,
-		"%s-objcopy -O binary inject.elf inject.o",
-		ARMCC
-	); run(command);
-
-	inject(location, "inject.o", max);
-}
-
 void laySection(char block[], unsigned long mem, unsigned long text, unsigned long length) {
 	printf("[INFO] Offset: 0x%lx\n", mem - text);
 	printf("[INFO] Will copy text: %lx - %lx\n", text, text + length);
@@ -285,11 +260,18 @@ int main(int argc, char *argv[]) {
 	} else if (!strcmp(argv[1], "lay")) {
 		unpack();
 		lay();
-	} else if (!strcmp(argv[1], "asm")) {
-		puts("[NOTE] Result firmware should have md5sum 3f3b6cafdeaa87ae5ca084135ebb54a6");
-		unpack();
-		injectAssembly("main.S", FIRMWARE_PRINTIM, 236);
-		pack();
+	} else if (!strcmp(argv[1], "inject")) {
+		if (argc < 5) {
+			printf("[ERR] Not enough parameters for 'inject'\n");
+			return 1;
+		}
+
+		int address = strtol(argv[3], (char **)NULL, 0);
+		int max = strtol(argv[4], (char **)NULL, 0);
+
+		printf("[INFO] Writing '%s' at %x, (%d)\n", argv[2], address, max);
+
+		inject(address, argv[2], max);
 	}
 
 	return 0;

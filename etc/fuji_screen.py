@@ -1,3 +1,4 @@
+# Failed attempt to render fuji screen buffer
 from tkinter import *
 import math
 w = Tk()
