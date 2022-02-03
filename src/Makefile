@@ -5,8 +5,11 @@ include util.mk
 $(call importMacro, ../model/$(MODEL).h, MEM_FREE_SPACE, %x)
 ADDR=0x$(MEM_FREE_SPACE)
 
-# These are set in order for the linker
-FILES=entry.o main.o lib.o stub.o
+# All c files as .o
+CFILES=$(wildcard *.c:.c=.o)
+
+# lay out files in order for linker
+FILES=entry.o $(CFILES) stub.o
 
 CC=arm-none-eabi
 CFLAG=-include ../model/$(MODEL).h -nostdlib -c

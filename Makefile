@@ -21,6 +21,7 @@ $(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x))
 $(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u))
 
 ARMCC=arm-none-eabi
+ARMCFLAGS=-mcpu=cortex-a8 -c --include model/$(model).h
 
 help:
 	@echo "Parameters:"
@@ -33,7 +34,7 @@ help:
 
 # Use the firm program to send injection into 
 inject.o: $(asm_file)
-	$(ARMCC)-gcc -c --include model/$(model).h $(asm_file) -o inject.o
+	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
 	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_PRINTIM) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
