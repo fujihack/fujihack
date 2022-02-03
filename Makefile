@@ -17,8 +17,8 @@ HOST_CFLAGS+='-D ASM_FILE="$(asm_file)"'
 
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
-$(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x))
-$(eval $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u))
+$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x)
+$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u)
 
 ARMCC=arm-none-eabi
 ARMCFLAGS=-mcpu=cortex-a8 -c --include model/$(model).h

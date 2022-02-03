@@ -12,7 +12,7 @@ CFILES=$(wildcard *.c:.c=.o)
 FILES=entry.o $(CFILES) stub.o
 
 CC=arm-none-eabi
-CFLAG=-include ../model/$(MODEL).h -nostdlib -c
+CFLAGS=-mcpu=cortex-a8 -include ../model/$(MODEL).h -c
 LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
 
 RM=rm -rf
@@ -22,16 +22,16 @@ hack: hack.o
 
 # output rule for C files
 %.o: %.c
-	$(CC)-gcc $(CFLAG) $< -o $@
+	$(CC)-gcc $(CFLAGS) $< -o $@
 
 # output rule for assembly files
 %.o: %.S
-	$(CC)-gcc $(CFLAG) $< -o $@
+	$(CC)-gcc $(CFLAGS) $< -o $@
 
 # only stub.S is compiled with stubs
 # Also, it depends on the model file
 stub.o: stub.S ../model/$(MODEL).h
-	$(CC)-gcc -D STUBS $(CFLAG) $< -o $@
+	$(CC)-gcc -D STUBS $(CFLAGS) $< -o $@
 
 hack.o: $(FILES)
 	$(CC)-ld $(LDFLAGS) -o hack.elf
