@@ -3,21 +3,20 @@ MODEL?=xf1
 # Bring C preprocessor macro into Make
 include util.mk
 $(call importMacro, ../model/$(MODEL).h, MEM_FREE_SPACE, %x)
-ADDR=0x$(MEM_FREE_SPACE)
 
-# All c files as .o
-CFILES=$(wildcard *.c:.c=.o)
+# Collect C files as .o
+CFILES=$(subst .c,.o,$(wildcard *.c))
 
 # lay out files in order for linker
 FILES=entry.o $(CFILES) stub.o
 
 CC=arm-none-eabi
 CFLAGS=-mcpu=cortex-a8 -include ../model/$(MODEL).h -c
-LDFLAGS=-Bstatic $(FILES) -Ttext $(ADDR)
+LDFLAGS=-Bstatic $(FILES) -Ttext 0x$(MEM_FREE_SPACE)
 
 RM=rm -rf
 
-hack: hack.o
+hack: hack.bin
 	python3 ../ptp/load.py
 
 # output rule for C files
@@ -33,12 +32,12 @@ hack: hack.o
 stub.o: stub.S ../model/$(MODEL).h
 	$(CC)-gcc -D STUBS $(CFLAGS) $< -o $@
 
-hack.o: $(FILES)
+hack.bin: $(FILES)
 	$(CC)-ld $(LDFLAGS) -o hack.elf
-	$(CC)-objcopy -O binary hack.elf hack.o
-	$(CC)-size --format=berkeley --target=binary hack.o
+	$(CC)-objcopy -O binary hack.elf hack.bin
+	$(CC)-size --format=berkeley --target=binary hack.bin
 
 clean:
-	$(RM) *.elf *.o
+	$(RM) *.elf *.o *.bin
 
 .PHONY: clean hack

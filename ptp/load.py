@@ -12,7 +12,7 @@ RESET = 7
 EXEC = 6
 WRITE = 5
 
-f = open("hack.o", "rb")
+f = open("hack.bin", "rb")
 c = f.read()
 
 camera = ptpy.PTPy()
