@@ -3,10 +3,16 @@ Fujifilm firmware unpacker, repacker, and code injector.
 
 This will only work on modern Fujifilm cameras, such as the HS20EXR or the X-T4.  
 Fujifilm has been using this firmware format since [2005](https://fujifilm-x.com/en-us/support/download/procedure-finepix-z/).  
+This isn't for the Fujifilm S series. [CHDK](https://chdk.setepontos.com/index.php?topic=6484.0) already figured out how those.
+
+## Contact
+- Send me an email: brikbusters@gmail.com
+- Official Matrix: https://app.element.io/#/room/#fuji:matrix.org
+- Official Discord: https://discord.gg/UZXDktvAZP
 
 ## How to Use
 Don't, at least not yet. If you are interested or have questions,  
-please send me an email at brikbusters@gmail.com (or create a Github issue)
+contact me (See above)
 
 If you just want to unpack a firmware file:  
 ```
