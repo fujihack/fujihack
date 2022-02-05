@@ -41,6 +41,11 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_fread, 0x0072b618)
 	NSTUB(fuji_malloc, 0x0073a2cc)
 
+	/* Test:
+	sqlite_exec(0x0144c67c, "create table foo()", ); 
+	*/
+
+	NSTUB(sqlite_parse, 0x01435224) // not entirely sure
 	NSTUB(sqlite_exec, 0x014224b4)
 	NSTUB(sqlite_snprintf, 0x013ff32c)
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all

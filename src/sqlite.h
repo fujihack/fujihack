@@ -1,15 +1,16 @@
 #ifndef FUJI_SQLITE_H
 #define FUJI_SQLITE_H
 
+// https://www.sqlite.org/c3ref/mprintf.html
 void sqlite_snprintf(int size, char *buf, char *fmt, ...);
 
-void sqlite_exec(int *fmt, ...);
-
-// Why not :)
-#define sprintf(buf, fmt, ...) \
-	sqlite_snprintf(-1, buf, fmt, __VA_ARGS__)
-
-#define snprintf(buf, size, fmt, ...) \
-	sqlite_snprintf(size, buf, fmt, __VA_ARGS__)
+// https://www.sqlite.org/c3ref/exec.html
+int sqlite_exec(
+	void *db,
+	char *sql,
+	int (*callback)(void*, int, char**, char**),
+	void *arg,
+	char **errmsg
+);
 
 #endif

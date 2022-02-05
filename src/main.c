@@ -3,6 +3,7 @@
 #endif
 
 #include <string.h>
+
 #include "sqlite.h"
 #include "fujifilm.h"
 
