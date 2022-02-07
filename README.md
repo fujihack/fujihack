@@ -7,18 +7,31 @@ This isn't for the Fujifilm S series. [CHDK](https://chdk.setepontos.com/index.p
 
 ## Contact
 - Send me an email: brikbusters@gmail.com
-- Official Matrix: https://app.element.io/#/room/#fuji:matrix.org
-- Official Discord: https://discord.gg/UZXDktvAZP
+- Matrix: https://app.element.io/#/room/#fuji:matrix.org
+- Discord: https://discord.gg/UZXDktvAZP
+- Hackaday: https://hackaday.io/project/182218-fujifilm-custom-firmware
 
 ## How to Use
-Don't, at least not yet. If you are interested or have questions,  
-contact me (See above)
+**Don't, at least not yet. If you are interested or have questions, contact me (See above)**
 
-If you just want to unpack a firmware file:  
+*Note: The firmware utility (firm.c) doesn't have a command line parser yet.*  
+*Parameters are sent in via preprocessor definitions on compile time.*  
+
+The Makefile will compile firm.c, as well as the assembly injection hacks.  
+Type `make help` for some info.  
+
+### Unpacking
+This will simply output a bit flipped version of `input` into `temp_file`.  
 ```
-make unpack model=xf1 input=~/Downloads/FPUPDATE.DAT output=FPUPDATE.DAT
+make unpack input=~/Downloads/FPUPDATE.DAT temp_file=output
 ```
-Type `make help` for some extra info.  
+### Packing
+Packing will bit flip `temp_file`, increment the firmware version by one,  
+and copy back into `output`.
+
+```
+make pack model=xf1 temp_file=output output=FPUPDATE.DAT
+```
 
 ![img](https://petabyt.dev/filedump/IMG_0010.JPG)
 
