@@ -13,4 +13,6 @@ int sqlite_exec(
 	char **errmsg
 );
 
+int sqlite_alloc(char *text);
+
 #endif

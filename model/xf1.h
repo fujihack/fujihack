@@ -37,18 +37,30 @@ Fujifilm X-F1 Information File
 	#include "stub.h"
 
 	NSTUB(fuji_drive, 0x0072db0c)
-	NSTUB(fuji_fopen, 0x0072b87c)
+	NSTUB(fuji_fopen, 0x0072b87c) // see 0x00e8ed40
 	NSTUB(fuji_fread, 0x0072b618)
 	NSTUB(fuji_malloc, 0x0073a2cc)
 
-	/* Test:
+	// Fopen function, calls fine
+	NSTUB(fujidemo, 0x0074d0c4)
+
+	NSTUB(fuji_file_do, 0x0074b4cc)
+
+	NSTUB(fuji_file_create, 0x0074ce38)
+
+	/*
+	Example: 0x013f7414
+	
 	sqlite_exec(0x0144c67c, "create table foo()", ); 
+
+	select tm from finf
 	*/
+
+	NSTUB(sqlite_alloc, 0x014351ec)
 
 	NSTUB(sqlite_parse, 0x01435224) // not entirely sure
 	NSTUB(sqlite_exec, 0x014224b4)
 	NSTUB(sqlite_snprintf, 0x013ff32c)
-	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 
 	NSTUB(dumb_test, 0x011d1bec)
 	NSTUB(random_strcpy, 0x0072f90c) // nothing much, good testing function

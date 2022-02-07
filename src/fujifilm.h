@@ -19,6 +19,14 @@ unsigned int rtos_malloc(int n, void *addr, int mode);
 // Returns current drive (DOS style)
 char fuji_drive();
 
+int fuji_fopen();
+
+enum FileError {
+	FILE_SUCCESS = 2,
+	FILE_ERROR = 1,
+	// ?? = 0
+};
+
 #if 0
 // Posix wrappers around RTOS functions:
 void malloc(int n) {
