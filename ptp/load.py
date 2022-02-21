@@ -1,3 +1,4 @@
+import sys
 import ptpy
 import ctypes
 from random import randrange
@@ -12,7 +13,7 @@ RESET = 7
 EXEC = 6
 WRITE = 5
 
-f = open("hack.bin", "rb")
+f = open(sys.argv[1], "rb")
 c = f.read()
 
 camera = ptpy.PTPy()

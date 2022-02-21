@@ -13,7 +13,7 @@ def custom_recv(self, code, param = []):
     response = self.recv(ptp)
     return response
 
-def custom_send(self, code, bytes, param = []):
+def custom_send(self, code, data, param = []):
     ptp = Container(
         OperationCode=code,
         SessionID=self._session,
@@ -21,7 +21,7 @@ def custom_send(self, code, bytes, param = []):
         Parameter=param
     )
 
-    response = self.send(ptp, bytes)
+    response = self.send(ptp, data)
     return response
 
 def setup():

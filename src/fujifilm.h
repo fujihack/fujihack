@@ -14,7 +14,7 @@ last 2 bytes are transparency (????)
 
 // RTOS malloc, used by some wlan functions.
 // mode is generally -1
-unsigned int rtos_malloc(int n, void *addr, int mode);
+unsigned int fuji_malloc(int n, void *addr, int mode);
 
 // Returns current drive (DOS style)
 char fuji_drive();

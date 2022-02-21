@@ -9,5 +9,5 @@
 
 void entry() {
 	char *model = (char *)MEM_MODEL_TEXT;
-	sqlite_snprintf(0x20, model, "Hello, World, %u", 123);
+	sqlite_snprintf(0x20, model, "I'm allocated");
 }

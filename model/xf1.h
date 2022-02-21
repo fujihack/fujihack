@@ -27,6 +27,9 @@ Fujifilm X-F1 Information File
 // Seems to have bytes [0xf0, 0x4d, 0x2d, 0xe9]
 #define MEM_PTP_THUMBNAIL 0x00e56fbc
 
+// Dumper memory location - 
+#define DUMPER_TEMP_ADDR 0x00e56f34
+
 // fujifilm.co.jp text printed by PTP
 #define MEM_MODEL_TEXT 0x00e5e228
 
