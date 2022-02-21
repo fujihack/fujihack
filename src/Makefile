@@ -10,19 +10,23 @@ ALLOCER_BIN_DEPS=entry.o alloc.o stub.o
 
 CC=arm-none-eabi
 CFLAGS=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
-LDFLAGS=-Bstatic
+LDFLAGS=-Bstatic -T Linker.ld
 
 RM=rm -rf
 
 # Recompile when these are changed
 EXTERN_DEPS=Makefile ../model/$(model).h
 
+# The normal hack code
 hack: hack.bin
 	python3 ../ptp/load.py hack.bin
 
 # Sets load address to allocated memory
 allocer: allocer.bin
 	python3 ../ptp/load.py allocer.bin
+
+run:
+	python3 ../ptp/run.py
 
 # output rule for C files
 %.o: %.c $(EXTERN_DEPS)
