@@ -13,9 +13,9 @@ HOST_CFLAGS=-include "model/$(model).h"
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x)
-FIRMWARE_INJECT_ADDR=$(FIRMWARE_PRINTIM)
+FIRMWARE_INJECT_ADDR?=$(FIRMWARE_PRINTIM)
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u)
-FIRMWARE_INJECT_MAX=$(FIRMWARE_PRINTIM_MAX)
+FIRMWARE_INJECT_MAX?=$(FIRMWARE_PRINTIM_MAX)
 
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h

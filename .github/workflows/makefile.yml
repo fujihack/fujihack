@@ -25,3 +25,6 @@ jobs:
 
     - name: md5sum of result firmware
       run: md5sum FPUPDATE.DAT
+
+    - name: Compile main program
+      run: cd src; make hack.bin
