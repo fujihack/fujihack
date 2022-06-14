@@ -36,6 +36,9 @@ Fujifilm X-F1 Information File
 // "USB" unicode text shown when plugged in
 #define MEM_USB_TEXT 0x003276f8
 
+// addr of ".WAV" text used by voice memo
+#define MEM_WAV_TEXT 0x0137cea4
+
 // "Seems to work" screen buffer
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -60,5 +63,5 @@ Fujifilm X-F1 Information File
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 
 	NSTUB(dumb_test, 0x011d1bec)
-	NSTUB(random_strcpy, 0x0072f90c) // nothing much, good testing function
+	NSTUB(random_strcpy, 0x0072f90c) // good emulator testing function
 #endif
