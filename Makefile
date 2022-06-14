@@ -13,10 +13,12 @@ HOST_CFLAGS=-include "model/$(model).h"
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x)
+FIRMWARE_INJECT_ADDR=$(FIRMWARE_PRINTIM)
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u)
+FIRMWARE_INJECT_MAX=$(FIRMWARE_PRINTIM_MAX)
 
-ARMCC=arm-none-eabi
-ARMCFLAGS=-mcpu=cortex-a8 -c --include model/$(model).h
+ARMCC?=arm-none-eabi
+ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h
 
 help:
 	@echo "Parameters:"
@@ -34,7 +36,7 @@ inject.o: $(asm_file)
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
 inject: firm inject.o
-	./firm $@ -j inject.o -a 0x$(FIRMWARE_PRINTIM) -x $(FIRMWARE_PRINTIM_MAX)
+	./firm $@ -j inject.o -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
 
 asm: unpack inject pack
 

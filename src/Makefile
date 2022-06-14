@@ -1,3 +1,5 @@
+-include ../config.mak
+
 model?=xf1
 
 # Bring C preprocessor macro into Make
@@ -8,9 +10,9 @@ $(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
 HACK_BIN_DEPS=entry.o main.o lib.o stub.o
 ALLOCER_BIN_DEPS=entry.o alloc.o stub.o
 
-CC=arm-none-eabi
-CFLAGS=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
-LDFLAGS=-Bstatic -T Linker.ld
+ARMCC?=arm-none-eabi
+ARMCFLAGS?=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
+ARMLDFLAGS?=-Bstatic -T Linker.ld
 
 RM=rm -rf
 
@@ -30,26 +32,26 @@ run:
 
 # output rule for C files
 %.o: %.c $(EXTERN_DEPS)
-	$(CC)-gcc $(CFLAGS) $< -o $@
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
 # output rule for assembly files
 %.o: %.S $(EXTERN_DEPS)
-	$(CC)-gcc $(CFLAGS) $< -o $@
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
 # only stub.S is compiled with stubs
 # Also, it depends on the model file
 stub.o: stub.S ../model/$(model).h
-	$(CC)-gcc -D FPIC -D STUBS $(CFLAGS) $< -o $@
+	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) $< -o $@
 
 hack.bin: $(HACK_BIN_DEPS)
-	$(CC)-ld $(LDFLAGS) $(HACK_BIN_DEPS) -o hack.elf
-	$(CC)-objcopy -O binary hack.elf hack.bin
-	$(CC)-size --format=berkeley --target=binary hack.bin
+	$(ARMCC)-ld $(ARMLDFLAGS) $(HACK_BIN_DEPS) -o hack.elf
+	$(ARMCC)-objcopy -O binary hack.elf hack.bin
+	$(ARMCC)-size --format=berkeley --target=binary hack.bin
 
 allocer.bin: $(ALLOCER_BIN_DEPS)
-	$(CC)-ld $(LDFLAGS) $(ALLOCER_BIN_DEPS) -o allocer.elf
-	$(CC)-objcopy -O binary allocer.elf allocer.bin
-	$(CC)-size --format=berkeley --target=binary allocer.bin
+	$(ARMCC)-ld $(ARMLDFLAGS) $(ALLOCER_BIN_DEPS) -o allocer.elf
+	$(ARMCC)-objcopy -O binary allocer.elf allocer.bin
+	$(ARMCC)-size --format=berkeley --target=binary allocer.bin
 
 clean:
 	$(RM) *.elf *.o *.bin
