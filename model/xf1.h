@@ -27,7 +27,7 @@ Fujifilm X-F1 Information File
 // Seems to have bytes [0xf0, 0x4d, 0x2d, 0xe9]
 #define MEM_PTP_THUMBNAIL 0x00e56fbc
 
-// Dumper memory location - 
+// Dumper temp addr
 #define DUMPER_TEMP_ADDR 0x00e56f34
 
 // fujifilm.co.jp text printed by PTP
@@ -35,6 +35,12 @@ Fujifilm X-F1 Information File
 
 // "USB" unicode text shown when plugged in
 #define MEM_USB_TEXT 0x003276f8
+
+// "Seems to work" screen buffer
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+#define SCREEN_BUFFER 0x1cee77e + ((SCREEN_WIDTH * SCREEN_HEIGHT) * 0)
 
 #ifdef STUBS
 	#include "stub.h"

@@ -1,4 +1,6 @@
-# Defaults, tweak these via CLI
+-include config.mak
+
+# Defaults, tweak these via CLI or config.mak
 model?=xf1
 input?=$(shell echo ~/Downloads/FPUPDATE.DAT)
 output?=FPUPDATE.DAT
@@ -7,13 +9,6 @@ asm_file?=main.S
 
 # Include model info by default
 HOST_CFLAGS=-include "model/$(model).h"
-
-# Send makefile flags into cflags
-HOST_CFLAGS+='-D OUTPUT_FILE="$(output)"'
-HOST_CFLAGS+='-D INPUT_FILE="$(input)"'
-HOST_CFLAGS+='-D MODEL="$(model)"'
-HOST_CFLAGS+='-D TEMP_FILE="$(temp_file)"'
-HOST_CFLAGS+='-D ASM_FILE="$(asm_file)"'
 
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
@@ -39,16 +34,16 @@ inject.o: $(asm_file)
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
 inject: firm inject.o
-	./firm $@ inject.o 0x$(FIRMWARE_PRINTIM) $(FIRMWARE_PRINTIM_MAX)
+	./firm $@ -j inject.o -a 0x$(FIRMWARE_PRINTIM) -x $(FIRMWARE_PRINTIM_MAX)
 
 asm: unpack inject pack
+
+pack unpack lay: firm
+	./firm $@ -m $(model) -i $(input) -o $(output) -t $(temp_file)
 
 # Route makefile target into firmware program
 firm: firm.c
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
-
-pack unpack lay: firm
-	./firm $@
 
 clean:
 	$(RM) output* firm *.o *.out *.DAT *.elf

@@ -2,32 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-// These things are sent in by the Makefile, declare
-// them to keep linter happy
-#ifndef TEMP_FILE
-	#define TEMP_FILE ""
-#endif
-#ifndef OUTPUT_FILE
-	#define OUTPUT_FILE ""
-#endif
-#ifndef INPUT_FILE
-	#define INPUT_FILE ""
-#endif
-#ifndef MODEL
-	#define MODEL ""
-#endif
-#ifndef ASM_FILE
-	#define ASM_FILE "main.S"
-#endif
+struct cli {
+	char *temp;
+	char *output;
+	char *input;
+	char *model;
+	char *max;
+	char *addr;
+	char *inject;
+}Cli = {
+	.temp = "output",
+	.output = "FPUPDATE.DAT",
+	.input = "FPUPDATE-xf1.DAT",
+	.model = "xf1",
+	.max = NULL,
+	.addr = NULL,
+	.inject = "inject.o"
+};
+
+// Bypass linter
 #ifndef MODEL_NAME
 	#include "model/hs20exr.h"
 #endif
 
-#define ARMCC "arm-none-eabi"
-
-char include[1024];
 char command[4096];
-char asmflag[1024];
 
 // Standard header for all Fujifilm firmware
 struct Header {
@@ -69,8 +67,8 @@ void inject(unsigned long addr, char input[], int max) {
 		exit(1);
 	}
 	
-	FILE *f = fopen(TEMP_FILE, "r+w");
-	if (f == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
+	FILE *f = fopen(Cli.temp, "r+w");
+	if (f == NULL) {printf("[ERR] Can't open %s\n", Cli.temp); exit(1);}
 	fseek(f, addr, SEEK_SET);
 	fwrite(file, 1, length, f);
 	fclose(f);
@@ -79,8 +77,8 @@ void inject(unsigned long addr, char input[], int max) {
 void unpack() {
 	struct Header header;
 
-	FILE *f = fopen(INPUT_FILE, "r");
-	if (f == NULL) {printf("[ERR] Can't open %s\n", INPUT_FILE); exit(1);}
+	FILE *f = fopen(Cli.input, "r");
+	if (f == NULL) {printf("[ERR] Can't open %s\n", Cli.input); exit(1);}
 	fread(&header, 1, sizeof(header), f);
 
 	printf("[INFO] Hardware version: %x\n", header.os);
@@ -89,8 +87,8 @@ void unpack() {
 	printf("[INFO] Checksum: %x\n", header.checksum);
 
 	// Payload data is bit flipped
-	FILE *o = fopen(TEMP_FILE, "w");
-	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
+	FILE *o = fopen(Cli.temp, "w");
+	if (o == NULL) {printf("[ERR] Can't open %s\n", Cli.temp); exit(1);}
 	while (1) {
 		int c = fgetc(f);
 		if (c == EOF) {
@@ -105,15 +103,15 @@ void unpack() {
 }
 
 void pack() {
-	FILE *f = fopen(OUTPUT_FILE, "wr");
-	if (f == NULL) {printf("[ERR] Can't open %s\n", OUTPUT_FILE); exit(1);}
+	FILE *f = fopen(Cli.output, "wr");
+	if (f == NULL) {printf("[ERR] Can't open %s\n", Cli.output); exit(1);}
 
 	unsigned int checksum1 = 0;
 	unsigned int checksum2 = 0;
 
 	// Read the original header
-	FILE *p = fopen(INPUT_FILE, "r");
-	if (p == NULL) {printf("[ERR] Can't open %s\n", INPUT_FILE); exit(1);}
+	FILE *p = fopen(Cli.input, "r");
+	if (p == NULL) {printf("[ERR] Can't open %s\n", Cli.input); exit(1);}
 
 	struct Header header;
 	fread(&header, 1, sizeof(header), p);
@@ -131,8 +129,8 @@ void pack() {
 	fclose(p);
 
 	// Get modified file checksum
-	FILE *o = fopen(TEMP_FILE, "r");
-	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
+	FILE *o = fopen(Cli.temp, "r");
+	if (o == NULL) {printf("[ERR] Can't open %s\n", Cli.temp); exit(1);}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -164,8 +162,8 @@ void pack() {
 	fwrite(&header, 1, sizeof(header), f);
 
 	// Copy payload from output
-	o = fopen(TEMP_FILE, "r");
-	if (o == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
+	o = fopen(Cli.temp, "r");
+	if (o == NULL) {printf("[ERR] Can't open %s\n", Cli.temp); exit(1);}
 	while (1) {
 		int c = fgetc(o);
 		if (c == EOF) {
@@ -211,8 +209,8 @@ void lay() {
 	// repository, and then looked for a string
 	// to calculate the offset from.
 	
-	FILE *f = fopen(TEMP_FILE, "r+w");
-	if (f == NULL) {printf("[ERR] Can't open %s\n", TEMP_FILE); exit(1);}
+	FILE *f = fopen(Cli.temp, "r+w");
+	if (f == NULL) {printf("[ERR] Can't open %s\n", Cli.temp); exit(1);}
 
 	fseek(f, 0, SEEK_END);
 	unsigned long length = ftell(f);
@@ -242,36 +240,87 @@ void lay() {
 	free(block);
 }
 
+void help() {
+	puts("FujiHack firmware utility\n"
+		"Licesed under the GNU General Public License v3.0\n"
+		"https://github.com/petabyt/fujifilm");
+}
+
 int main(int argc, char *argv[]) {
-	if (argc <= 1) {
+	char *action = "none";
+
+	/*
+	TODO:
+	firmware inject addr
+	firmware inject max
+	 */
+
+	for (int i = 1; i < argc; i++) {
+		if (argv[i][0] == '-') {
+			switch (argv[i][1]) {
+			case 't':
+				Cli.temp = argv[i + 1]; i++;
+				break;
+			case 'o':
+				Cli.output = argv[i + 1]; i++;
+				break;
+			case 'i':
+				Cli.input = argv[i + 1]; i++;
+				break;
+			case 'm':
+				Cli.model = argv[i + 1]; i++;
+				break;
+			case 'a':
+				Cli.addr = argv[i + 1]; i++;
+				break;
+			case 'x':
+				Cli.max = argv[i + 1]; i++;
+				break;
+			case 'j':
+				Cli.inject = argv[i + 1]; i++;
+				break;
+			default:
+				printf("Unknown option %c\n", argv[i][1]);
+				return 1;
+			}
+		} else {
+			action = argv[i];
+		}
+	}
+
+	if (argc <= 4) {
+		puts("[ERR] Not enough arguments supplied");
 		return 1;
 	}
 
 	sprintf(
 		command,
 		"touch %s %s",
-		TEMP_FILE, OUTPUT_FILE
+		Cli.temp, Cli.output
 	); run(command);
 
-	if (!strcmp(argv[1], "pack")) {
+	if (!strcmp(action, "pack")) {
 		pack();
-	} else if (!strcmp(argv[1], "unpack")) {
+	} else if (!strcmp(action, "unpack")) {
 		unpack();
-	} else if (!strcmp(argv[1], "lay")) {
+	} else if (!strcmp(action, "lay")) {
 		unpack();
 		lay();
-	} else if (!strcmp(argv[1], "inject")) {
-		if (argc < 5) {
-			printf("[ERR] Not enough parameters for 'inject'\n");
+	} else if (!strcmp(action, "inject")) {
+		if (Cli.addr == NULL || Cli.max == NULL || Cli.inject == NULL) {
+			puts("[ERR] Parameters not defined for inject");
 			return 1;
 		}
 
-		int address = strtol(argv[3], (char **)NULL, 0);
-		int max = strtol(argv[4], (char **)NULL, 0);
+		int address = strtol(Cli.addr, (char **)NULL, 0);
+		int max = strtol(Cli.max, (char **)NULL, 0);
 
-		printf("[INFO] Writing '%s' at %x, (%d)\n", argv[2], address, max);
+		printf("[INFO] Writing '%s' at %x, (%d)\n", Cli.inject, address, max);
 
-		inject(address, argv[2], max);
+		inject(address, Cli.inject, max);
+	} else {
+		puts("[ERR] Unknown action.");
+		return 1;
 	}
 
 	return 0;
