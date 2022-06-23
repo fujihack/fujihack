@@ -33,7 +33,7 @@ and copy back into `output`.
 make pack model=xf1 temp_file=output output=FPUPDATE.DAT
 ```
 
-![img](https://petabyt.dev/filedump/IMG_0010.JPG)
+![img](https://danielc.dev/filedump/IMG_0010.JPG)
 
 Remember that updating to custom firmware files is  
 very dangerous. I'm a Canon DSLR user. I'm just hacking  
