@@ -1,5 +1,5 @@
 /*
-Fujifilm X-T10
+Fujifilm X-TEMPLATE
 
 */
 

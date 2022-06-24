@@ -32,7 +32,7 @@ help:
 # Use the firm program to send injection into 
 inject.o: $(asm_file)
 	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
-	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_PRINTIM) inject.o -o inject.elf
+	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_INJECT_ADDR) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
 inject: firm inject.o

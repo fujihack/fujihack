@@ -39,7 +39,7 @@ struct Header {
 	#ifndef MODEL_SIZE
 		#define MODEL_SIZE 512
 	#endif
-	unsigned char model[512];
+	unsigned char code[512];
 
 	// Printed as hex in the camera. X.X
 	unsigned int version1;
@@ -74,12 +74,46 @@ void inject(unsigned long addr, char input[], int max) {
 	fclose(f);
 }
 
+// Parse the 512 byte model ID in the firmware header
+// (Sometimes 128, sometimes 1024 (?))
+// This is a basic dump, further analysis: https://docs.google.com/spreadsheets/d/1HnRGIC9CDXgBGscjW5mOb_aKOIqzI9wp8RbXZ-fu78k/edit#gid=396646525
+void parseCode(unsigned char *code) {
+	int x = 0;
+
+	char parseCode[MODEL_SIZE / 2 + 1];
+
+	for (int i = 1; i < MODEL_SIZE; i += 2) {
+		parseCode[x] = code[i];
+		x++;
+	}
+
+	// Trim off trailing zeros
+	x--;
+	while (parseCode[x] == '0') {
+		x--;
+	}
+	x++;
+
+	parseCode[x] = '\0';
+
+	printf("[INFO] Model Code:  %s\n", parseCode);
+
+	#ifdef MODEL_CODE
+		if (strcmp(MODEL_CODE, parseCode)) {
+			puts("[ERR] Model code didn't match code stored in the header file.");
+			exit(1);
+		}
+	#endif
+}
+
 void unpack() {
 	struct Header header;
 
 	FILE *f = fopen(Cli.input, "r");
 	if (f == NULL) {printf("[ERR] Can't open %s\n", Cli.input); exit(1);}
 	fread(&header, 1, sizeof(header), f);
+
+	parseCode(header.code);
 
 	printf("[INFO] Hardware version: %x\n", header.os);
 	printf("[INFO] Firmware Version: %u.%x\n", header.version1, header.version2);
@@ -177,14 +211,6 @@ void pack() {
 	fclose(f);
 }
 
-void run(char string[]) {
-	printf("[COMPILING] %s\n", string);
-	if (system(string)) {
-		puts("Command failed");
-		exit(0);
-	}
-}
-
 void laySection(char block[], unsigned long mem, unsigned long text, unsigned long length) {
 	printf("[INFO] Offset: 0x%lx\n", mem - text);
 	printf("[INFO] Will copy text: %lx - %lx\n", text, text + length);
@@ -228,7 +254,7 @@ void lay() {
 		laySection(block, MEM_START2, TEXT_START2, COPY_LENGTH2);
 	#endif
 
-	// Second data transfer if needed
+	// Third data transfer if needed
 	#ifdef COPY_LENGTH3
 		laySection(block, MEM_START3, TEXT_START3, COPY_LENGTH3);
 	#endif
@@ -287,7 +313,7 @@ int main(int argc, char *argv[]) {
 				Cli.inject = argv[i + 1]; i++;
 				break;
 			default:
-				printf("Unknown option %c\n", argv[i][1]);
+				printf("[ERR] Unknown option %c\n", argv[i][1]);
 				return 1;
 			}
 		} else {
@@ -300,11 +326,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	sprintf(
-		command,
-		"touch %s %s",
-		Cli.temp, Cli.output
-	); run(command);
+	printf("[INFO] Utility compiled for %s.\n", MODEL_NAME);
 
 	if (!strcmp(action, "pack")) {
 		pack();
