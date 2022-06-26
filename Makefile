@@ -8,7 +8,7 @@ temp_file?=output
 asm_file?=main.S
 
 # Include model info by default
-HOST_CFLAGS=-include "model/$(model).h"
+HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
 
 # import FIRMWARE_PRINTIM macro from header file
 include src/util.mk
@@ -46,6 +46,10 @@ pack unpack lay: firm
 # Route makefile target into firmware program
 firm: firm.c
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
+
+# Force compilation of firm every time. The compiled binary
+# is model specific.
+.PHONY: firm
 
 clean:
 	$(RM) output* firm *.o *.out *.DAT *.elf

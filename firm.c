@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// CLI Default values
 struct cli {
 	char *temp;
 	char *output;
@@ -24,8 +25,6 @@ struct cli {
 #ifndef MODEL_NAME
 	#include "model/hs20exr.h"
 #endif
-
-char command[4096];
 
 // Standard header for all Fujifilm firmware
 struct Header {
@@ -267,8 +266,9 @@ void lay() {
 }
 
 void help() {
-	puts(
+	printf(
 		"FujiHack firmware utility\n"
+		"Utility compiled for %s.\n"
 		"Licesed under the GNU General Public License v3.0\n"
 		"https://github.com/petabyt/fujifilm\n"
 		"Options:\n"
@@ -278,7 +278,8 @@ void help() {
 		"\t-m\t Model name\n"
 		"\t-a\t Injection address\n"
 		"\t-j\t Injection input file\n"
-		"\t-x\t Max injection input file size\n"
+		"\t-x\t Max injection input file size\n",
+		MODEL_NAME
 	);
 }
 
@@ -326,7 +327,12 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	printf("[INFO] Utility compiled for %s.\n", MODEL_NAME);
+	#ifdef MODEL
+		if (strcmp(Cli.model, MODEL)) {
+			puts("[ERR] firm.c wasn't compiled with the right module. You need to recompile.");
+			return 1;
+		}
+	#endif
 
 	if (!strcmp(action, "pack")) {
 		pack();

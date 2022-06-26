@@ -2,8 +2,11 @@
 # See https://gist.github.com/petabyt/898d3437decf65fc04fc50bd0e125362
 define importMacro
     $(shell echo "#include <stdio.h>\n \
-        int main() {printf(\"$(2)=$(3)\", $(2));return 0;}" > temp.c)
-    $(shell $(CC) -include $(1) temp.c -o temp.o)
-	$(eval $(shell ./temp.o))
-    $(shell $(RM) temp.c temp.o)
+        #ifndef $(2)\n \
+        #define $(2) 0\n \
+        #endif\n \
+        int main() {printf(\"$(2)=$(3)\", $(2));return 0;}" > MakefileImportMacro.c)
+    $(shell $(CC) -include $(1) MakefileImportMacro.c -o MakefileImportMacro.o)
+	$(eval $(shell ./MakefileImportMacro.o))
+    $(shell $(RM) MakefileImportMacro.c MakefileImportMacro.o)
 endef

@@ -9,6 +9,7 @@ This is an information file for the Fujifilm HS20EXR.
 #define PRINTIM_HACK_WORKS
 
 #define MODEL_NAME "Fujifilm HS20EXR"
+#define MODEL_CODE "62306231623262336234623562366237623862397382"
 
 #define MEM_STRNCPY 0x001e1af8
 #define MEM_SUBTRING 0x001e1af8
