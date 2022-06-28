@@ -47,6 +47,9 @@ pack unpack lay: firm
 firm: firm.c
 	$(CC) $(HOST_CFLAGS) firm.c -o firm
 
+upload_ptp:
+	python3 ptp/firmware.py $(output)
+
 # Force compilation of firm every time. The compiled binary
 # is model specific.
 .PHONY: firm

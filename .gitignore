@@ -13,3 +13,4 @@ build.sh
 *.elf
 *.bin
 *.BIN
+__pycache__
