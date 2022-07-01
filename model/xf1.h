@@ -19,7 +19,13 @@ Fujifilm X-F1 Information File
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
 #define FIRMWARE_PRINTIM 0x00516c90
+#define MEM_PRINTIM 0x0 // Can't find it in 30mb dump
 #define FIRMWARE_PRINTIM_MAX 236
+
+// Injection details for "voice memo" feature
+#define FIRMWARE_MEMO 0x0063fe20
+#define MEM_MEMO 0x01397dd8
+#define FIRMWARE_MEMO_MAX 100
 
 // Memory address where code can be copied. Need
 // A bunch of useless bytes that don't seem important,
@@ -41,6 +47,10 @@ Fujifilm X-F1 Information File
 
 // addr of ".WAV" text used by voice memo
 #define MEM_WAV_TEXT 0x0137cea4
+
+// Addresses exposed in memory and in firmware
+#define FIRM_DUMP_ADDR 0x006e3748
+#define MEM_DUMP_ADDR 0x0143b700
 
 // "Seems to work" screen buffer
 #define SCREEN_WIDTH 640
@@ -67,4 +77,8 @@ Fujifilm X-F1 Information File
 
 	NSTUB(dumb_test, 0x011d1bec)
 	NSTUB(random_strcpy, 0x0072f90c) // good emulator testing function
+	NSTUB(random_strncat, 0x0072f9d8)
+
+	NSTUB(random_test3, 0x00e50ebc)
+
 #endif

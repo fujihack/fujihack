@@ -6,9 +6,9 @@
 char buffer[100];
 
 char *_start() {
-	char drive = fuji_drive();
 
-	sqlite_snprintf(100, buffer, "Drive at dump is %c", drive);
+	int *asd = 0;
+	sqlite_snprintf(100, buffer, "Test: %d", random_test3(2));
 
 	return buffer;
 }

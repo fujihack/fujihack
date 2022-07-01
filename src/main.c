@@ -5,9 +5,8 @@
 #include <string.h>
 #include "sqlite.h"
 
-#ifdef A
+#if 0
 #include "font/font.h"
-#endif
 
 void pixel(int x, int y) {
 	int *buf = (int *)SCREEN_BUFFER;
@@ -22,7 +21,6 @@ void rect(int x1, int y1, int w1, int h1) {
 	}
 }
 
-#ifdef A
 int printChar(int x, int y, char c) {
 	// Loop to "null terminator character"
 	int match = 0;
@@ -53,14 +51,7 @@ int printChar(int x, int y, char c) {
 #endif
 
 void entry() {
-	int *fudge = (int *)SCREEN_BUFFER;
-
-	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-		fudge[i] = 0xffffffff;
-	}
-
-	rect(0, 0, 100, 100);
-	rect(100, 100, 100, 100);
-	rect(200, 200, 100, 100);
-	rect(300, 300, 100, 100);
+	// Basic Test for now
+	char *a = (char*)MEM_MODEL_TEXT;
+	sqlite_snprintf(30, a, "Hello, World");
 }

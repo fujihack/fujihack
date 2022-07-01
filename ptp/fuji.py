@@ -12,6 +12,8 @@ FUJI_WRITE_FILE = 0x901d
 
 FUJI_FPUPDATE = 0xb802
 FUJI_AUTO_ACT = 0x3002
+FUJI_DSCF_JPG = 0x3801
+FUJI_DSCF_RAF = 0xb103
 
 def packFile(fileCode):
     string = 0

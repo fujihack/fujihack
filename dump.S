@@ -1,3 +1,4 @@
+// (This code is retired)
 // Very hacky janky Fujifilm XF-1 ONLY test
 // Memcpy hijack syncing memory dumper (firmware injection)
 

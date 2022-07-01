@@ -1,3 +1,4 @@
+include src/util.mk
 -include config.mak
 
 # Defaults, tweak these via CLI or config.mak
@@ -11,10 +12,11 @@ asm_file?=main.S
 HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
 
 # import FIRMWARE_PRINTIM macro from header file
-include src/util.mk
+$(call importMacro, model/$(model).h, MEM_PRINTIM, %x)
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x)
-FIRMWARE_INJECT_ADDR?=$(FIRMWARE_PRINTIM)
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u)
+MEM_INJECT_ADDR?=$(MEM_PRINTIM)
+FIRMWARE_INJECT_ADDR?=$(FIRMWARE_PRINTIM)
 FIRMWARE_INJECT_MAX?=$(FIRMWARE_PRINTIM_MAX)
 
 ARMCC?=arm-none-eabi
@@ -32,7 +34,7 @@ help:
 # Use the firm program to send injection into 
 inject.o: $(asm_file)
 	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
-	$(ARMCC)-ld -Bstatic -Ttext=0x$(FIRMWARE_INJECT_ADDR) inject.o -o inject.elf
+	$(ARMCC)-ld -Bstatic -Ttext=0x$(MEM_INJECT_ADDR) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
 inject: firm inject.o

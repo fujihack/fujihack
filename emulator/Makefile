@@ -1,3 +1,5 @@
+-include ../config.mak
+
 # Installation:
 # pip3 install unicorn
 
