@@ -8,10 +8,11 @@ hijack.setup()
 
 # See main.S
 HIJACK = "GetThumb"
-ZERO = 8
-RESET = 7
-EXEC = 6
+
+ZERO = 4
 WRITE = 5
+EXEC = 6
+RESET = 7
 
 f = open(sys.argv[1], "rb")
 c = f.read()

@@ -51,7 +51,6 @@ int printChar(int x, int y, char c) {
 #endif
 
 void entry() {
-	// Basic Test for now
 	char *a = (char*)MEM_MODEL_TEXT;
-	sqlite_snprintf(30, a, "Hello, World");
+	sqlite_snprintf(30, a, "Hello, FujiHack World");
 }

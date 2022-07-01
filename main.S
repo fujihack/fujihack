@@ -53,12 +53,12 @@ custom:
 	ldr r5, [r1, #0x14] // get second parameter
 
 	// Problems with sending zero to PTP,
-	// command #8 will be used to write it
+	// command #4 will be used to write it
 	cmp r6, #4
 	bne h
-	eor r5, r5, r5
-	mov r5, #0
-	mov r6, #5
+		eor r5, r5, r5 // reset register
+		mov r5, #0 // reset register again for some reason
+		mov r6, #5 // set action to #5, write byte
 	h:
 
 	// #5 - write byte

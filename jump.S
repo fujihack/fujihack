@@ -3,11 +3,11 @@
 
 .global _start
 _start:
-	push {r4, r5, r6, lr}
+	push {r4, r5, r6, r7, r8, lr}
 
-	adr r9, addr
-	ldr r9, [r9]
-	bx r9
+	adr r4, addr
+	ldr r4, [r4]
+	bx r4
 
-	pop {r4, r5, r6, pc}
+	pop {r4, r5, r6, r7, r8, pc}
 	addr: .int MEM_DUMP_ADDR
