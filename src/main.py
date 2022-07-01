@@ -11,8 +11,8 @@ with camera.session():
     camera.custom2(0x100a, [7])
     for i in c:
         if i == 0:
-            print("Sending 8")
-            camera.custom2(0x100a, [8, 255])
+            print("Sending 4")
+            camera.custom2(0x100a, [4, 255])
         else:
             print("Sending", hex(i))
             camera.custom2(0x100a, [5, i])
