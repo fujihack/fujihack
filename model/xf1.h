@@ -11,7 +11,24 @@ Fujifilm X-F1 Information File
 #define CAN_CUSTOM_FIRMWARE
 #define PRINTIM_HACK_WORKS
 
-// "lay" information
+/*
+These are stubs for the "lay" target,
+which rearrages the firmware file
+as if it were in memory.
+
+In most cases, the firmware thinks the
+strings should be somewhere else in
+the firmware file, although this
+could also be somewhere outside the
+firmware file.
+
+In order to find these addresses, code
+must be matched up with an external
+source. For the first time this was
+done, firmware code was matched up
+alongside the SQLite source code, which
+is included on newer models.
+*/
 #define MEM_START 0x011ea108 - 0x10000
 #define TEXT_START 0x00492150 - 0x10000
 #define COPY_LENGTH 0x500000

@@ -59,4 +59,4 @@ upload_ptp:
 clean:
 	$(RM) output* firm *.o *.out *.DAT *.elf
 
-.PHONY: pack unpack lay asm clean help
+.PHONY: pack unpack lay asm clean help inject upload_ptp
