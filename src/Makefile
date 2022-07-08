@@ -3,7 +3,7 @@
 model?=xf1
 
 # Bring C preprocessor macro into Make
-include util.mk
+include ../etc/util.mk
 $(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
 
 # Target specific dependencies

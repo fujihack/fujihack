@@ -3,6 +3,8 @@
 #endif
 
 #include <string.h>
+#include <stdint.h>
+#include "fujifilm.h"
 #include "sqlite.h"
 
 #if 0
@@ -51,6 +53,10 @@ int printChar(int x, int y, char c) {
 #endif
 
 void entry() {
+	int buf;
+	int r = fuji_malloc(0x014559c8, &buf, -1);
+
 	char *a = (char*)MEM_MODEL_TEXT;
-	sqlite_snprintf(30, a, "Hello, FujiHack World");
+
+	sqlite_snprintf(40, a, "E %d", r);
 }

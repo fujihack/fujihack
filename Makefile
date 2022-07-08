@@ -1,4 +1,4 @@
-include src/util.mk
+include etc/util.mk
 -include config.mak
 
 # Defaults, tweak these via CLI or config.mak
@@ -10,17 +10,18 @@ asm_file?=main.S
 
 # Include model info by default
 HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
-
-# import FIRMWARE_PRINTIM macro from header file
-$(call importMacro, model/$(model).h, MEM_PRINTIM, %x)
-$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x)
-$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u)
-MEM_INJECT_ADDR?=$(MEM_PRINTIM)
-FIRMWARE_INJECT_ADDR?=$(FIRMWARE_PRINTIM)
-FIRMWARE_INJECT_MAX?=$(FIRMWARE_PRINTIM_MAX)
-
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h
+
+# Import macros from header files to Makefiles
+# This is put inside a "define/endef" so it can be
+# Expanded ONLY when it is needed for each target.
+# It's a really janky solution, but there's no other way.
+define import
+$(call importMacro, model/$(model).h, MEM_PRINTIM, %x, MEM_INJECT_ADDR)
+$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x, FIRMWARE_INJECT_ADDR)
+$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u, FIRMWARE_INJECT_MAX)
+endef
 
 help:
 	@echo "Parameters:"
@@ -33,11 +34,13 @@ help:
 
 # Use the firm program to send injection into 
 inject.o: $(asm_file)
+	$(call import)
 	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
 	$(ARMCC)-ld -Bstatic -Ttext=0x$(MEM_INJECT_ADDR) inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.o
 
 inject: firm inject.o
+	$(call import)
 	./firm $@ -j inject.o -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
 
 asm: unpack inject pack
