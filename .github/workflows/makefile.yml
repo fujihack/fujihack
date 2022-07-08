@@ -32,7 +32,7 @@ jobs:
       run: |
         make clean
         cp etc/xf1_memo_config.mak config.mak
-        make multi_inject
+        make multi_inject input=FPUPDATE-xf1.DAT
     - name: XF1 voice memo hack md5sum
       run: md5sum FPUPDATE.DAT
 
