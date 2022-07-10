@@ -7,15 +7,11 @@ This isn't for the Fujifilm S series. [CHDK](https://chdk.setepontos.com/index.p
 
 ## Contact
 - Send me an email: brikbusters@gmail.com
-- Matrix: https://app.element.io/#/room/#fuji:matrix.org
 - Discord: https://discord.gg/UZXDktvAZP
 - Hackaday: https://hackaday.io/project/182218-fujifilm-custom-firmware
 
 ## How to Use
 **Don't, at least not yet. If you are interested or have questions, contact me (See above)**
-
-*Note: The firmware utility (firm.c) doesn't have a command line parser yet.*  
-*Parameters are sent in via preprocessor definitions on compile time.*  
 
 The Makefile will compile firm.c, as well as the assembly injection hacks.  
 Type `make help` for some info.  
@@ -41,3 +37,6 @@ Fujifilm cameras for fun.
 
 And remember...   
 **If you break it, you get to keep both pieces.**  
+
+Copyright 2021-2022 FujiHack by Cook Board Company LLC and contributors
+FujiHack is licenced under the GNU General Public License v3.0
