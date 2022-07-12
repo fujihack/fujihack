@@ -6,10 +6,6 @@
 // header, jumps to the code above, and then returns back, hoping that
 // it preserved everything correctly for the original code.
 
-#ifndef CAN_DO_EXECUTER
-	#error "This model doesn't seem to be able to run the executer!"
-#endif
-
 // This section is copied into the firmware on compile time,
 // preferably by the PrintIM hack.
 .global _start

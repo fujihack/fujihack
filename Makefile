@@ -33,9 +33,8 @@ help:
 
 # Use the firm program to send injection into 
 inject.bin: $(asm_file)
-	$(call import)
 	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
-	$(ARMCC)-ld -Bstatic -Ttext=0x$(MEM_INJECT_ADDR) inject.o -o inject.elf
+	$(ARMCC)-ld -Bstatic inject.o -o inject.elf
 	$(ARMCC)-objcopy -O binary inject.elf inject.bin
 
 inject: firm inject.bin
@@ -59,6 +58,6 @@ upload_ptp:
 .PHONY: firm
 
 clean:
-	$(RM) output* firm *.o *.out *.DAT *.elf
+	$(RM) output* firm *.o *.out *.DAT *.elf *.bin
 
 .PHONY: pack unpack lay asm clean help inject upload_ptp
