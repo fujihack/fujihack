@@ -16,7 +16,6 @@ ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h
 # Import macros from header files to Makefiles
 # This is put inside a "define/endef" so it can be
 # Expanded ONLY when it is needed for each target.
-# It's a really janky solution, but there's no other way.
 define import
 $(call importMacro, model/$(model).h, MEM_PRINTIM, %x, MEM_INJECT_ADDR)
 $(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x, FIRMWARE_INJECT_ADDR)
@@ -33,15 +32,15 @@ help:
 	@echo "  make unpack input=~/Downloads/FPUPDATE.DAT temp_file=output"
 
 # Use the firm program to send injection into 
-inject.o: $(asm_file)
+inject.bin: $(asm_file)
 	$(call import)
 	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
 	$(ARMCC)-ld -Bstatic -Ttext=0x$(MEM_INJECT_ADDR) inject.o -o inject.elf
-	$(ARMCC)-objcopy -O binary inject.elf inject.o
+	$(ARMCC)-objcopy -O binary inject.elf inject.bin
 
-inject: firm inject.o
+inject: firm inject.bin
 	$(call import)
-	./firm $@ -j inject.o -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
+	./firm $@ -j inject.bin -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
 
 asm: unpack inject pack
 

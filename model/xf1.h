@@ -3,32 +3,14 @@ Fujifilm X-F1 Information File
 */
 
 #define MODEL_NAME "Fujifilm XF-1"
-
 #define MODEL_CODE "000192710001927200019273000192740001927500019276000192770001927800019279000192810001928200019286"
 
 // Confirmed tests:
 #define CAN_DO_EXECUTER
 #define CAN_CUSTOM_FIRMWARE
 #define PRINTIM_HACK_WORKS
+#define MEMO_HACK_WORKS
 
-/*
-These are stubs for the "lay" target,
-which rearrages the firmware file
-as if it were in memory.
-
-In most cases, the firmware thinks the
-strings should be somewhere else in
-the firmware file, although this
-could also be somewhere outside the
-firmware file.
-
-In order to find these addresses, code
-must be matched up with an external
-source. For the first time this was
-done, firmware code was matched up
-alongside the SQLite source code, which
-is included on newer models.
-*/
 #define MEM_START 0x011ea108 - 0x10000
 #define TEXT_START 0x00492150 - 0x10000
 #define COPY_LENGTH 0x500000
@@ -75,6 +57,8 @@ is included on newer models.
 
 #define SCREEN_BUFFER 0x1cee77e + ((SCREEN_WIDTH * SCREEN_HEIGHT) * 0)
 
+#define DEV_FLAG 0x007a0e64
+
 #ifdef STUBS
 	#include "stub.h"
 
@@ -92,10 +76,33 @@ is included on newer models.
 	NSTUB(sqlite_snprintf, 0x013ff32c)
 	NSTUB(sqlite_malloc, 0x013fddcc) // aka sqlite3Malloc, does not seem to work at all
 
-	NSTUB(dumb_test, 0x011d1bec)
 	NSTUB(random_strcpy, 0x0072f90c) // good emulator testing function
 	NSTUB(random_strncat, 0x0072f9d8)
 
-	NSTUB(random_test3, 0x00e50ebc)
+	NSTUB(fuji_screen_write, 0x011d1fb4)
+	NSTUB(fuji_discard_text_buffer, 0x011d1f90)
+
+	NSTUB(fuji_ptp_strncpy, 0x00730148)
+
+	NSTUB(ui_get_text, 0x0122e024)
 
 #endif
+
+/*
+
+Container: 
+    StandardVersion = 100
+    VendorExtensionID = Microsoft
+    VendorExtensionVersion = 100
+    VendorExtensionDesc = fujifilm.co.jp: 1.0; 
+    FunctionalMode = 0
+    OperationsSupported = ['GetDeviceInfo', 'OpenSession', 'CloseSession', 'GetStorageIDs', 'GetStorageInfo', 'GetNumObjects', 'GetObjectHandles', 'GetObjectInfo', 'GetObject', 'GetThumb', 'DeleteObject', 'SendObjectInfo', 'SendObject', 'FormatStore', 'GetDevicePropDesc', 'GetDevicePropValue', 'SetDevicePropValue', 'GetPartialObject', 36876, 36877, 36893, 'GetObjectPropsSupported', 'GetObjectPropDesc', 'GetObjectPropValue', 'GetObjPropList']
+    EventsSupported = ['ObjectAdded', 'ObjectRemoved', 'StoreAdded', 'StoreRemoved', 'DevicePropChanged', 'DeviceInfoChanged', 'RequestObjectTransfer']
+    DevicePropertiesSupported = ['BatteryLevel', 54019, 'SessionInitiatorVendorInfo', 'PerceivedDeviceType']
+    CaptureFormats = []
+    ImageFormats = ['EXIF_JPEG', 'JFIF']
+    Manufacturer = FUJIFILM
+    Model = XF1
+    DeviceVersion = 1.01
+
+*/
