@@ -38,7 +38,7 @@ struct Header {
 	#ifndef MODEL_SIZE
 		#define MODEL_SIZE 512
 	#endif
-	unsigned char code[512];
+	unsigned char code[MODEL_SIZE];
 
 	// Printed as hex in the camera. X.X
 	unsigned int version1;
@@ -48,7 +48,7 @@ struct Header {
 	unsigned int checksum;
 
 	// Generally just 1 (?)
-	unsigned int noIdea;
+	unsigned int end;
 };
 
 void inject(unsigned long addr, char input[], int max) {

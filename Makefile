@@ -13,15 +13,6 @@ HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h
 
-# Import macros from header files to Makefiles
-# This is put inside a "define/endef" so it can be
-# Expanded ONLY when it is needed for each target.
-define import
-$(call importMacro, model/$(model).h, MEM_PRINTIM, %x, MEM_INJECT_ADDR)
-$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x, FIRMWARE_INJECT_ADDR)
-$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u, FIRMWARE_INJECT_MAX)
-endef
-
 help:
 	@echo "Parameters:"
 	@echo "  model      Used for camera info, see model/. Can be left blank if you are just unpacking."
@@ -38,7 +29,11 @@ inject.bin: $(asm_file)
 	$(ARMCC)-objcopy -O binary inject.elf inject.bin
 
 inject: firm inject.bin
-	$(call import)
+	# Import macros
+	$(call importMacro, model/$(model).h, MEM_PRINTIM, %x, MEM_INJECT_ADDR)
+	$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x, FIRMWARE_INJECT_ADDR)
+	$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u, FIRMWARE_INJECT_MAX)
+
 	./firm $@ -j inject.bin -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
 
 asm: unpack inject pack
