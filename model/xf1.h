@@ -18,7 +18,7 @@ Fujifilm X-F1 Information File
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
 #define FIRMWARE_PRINTIM 0x00516c90
-#define MEM_PRINTIM 0x0 // Can't find it in 30mb dump
+#define MEM_PRINTIM 0x0
 #define FIRMWARE_PRINTIM_MAX 236
 
 // Injection details for "voice memo" feature

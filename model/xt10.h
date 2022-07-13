@@ -4,6 +4,7 @@ Fujifilm X-T10
 */
 
 #define MODEL_NAME "Fujifilm X-T10"
+#define MODEL_CODE "0005100100051002000510040005100500051007000510090005101"
 
 // Code triggered when a picture is taken
 #define FIRM_TAKEPIC 0x0096cc80

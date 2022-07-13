@@ -12,6 +12,7 @@ cmp r2, #0x71000000 or `71 04 52 e3`
 */
 
 #define MODEL_NAME "Fujifilm Z3"
+#define MODEL_CODE "1109111011121113111411151116"
 
 #define MODEL_SIZE 128
 
