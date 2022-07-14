@@ -97,7 +97,7 @@ Fujifilm X-F1 Information File
 
 	NSTUB(ui_get_text, 0x0122e024)
 
-	NSTUB(file_test, 0x00fd5aa4)
+	NSTUB(file_test, 0x00e2e220)
 #endif
 
 /*

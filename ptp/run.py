@@ -9,7 +9,7 @@ hijack.setup()
 HIJACK = "GetThumb"
 RESET = 7
 EXEC = 6
-WRITE = 5
+WRITE = 8
 
 camera = ptpy.PTPy()
 

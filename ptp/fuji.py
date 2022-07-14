@@ -10,10 +10,18 @@ FUJI_CREATE_FILE = 0x900c
 FUJI_UNKNOWN1 = 0x900d
 FUJI_WRITE_FILE = 0x901d
 
+FUJI_UNKNOWN2 = 0x9801 # InvalidObjectFormatCode
+FUJI_UNKNOWN3 = 0x9802 # Invalid_ObjectPropCode, NO DATA
+FUJI_UNKNOWN4 = 0x9803 # InvalidObjectHandle
+FUJI_UNKNOWN5 = 0x9805 # Specification_By_Group_Unsupported
+
 FUJI_FPUPDATE = 0xb802
 FUJI_AUTO_ACT = 0x3002
 FUJI_DSCF_JPG = 0x3801
 FUJI_DSCF_RAF = 0xb103
+FUJI_XXXXXXXX = 0xb003 # ?
+FUJI_XXXXXXX2 = 0x3001 # ?
+FUJI_XXXXXXX3 = 0x3808 # ?
 
 def packFile(fileCode):
     string = 0

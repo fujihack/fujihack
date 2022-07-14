@@ -97,4 +97,7 @@ void entry() {
 #if 0
 	memory_dump();
 #endif
+	char buffer[16];
+	sqlite_snprintf(16, buffer, "Testx");
+	fuji_screen_write(buffer, 1, 1, 0, 7);
 }
