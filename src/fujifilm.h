@@ -34,15 +34,8 @@ void *fuji_fopen(uint32_t handler, char string[]);
 void *fuji_fwrite(uint32_t handler, void *fp, int n, void *data);
 void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 
+// Weird timing functions required by file API
 void fuji_toggle();
 void fuji_zero();
-
-#if 0
-// Posix wrappers around RTOS functions:
-void malloc(int n) {
-	void *addr;
-	rtos_malloc(n, &addr, -1);
-}
-#endif
 
 #endif
