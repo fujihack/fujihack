@@ -59,13 +59,24 @@ Fujifilm X-F1 Information File
 
 #define DEV_FLAG 0x007a0e64
 
+#define FUJI_FOPEN_HANDLER 0x00fd45b4
+#define FUJI_FWRITE_HANDLER 0x00fd462c
+#define FUJI_FCLOSE_HANDLER 0x00fd45dc
+
 #ifdef STUBS
 	#include "stub.h"
 
 	NSTUB(fuji_drive, 0x0072db0c)
+
 	NSTUB(fuji_fopen, 0x0072b87c)
 	NSTUB(fuji_fread, 0x0072b618)
+	NSTUB(fuji_fwrite, 0x0072b428)
+	NSTUB(fuji_fclose, 0x0072b250)
+
 	NSTUB(fuji_malloc, 0x0073a2cc)
+
+	NSTUB(fuji_toggle, 0x00fd5a1c)
+	NSTUB(fuji_zero, 0x00fd4590)
 
 	/* Test:
 	sqlite_exec(0x0144c67c, "create table foo()", ); 
@@ -86,6 +97,7 @@ Fujifilm X-F1 Information File
 
 	NSTUB(ui_get_text, 0x0122e024)
 
+	NSTUB(file_test, 0x00fd5aa4)
 #endif
 
 /*

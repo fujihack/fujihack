@@ -52,7 +52,7 @@ int printChar(int x, int y, char c) {
 }
 #endif
 
-#if 1
+#if 0
 
 // 512 meg
 #define DUMP_SIZE_MB 256
