@@ -13,9 +13,9 @@ FIRMWARE_INJECT_MAX=300
 MEM_INJECT_ADDR=0
 
 multi_inject:
-	$(RM) *.o *.elf
+	$(MAKE) clean-out
 	$(MAKE) unpack
 	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRM_DUMP_ADDR) asm_file=main.S
-	$(RM) *.o *.elf
+	$(MAKE) clean-out
 	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRMWARE_MEMO) asm_file=jump.S
 	$(MAKE) pack

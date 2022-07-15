@@ -52,7 +52,10 @@ upload_ptp:
 # is model specific.
 .PHONY: firm
 
-clean:
-	$(RM) output* firm *.o *.out *.DAT *.elf *.bin
+clean-out:
+	$(RM) firm *.o *.out *.elf *.bin
+
+clean: clean-out
+	$(RM) output* firm *.DAT
 
 .PHONY: pack unpack lay asm clean help inject upload_ptp
