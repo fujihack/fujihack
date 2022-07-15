@@ -52,21 +52,21 @@ int printChar(int x, int y, char c) {
 }
 #endif
 
-#if 0
+#if 1
 
 // 512 meg
 #define DUMP_SIZE_MB 256
 #define DUMP_SIZE DUMP_SIZE_MB * 1000 * 1000
 
 void memory_dump() {
-	char buffer[16];
-	sqlite_snprintf(16, buffer, "Dumping %uMB RAM", DUMP_SIZE_MB);
+	char buffer[32];
+	sqlite_snprintf(sizeof(buffer), buffer, "Dumping %uMB RAM", DUMP_SIZE_MB);
 	fuji_screen_write(buffer, 1, 1, 0, 7);
 	fuji_screen_write("Will lock up", 1, 2, 0, 7);
 
-	uint8_t *mem = (uint8_t*)0x0;
+	uint8_t *mem = (uint8_t*)0x10000000;
 
-	char file[] = "X:\\RAM.BIN";
+	char file[] = "X:\\RAM2.BIN";
 	file[0] = fuji_drive();
 
 	fuji_toggle();
@@ -89,15 +89,5 @@ void memory_dump() {
 #endif
 
 void entry() {
-// Basic Test
-#if 0
-	char *x = (char*)MEM_MODEL_TEXT;
-	sqlite_snprintf(16, x, "Hello World");
-#endif
-#if 0
 	memory_dump();
-#endif
-	char buffer[16];
-	sqlite_snprintf(16, buffer, "Testx");
-	fuji_screen_write(buffer, 1, 1, 0, 7);
 }
