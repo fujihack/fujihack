@@ -42,8 +42,8 @@ def packFile(fileCode):
     # Prepare Data struct
     header = bytes([0, 0, 0, 0])
     header += (fileCode).to_bytes(4, 'little')
-    header += bytes([0xff, 0xff, 0xff, 0xff]) # magic numbers
-    #header += bytes([0x34, 0x84, 0xa1, 0x1]) # magic numbers
+    #header += bytes([0xff, 0xff, 0xff, 0xff]) # magic numbers
+    header += bytes([0x34, 0x84, 0xa1, 0x1]) # magic numbers
 
     # 40 characters of blank Space, then carriage return
     header += bytearray(40) + bytes([13])
