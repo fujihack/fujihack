@@ -186,6 +186,8 @@ void pack() {
 		printf("[INFO] Added %x to checksum.\n", checksum1 - checksum2);
 	}
 
+	printf("[INFO] New header checksum: %x\n", header.checksum);
+
 	// Change firmware version
 	header.version2++;
 
