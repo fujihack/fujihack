@@ -21,7 +21,10 @@ with camera.session():
     data = file.read()
     
     # Initialize FPUPDATE.DAT
-    camera.custom_send(FUJI_CREATE_FILE, packFile(FUJI_FPUPDATE))
+    r = camera.custom_send(FUJI_CREATE_FILE, packFile(FUJI_FPUPDATE))
+    if r.ResponseCode != "OK":
+        print("Error:", r)
+        sys.exit(1);
 
     # Write some test bytes
     percent = 0

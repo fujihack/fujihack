@@ -29,14 +29,11 @@ Fujifilm X-F1 Information File
 // Memory address where code can be copied. Need
 // A bunch of useless bytes that don't seem important,
 // crashes when I go over 2kb
-#define MEM_FREE_SPACE 0x00e572e8
+#define MEM_FREE_SPACE 0x019a0000
 
 // Where to hack on the PTP thumbnail function, 
 // Seems to have bytes [0xf0, 0x4d, 0x2d, 0xe9]
 #define MEM_PTP_THUMBNAIL 0x00e56fbc
-
-// Dumper temp addr
-#define DUMPER_TEMP_ADDR 0x00e56f34
 
 // fujifilm.co.jp text printed by PTP
 #define MEM_MODEL_TEXT 0x00e5e228
