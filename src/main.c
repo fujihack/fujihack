@@ -1,5 +1,5 @@
 #ifndef MODEL_NAME
-	#include "../model/xf1.h"
+	#include "../model/xf1_101.h"
 #endif
 
 #include <string.h>

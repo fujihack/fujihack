@@ -1,7 +1,3 @@
-#ifndef MODEL_NAME
-	#include "../model/xf1.h"
-#endif
-
 #include "sqlite.h"
 #include <string.h>
 #include <stdint.h>

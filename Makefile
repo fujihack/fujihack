@@ -2,7 +2,7 @@ include etc/util.mk
 -include config.mak
 
 # Defaults, tweak these via CLI or config.mak
-model?=xf1
+model?=xf1_101
 input?=$(shell echo ~/Downloads/FPUPDATE.DAT)
 output?=FPUPDATE.DAT
 temp_file?=output

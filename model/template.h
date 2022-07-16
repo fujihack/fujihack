@@ -6,7 +6,7 @@ Fujifilm X-TEMPLATE
 #define MODEL_NAME "Fujifilm XXXXX"
 
 // Paste number from firm utility
-#define MODEL_CODE "XXXX"
+//#define MODEL_CODE "XXXX"
 
 // Where code thinks the data should be:
 #define MEM_START 0x1f54c3c - 10000

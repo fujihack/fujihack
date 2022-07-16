@@ -3,7 +3,7 @@
 # Installation:
 # pip3 install unicorn
 
-model?=xf1
+model?=xf1_101
 dump?=/home/daniel/Downloads/dump_0x00e_32mb.bin
 
 ARMCC=arm-none-eabi

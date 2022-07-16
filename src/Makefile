@@ -1,6 +1,6 @@
 -include ../config.mak
 
-model?=xf1
+model?=xf1_101
 
 # Bring C preprocessor macro into Make
 include ../etc/util.mk

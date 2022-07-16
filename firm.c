@@ -15,7 +15,7 @@ struct cli {
 	.temp = "output",
 	.output = "FPUPDATE.DAT",
 	.input = "FPUPDATE-xf1.DAT",
-	.model = "xf1",
+	.model = "xf1_101",
 	.max = NULL,
 	.addr = NULL,
 	.inject = "inject.o"
@@ -23,7 +23,7 @@ struct cli {
 
 // Bypass linter
 #ifndef MODEL_NAME
-	#include "model/hs20exr.h"
+	#include "model/template.h"
 #endif
 
 // Standard header for all Fujifilm firmware
@@ -114,8 +114,27 @@ void unpack() {
 
 	parseCode(header.code);
 
+	// Generate model code from header, Eg "101" from 1.01
+	char verCode[8];
+	if (header.version2 >= 0x10) {
+		snprintf(verCode, 8, "%x%x", header.version1, header.version2);
+	} else {
+		snprintf(verCode, 8, "%x0%x", header.version1, header.version2);
+	}
+
+	int i;
+	for (i = 0; Cli.model[i] != '_'; i++) {
+		if (Cli.model[i] == '\0') {exit(1);}
+	}
+	i++;
+
+	if (strcmp(Cli.model + i, verCode)) {
+		printf("[ERR] Firmware does not match chosen model.\n");
+		exit(1);
+	}
+
 	printf("[INFO] Hardware version: %x\n", header.os);
-	printf("[INFO] Firmware Version: %u.%x\n", header.version1, header.version2);
+	printf("[INFO] Firmware Version: %s\n", verCode);
 
 	printf("[INFO] Checksum: %x\n", header.checksum);
 
