@@ -15,6 +15,7 @@ FUJI_UNKNOWN3 = 0x9802 # Invalid_ObjectPropCode, NO DATA
 FUJI_UNKNOWN4 = 0x9803 # InvalidObjectHandle
 FUJI_UNKNOWN5 = 0x9805 # Specification_By_Group_Unsupported
 
+# These are PTP standard ancillary format codes
 FUJI_FPUPDATE = 0xb802
 FUJI_AUTO_ACT = 0x3002
 FUJI_DSCF_JPG = 0x3801

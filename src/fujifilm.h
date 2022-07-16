@@ -1,6 +1,8 @@
 #ifndef FUJI_H
 #define FUJI_H
 
+#include <stdint.h>
+
 /*
 
 Fujifilm uses 4 bytes per pixel, multiple layer display system.
@@ -37,5 +39,26 @@ void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 // Weird timing functions required by file API
 void fuji_toggle();
 void fuji_zero();
+
+#if 0
+struct FujiTask task;
+task.function = test;
+task.priority = 0x800;
+task.type = "WLDSDINTR";
+task.z = 0;
+fuji_create_task(0, 1, &task);
+#endif
+
+struct FujiTask {
+	void *function;
+	uint32_t *x;
+	uint32_t priority;
+	uint32_t *y;
+	uint32_t z;
+	char *type;
+};
+
+int fuji_task_sleep(int ms);
+void fuji_create_task(int x, int y, struct FujiTask *task);
 
 #endif

@@ -11,7 +11,7 @@ asm_file?=main.S
 # Include model info by default
 HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
 ARMCC?=arm-none-eabi
-ARMCFLAGS?=-mcpu=cortex-a8 -c --include model/$(model).h
+ARMCFLAGS?=-mcpu=cortex-a8 -c -D STUBS --include model/$(model).h
 
 help:
 	@echo "Parameters:"

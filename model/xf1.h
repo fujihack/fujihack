@@ -52,7 +52,7 @@ Fujifilm X-F1 Information File
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
-#define SCREEN_BUFFER 0x1cee77e + ((SCREEN_WIDTH * SCREEN_HEIGHT) * 0)
+#define SCREEN_BUFFER 0x01be0000
 
 #define DEV_FLAG 0x007a0e64
 
@@ -90,11 +90,30 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_screen_write, 0x011d1fb4)
 	NSTUB(fuji_discard_text_buffer, 0x011d1f90)
 
+	NSTUB(fuji_task_sleep, 0x0073ba3c)
+	NSTUB(fuji_create_task, 0x0073bec8)
+
+	NSTUB(ui_test, 0x0122e408)
+
+	NSTUB(key_push, 0x011d2650)
+
+	NSTUB(common_func, 0x007332cc)
+	NSTUB(get_key, 0x00730008)
+
 	NSTUB(fuji_ptp_strncpy, 0x00730148)
-
 	NSTUB(ui_get_text, 0x0122e024)
+	NSTUB(file_test, 0x00fd5c28)
+	NSTUB(run_auto_act, 0x00fd5aa4)
 
-	NSTUB(file_test, 0x00fd5aa4)
+	/*
+		uint8_t *r = (uint8_t*)0x409a7e00 + 0xb6;
+	r[0] = 1;
+	r = (uint8_t*)0x0163048c;
+	r[0] = 0;
+
+((uint8_t*)0x023ef4b0)[2]
+	*/
+
 #endif
 
 /*

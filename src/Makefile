@@ -17,7 +17,7 @@ ARMLDFLAGS?=-Bstatic -T Linker.ld
 RM=rm -rf
 
 # Recompile when these are changed
-EXTERN_DEPS=Makefile ../model/$(model).h
+EXTERN_DEPS=Makefile ../model/$(model).h *.h *.c
 
 # The normal hack code
 hack: hack.bin
