@@ -54,11 +54,16 @@ Fujifilm X-F1 Information File
 
 #define SCREEN_BUFFER 0x01be0000
 
-#define DEV_FLAG 0x007a0e64
+#define MEM_DEV_FLAG 0x007a117c
+#define MEM_DEV_MODE 0x007a7250
 
 #define FUJI_FOPEN_HANDLER 0x00fd45b4
 #define FUJI_FWRITE_HANDLER 0x00fd462c
 #define FUJI_FCLOSE_HANDLER 0x00fd45dc
+
+#define MEM_SCREEN_LAYER 0x4164e92c
+
+#define MEM_INPUT_MAP 0x00795370;
 
 #ifdef STUBS
 	#include "stub.h"
@@ -89,30 +94,52 @@ Fujifilm X-F1 Information File
 
 	NSTUB(fuji_screen_write, 0x011d1fb4)
 	NSTUB(fuji_discard_text_buffer, 0x011d1f90)
+	NSTUB(fuji_update_buffer, 0x00e8d418)
 
 	NSTUB(fuji_task_sleep, 0x0073ba3c)
-	NSTUB(fuji_create_task, 0x0073bec8)
+	NSTUB(fuji_create_semaphore, 0x0073b3a4)
 
-	NSTUB(ui_test, 0x0122e408)
+	NSTUB(fuji_task_create, 0x00735c2c)
+	NSTUB(fuji_task_check, 0x00734610)
+	NSTUB(fuji_task_test, 0x00734848)
+
+	NSTUB(test, 0x013cc194)
+
+	NSTUB(sensor_info, 0x00fee158)
 
 	NSTUB(key_push, 0x011d2650)
 
-	NSTUB(common_func, 0x007332cc)
-	NSTUB(get_key, 0x00730008)
-
-	NSTUB(fuji_ptp_strncpy, 0x00730148)
-	NSTUB(ui_get_text, 0x0122e024)
-	NSTUB(file_test, 0x00fd5c28)
 	NSTUB(run_auto_act, 0x00fd5aa4)
+#endif
 
-	/*
-		uint8_t *r = (uint8_t*)0x409a7e00 + 0xb6;
-	r[0] = 1;
-	r = (uint8_t*)0x0163048c;
-	r[0] = 0;
+// Not working
+#if 0
+struct C {
+	int a;
+	uint32_t b;
+};
 
-((uint8_t*)0x023ef4b0)[2]
-	*/
+uint32_t id = 0x55;
+
+struct C x;
+x.a = 0x30;
+x.b = 0xb0;
+
+int r = fuji_task_check(id, &x);
+//SCREENDBG("Test %d", r)
+
+if (r == 0) {
+	struct FujiTask task;
+	task.a = id;
+	task.b = "";
+	task.c = 0xd;
+	task.d = 0x1000;
+	task.e = fujihack;
+	task.f = 0;
+
+	int r = fuji_task_create(&task);
+}
+
 
 #endif
 

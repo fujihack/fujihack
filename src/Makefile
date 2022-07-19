@@ -7,7 +7,7 @@ include ../etc/util.mk
 $(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
 
 # Target specific dependencies
-HACK_BIN_DEPS=entry.o main.o lib.o stub.o
+HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o
 ALLOCER_BIN_DEPS=entry.o alloc.o stub.o
 
 ARMCC?=arm-none-eabi

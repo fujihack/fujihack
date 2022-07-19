@@ -36,29 +36,28 @@ void *fuji_fopen(uint32_t handler, char string[]);
 void *fuji_fwrite(uint32_t handler, void *fp, int n, void *data);
 void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 
-// Weird timing functions required by file API
+// Weird OS/timing functions required by file API
 void fuji_toggle();
 void fuji_zero();
 
-#if 0
-struct FujiTask task;
-task.function = test;
-task.priority = 0x800;
-task.type = "WLDSDINTR";
-task.z = 0;
-fuji_create_task(0, 1, &task);
-#endif
-
 struct FujiTask {
-	void *function;
-	uint32_t *x;
-	uint32_t priority;
-	uint32_t *y;
-	uint32_t z;
-	char *type;
+	uint32_t a;
+	char *b;
+	uint32_t c;
+	uint32_t d;
+	void *e;
+	uint32_t f;
 };
 
 int fuji_task_sleep(int ms);
-void fuji_create_task(int x, int y, struct FujiTask *task);
+int fuji_create_task(int x, int y, struct FujiTask *task);
+
+struct FujiInputMap {
+	uint32_t key_code;
+	uint32_t x;
+	uint32_t key_status;
+	uint32_t accel;
+	uint32_t gyro;
+};
 
 #endif

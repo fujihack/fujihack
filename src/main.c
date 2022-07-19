@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdint.h>
+#include "fujihack.h"
 #include "fujifilm.h"
 #include "sqlite.h"
 
@@ -55,33 +56,11 @@ void memory_dump(char file[], uintptr_t location) {
 
 #include "parasite.h"
 
-#if 0
-
-int count = 1;
-void print_log(char *string) {
-	char file[10];
-	sqlite_snprintf(10, file, "%c:\\%d.TXT", fuji_drive(), count);
-
-	fuji_toggle();
-	void *fp = fuji_fopen(FUJI_FOPEN_HANDLER, file);
-	fuji_toggle();
-	fuji_zero();
-
-	fuji_toggle();
-	fuji_fwrite(FUJI_FWRITE_HANDLER, fp, strlen(string), string);
-	fuji_toggle();
-	fuji_zero();
-
-	fuji_toggle();
-	fuji_fclose(FUJI_FCLOSE_HANDLER, fp, 0, (char*)0);
-	fuji_toggle();
-	fuji_zero();
-	count++;
-}
-#endif
-
 void entry(uint32_t base) {
-#if 1
+#if 0
+	fujihack_init();
+#endif
+#if 0
 	char *x = (char*)MEM_MODEL_TEXT;
 	sqlite_snprintf(16, x, "Hello World");
 #endif
