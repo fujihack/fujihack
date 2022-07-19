@@ -3,11 +3,16 @@
 #include <sqlite.h>
 #include <fujifilm.h>
 
-char buffer[100];
+void *main();
+void *_start() {
+	return main();
+}
 
-char *_start() {
-	char str[] = "@@@@@@@@@@";
-	return parse_check(str, str + 6, 0, (char**)&str);
+char buffer[12];
+
+void *main() {
+	sqlite_snprintf(sizeof(buffer), buffer, "Hello");
+	return buffer;
 }
 
 #include <lib.c>
