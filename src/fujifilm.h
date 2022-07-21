@@ -32,7 +32,7 @@ void fuji_screen_write(char string[], int x, int y, int foreground_color, int ba
 // Delete text buffer, does not take effect until screen updates
 void fuji_discard_text_buffer();
 
-void *fuji_fopen(uint32_t handler, char string[]);
+void *fuji_fopen(uint32_t handler, char string[], int flag);
 void *fuji_fwrite(uint32_t handler, void *fp, int n, void *data);
 void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 
@@ -56,8 +56,8 @@ struct FujiInputMap {
 	uint32_t key_code;
 	uint32_t x;
 	uint32_t key_status;
-	uint32_t accel;
-	uint32_t gyro;
+	int accel;
+	int gyro;
 };
 
 #endif

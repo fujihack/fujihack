@@ -7,8 +7,7 @@ include ../etc/util.mk
 $(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
 
 # Target specific dependencies
-HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o
-ALLOCER_BIN_DEPS=entry.o alloc.o stub.o
+HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o hijack.o
 
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
@@ -22,10 +21,6 @@ EXTERN_DEPS=Makefile ../model/$(model).h *.h *.c
 # The normal hack code
 hack: hack.bin
 	python3 ../ptp/load.py hack.bin
-
-# Sets load address to allocated memory
-allocer: allocer.bin
-	python3 ../ptp/load.py allocer.bin
 
 run:
 	python3 ../ptp/run.py

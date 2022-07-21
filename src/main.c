@@ -36,7 +36,7 @@ void memory_dump(char file[], uintptr_t location) {
 	file[0] = fuji_drive();
 
 	fuji_toggle();
-	void *fp = fuji_fopen(FUJI_FOPEN_HANDLER, file);
+	void *fp = fuji_fopen(FUJI_FOPEN_HANDLER, file, 0);
 	fuji_toggle();
 	fuji_zero();
 
@@ -56,11 +56,11 @@ void memory_dump(char file[], uintptr_t location) {
 
 #include "parasite.h"
 
-void entry(uint32_t base) {
-#if 0
-	fujihack_init();
+void entry(uintptr_t base) {
+#if 1
+	fujihack_init(base);
 #endif
-#if 0
+#if 1
 	char *x = (char*)MEM_MODEL_TEXT;
 	sqlite_snprintf(16, x, "Hello World");
 #endif

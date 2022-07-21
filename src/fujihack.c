@@ -2,17 +2,18 @@
 	#include "../model/xf1_101.h"
 #endif
 
-#include "fujihack.h"
 
 #include <string.h>
 #include <stdint.h>
+#include "fujihack.h"
 #include "fujifilm.h"
 #include "sqlite.h"
+#include "hijack.h"
 
 void fujihack();
 
 // Main FujiHack Menu
-
+#define FLASH_TASK_PATCH 0x0064632c
 enum FujiKey {
 	KEY_UP = 0x2,
 	KEY_DOWN = 0x3,
@@ -25,16 +26,19 @@ enum FujiKey {
 };
 
 
-struct Menu {
+static struct Menu {
 	char curr_screen;
 	uint8_t screens;
 	char cursor;
 	uint8_t i;
-};
+}menu;
 
-void fujihack_init() {
-	// Soon: figure out multitasking
-	fujihack();
+void fujihack_init(uintptr_t base) {
+	menu.curr_screen = 0;
+	menu.screens = 1;
+	menu.cursor = 0;
+
+	generate_call((uintptr_t)FLASH_TASK_PATCH, (uintptr_t)(base + fujihack), (uint8_t*)FLASH_TASK_PATCH);
 }
 
 void menuPrint(struct Menu *menu, char string[]) {
@@ -48,22 +52,22 @@ void menuPrint(struct Menu *menu, char string[]) {
 }
 
 void fujihack() {
-	struct Menu menu;
-	menu.curr_screen = 0;
-	menu.screens = 1;
-	menu.cursor = 0;
-
 	struct FujiInputMap *k = (struct FujiInputMap*)MEM_INPUT_MAP;
+	char buffer[32];
 
-	k->key_code = 128;
+	if (k->key_status != 128 && k->key_code == KEY_EFN) {
+		k->key_status = 0;
+		k->key_code = 0;
+		fuji_task_sleep(10);
+		goto menu_start;
+	}
 
-	goto draw;
+	return;
 
+	uint8_t count = 0;
 	while (1) {
-		char buffer[32];
-
 		if (k->key_status != 128) {
-			switch (k->key_code) {
+			switch ((uint8_t)k->key_code) {
 			case KEY_DOWN:
 				menu.cursor++;
 				break;
@@ -80,16 +84,14 @@ void fujihack() {
 					menu.curr_screen++;
 				}
 				break;
-			case KEY_DISPBACK:
-				fuji_screen_write("FujiHack Quitting", 1, 1, 10, 7);
-				fuji_discard_text_buffer();
+			case KEY_EFN:
+				fuji_screen_write("Quitting", 1, 1, 10, 7);
 				return;
-			default:
-				continue;
 			}
 		}
 
-		draw:
+		menu_start:;
+
 		menu.i = 0;
 		switch (menu.curr_screen) {
 		case 0:
@@ -100,16 +102,22 @@ void fujihack() {
 			sqlite_snprintf(sizeof(buffer), buffer, "Key Code: %u", k->key_code);
 			menuPrint(&menu, buffer);
 
-			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %u", k->key_status != 128);
+			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %u", k->key_status);
 			menuPrint(&menu, buffer);
+
+			// sqlite_snprintf(sizeof(buffer), buffer, "X: %u", k->x);
+			// menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Gryroscope: %u", k->gyro);
 			menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Accelerometer: %u", k->accel);
 			menuPrint(&menu, buffer);
+
+			sqlite_snprintf(sizeof(buffer), buffer, "Renders: %u", count);
+			menuPrint(&menu, buffer);
 		}
 
-		fuji_task_sleep(100);
+		count++;
 	}
 }

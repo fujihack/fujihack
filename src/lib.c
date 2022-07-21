@@ -5,6 +5,7 @@
 // You define stuff to get a function.
 #define GIMMIE_MEMCPY
 #define GIMMIE_STRLEN
+#define GIMMIE_MEMSET
 
 /* A basic no nonsense divmod function if
  * needed (probably never) */
