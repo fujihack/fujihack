@@ -7,19 +7,7 @@
 #include "fujihack.h"
 #include "fujifilm.h"
 #include "sqlite.h"
-
-void pixel(int x, int y) {
-	int *buf = (int *)SCREEN_BUFFER;
-	buf[SCREEN_WIDTH * y + x] = 0xffffffff;
-}
-
-void rect(int x1, int y1, int w1, int h1) {
-	for (int x = x1; x < w1+x1; x++) {
-		for (int y = y1; y < h1+y1; y++) {
-			pixel(x, y);
-		}
-	}
-}
+#include "screen.h"
 
 #define DUMP_SIZE_MB 256
 #define DUMP_SIZE DUMP_SIZE_MB * 1000 * 1000
@@ -57,7 +45,11 @@ void memory_dump(char file[], uintptr_t location) {
 #include "parasite.h"
 
 void entry(uintptr_t base) {
-#if 1
+#if 0
+	disp_clear();
+	disp_rect(10, 10, 100, 100);
+#endif
+#if 0
 	fujihack_init(base);
 #endif
 #if 1

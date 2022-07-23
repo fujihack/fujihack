@@ -56,8 +56,8 @@ struct FujiInputMap {
 	uint32_t key_code;
 	uint32_t x;
 	uint32_t key_status;
-	int accel;
 	int gyro;
+	int accel;
 };
 
 #endif

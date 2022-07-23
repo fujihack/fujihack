@@ -2,6 +2,7 @@
 	#include "../model/xf1_101.h"
 #endif
 
+// for xf1 only at the moment
 
 #include <string.h>
 #include <stdint.h>
@@ -12,19 +13,28 @@
 
 void fujihack();
 
-// Main FujiHack Menu
 #define FLASH_TASK_PATCH 0x0064632c
+
+// key codes have different offsets in different menus
 enum FujiKey {
+	KEY_OK = 0x1,
 	KEY_UP = 0x2,
 	KEY_DOWN = 0x3,
-	KEY_RIGHT = 0x5,
 	KEY_LEFT = 0x4,
+	KEY_RIGHT = 0x5,
+	KEY_SHUTTER = 0x8,
 	KEY_DISPBACK = 0x9,
+	KEY_FLASH = 0x1c, // when flash is opened/closed
+	KEY_WHEEL_CLOCKWISE = 0x1f,
+	KEY_WHEEL_COUNTERCLOCKWISE = 0x20,
+	KEY_RECORD = 0x2e,
+	KEY_FN = 0x2f,
 	KEY_EFN = 0x36,
 	KEY_SCROLL_DOWN = 0x3a,
-	KEY_FN = 0x2f,
+	KEY_SCROLL_LEFT = 0x3b,
+	KEY_SCROLL_RIGHT = 0x3c,
+	KEY_SCROLL_PRESS = 0x3a,
 };
-
 
 static struct Menu {
 	char curr_screen;
@@ -55,6 +65,8 @@ void fujihack() {
 	struct FujiInputMap *k = (struct FujiInputMap*)MEM_INPUT_MAP;
 	char buffer[32];
 
+	// code to trigger menu on key press
+#if 0
 	if (k->key_status != 128 && k->key_code == KEY_EFN) {
 		k->key_status = 0;
 		k->key_code = 0;
@@ -63,6 +75,7 @@ void fujihack() {
 	}
 
 	return;
+#endif
 
 	uint8_t count = 0;
 	while (1) {
@@ -85,7 +98,9 @@ void fujihack() {
 				}
 				break;
 			case KEY_EFN:
+				fuji_discard_text_buffer();
 				fuji_screen_write("Quitting", 1, 1, 10, 7);
+				generate_nop((uint8_t*)FLASH_TASK_PATCH);
 				return;
 			}
 		}
@@ -99,19 +114,19 @@ void fujihack() {
 
 			menuPrint(&menu, "FujiHack By Daniel C");
 
-			sqlite_snprintf(sizeof(buffer), buffer, "Key Code: %u", k->key_code);
+			sqlite_snprintf(sizeof(buffer), buffer, "Key Code: %x", k->key_code);
 			menuPrint(&menu, buffer);
 
-			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %u", k->key_status);
+			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %x", k->key_status);
 			menuPrint(&menu, buffer);
 
-			// sqlite_snprintf(sizeof(buffer), buffer, "X: %u", k->x);
-			// menuPrint(&menu, buffer);
-
-			sqlite_snprintf(sizeof(buffer), buffer, "Gryroscope: %u", k->gyro);
+			sqlite_snprintf(sizeof(buffer), buffer, "buf: %x", ((uint32_t*)0x0144cd18)[0]);
 			menuPrint(&menu, buffer);
 
-			sqlite_snprintf(sizeof(buffer), buffer, "Accelerometer: %u", k->accel);
+			sqlite_snprintf(sizeof(buffer), buffer, "Gryroscope: %x", k->gyro);
+			menuPrint(&menu, buffer);
+
+			sqlite_snprintf(sizeof(buffer), buffer, "Accelerometer: %x", k->accel);
 			menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Renders: %u", count);
