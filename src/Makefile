@@ -11,7 +11,11 @@ HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o hijack.o
 
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
-ARMLDFLAGS?=-Bstatic -T Linker.ld
+ARMLDFLAGS?=--gc-sections -Bstatic -T Linker.ld
+
+# Remove unused sections
+ARMCFLAGS+=-fdata-sections -ffunction-sections
+ARMLDFLAGS+=--gc-sections
 
 RM=rm -rf
 
