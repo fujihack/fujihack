@@ -28,7 +28,7 @@ Fujifilm X-F1 Information File
 
 // Memory address where code can be copied. Need
 // A bunch of useless bytes that don't seem important,
-// crashes when I go over 2kb
+// TODO: This is actually where a screen buffer is...
 #define MEM_FREE_SPACE 0x019a0000
 
 // Where to hack on the PTP thumbnail function, 
@@ -52,7 +52,7 @@ Fujifilm X-F1 Information File
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
-#define SCREEN_BUFFER 0x01be0000
+#define SCREEN_BUFFER (0x01901800 + (640*480*4) * 1) - SCREEN_WIDTH * 300 - 100
 
 #define MEM_DEV_FLAG 0x007a117c
 #define MEM_DEV_MODE 0x007a7250
@@ -60,8 +60,6 @@ Fujifilm X-F1 Information File
 #define FUJI_FOPEN_HANDLER 0x00fd45b4
 #define FUJI_FWRITE_HANDLER 0x00fd462c
 #define FUJI_FCLOSE_HANDLER 0x00fd45dc
-
-#define MEM_SCREEN_LAYER 0x4164e92c
 
 #define MEM_INPUT_MAP 0x00795370;
 
@@ -103,7 +101,12 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_task_check, 0x00734610)
 	NSTUB(fuji_task_test, 0x00734848)
 
-	NSTUB(test, 0x013cc194)
+	NSTUB(test, 0x00e5bcd4)
+	NSTUB(fuji_get_key, 0x00d17d4c)
+
+	NSTUB(fuji_diropen, 0x00e4d8d0)
+
+	NSTUB(FUN_0073910c, 0x0073910c)
 
 	NSTUB(sensor_info, 0x00fee158)
 
