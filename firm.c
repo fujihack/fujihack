@@ -124,7 +124,10 @@ void unpack() {
 
 	int i;
 	for (i = 0; Cli.model[i] != '_'; i++) {
-		if (Cli.model[i] == '\0') {exit(1);}
+		if (Cli.model[i] == '\0') {
+			puts("[WARN] Model name doesn't include version.");
+			goto skip;
+		}
 	}
 	i++;
 
@@ -132,6 +135,8 @@ void unpack() {
 		printf("[ERR] Firmware does not match chosen model.\n");
 		exit(1);
 	}
+
+	skip:;
 
 	printf("[INFO] Hardware version: %x\n", header.os);
 	printf("[INFO] Firmware Version: %s\n", verCode);
