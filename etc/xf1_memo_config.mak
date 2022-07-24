@@ -2,7 +2,7 @@
 
 all: help
 
-model=xf1
+model=xf1_101
 output=FPUPDATE.DAT
 temp_file=output
 
