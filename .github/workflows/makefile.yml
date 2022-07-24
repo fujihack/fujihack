@@ -18,7 +18,7 @@ jobs:
       run: sudo apt install gcc make gcc-arm-none-eabi wget
 
     - name: Compile firmware utility
-      run: make firm model=xf1
+      run: make firm model=xf1_101
 
     - name: XF1 Firmware
       run: wget https://dl.fujifilm-x.com/support/firmware/xf1YbzzDmLK/FPUPDATE.DAT -O ../FPUPDATE-xf1.DAT
