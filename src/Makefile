@@ -1,3 +1,6 @@
+help:
+	@echo "Targets: hack run hack.bin clean"
+
 -include ../config.mak
 
 model?=xf1_101
@@ -7,7 +10,7 @@ include ../etc/util.mk
 $(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
 
 # Target specific dependencies
-HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o hijack.o screen.o
+HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o hijack.o screen.o posix.o
 
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
@@ -20,7 +23,7 @@ ARMLDFLAGS+=--gc-sections
 RM=rm -rf
 
 # Recompile when these are changed
-EXTERN_DEPS=Makefile ../model/$(model).h *.h *.c
+EXTERN_DEPS=Makefile ../model/$(model).h *.h
 
 # The normal hack code
 hack: hack.bin
@@ -47,10 +50,9 @@ hack.bin: $(HACK_BIN_DEPS)
 	$(ARMCC)-objcopy -O binary hack.elf hack.bin
 	$(ARMCC)-size --format=berkeley --target=binary hack.bin
 
-allocer.bin: $(ALLOCER_BIN_DEPS)
-	$(ARMCC)-ld $(ARMLDFLAGS) $(ALLOCER_BIN_DEPS) -o allocer.elf
-	$(ARMCC)-objcopy -O binary allocer.elf allocer.bin
-	$(ARMCC)-size --format=berkeley --target=binary allocer.bin
+font.bin: font/font.h
+	$(ARMCC)-gcc -c font/font.c -o font.o
+	$(ARMCC)-objcopy -O binary font.o font.bin
 
 clean:
 	$(RM) *.elf *.o *.bin

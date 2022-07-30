@@ -98,14 +98,16 @@ void fujihack() {
 				}
 				break;
 			case KEY_EFN:
-				fuji_discard_text_buffer();
-				fuji_screen_write("Quitting", 1, 1, 10, 7);
 				generate_nop((uint8_t*)FLASH_TASK_PATCH);
+				fuji_discard_text_buffer();
 				return;
 			}
 		}
 
 		menu_start:;
+
+		uint32_t io[3];
+		get_io(io, MEM_INPUT_MAP, 10);
 
 		menu.i = 0;
 		switch (menu.curr_screen) {
@@ -120,7 +122,7 @@ void fujihack() {
 			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %x", k->key_status);
 			menuPrint(&menu, buffer);
 
-			sqlite_snprintf(sizeof(buffer), buffer, "buf: %x", ((uint32_t*)0x0144cd18)[0]);
+			sqlite_snprintf(sizeof(buffer), buffer, "IO: %x", io[0]);
 			menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Gryroscope: %x", k->gyro);
