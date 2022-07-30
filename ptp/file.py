@@ -1,4 +1,4 @@
-# Basic File test
+# Basic interfacing
 import ptpy, sys
 from random import randrange
 
@@ -8,9 +8,5 @@ from fuji import *
 camera = ptpy.PTPy()
 
 with camera.session():
-    print(camera.custom_send(FUJI_CREATE_FILE, packFile(FUJI_AUTO_ACT), param=[]))
-    #print(camera.custom_send(FUJI_WRITE_FILE, bytes(10000)))
-    #print(camera.custom_send(FUJI_UNKNOWN3, bytes(), param=[13, 132, 111, 1, 1]))
-    #print(camera.custom_send(FUJI_CREATE_FILE, packFile(FUJI_AUTO_ACT)))
-    #print(camera.custom_send(FUJI_WRITE_FILE, bytes(1000)))
-
+    print(camera.custom_send(FUJI_CREATE_FILE, packFile(0x3800, string = "C:\\tests")))
+    print(camera.custom_send(FUJI_WRITE_FILE, bytes()))
