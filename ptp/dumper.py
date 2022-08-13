@@ -1,3 +1,4 @@
+# Custom PTP based memory dumper
 import ptpy
 from random import randrange
 import ctypes

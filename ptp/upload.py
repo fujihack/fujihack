@@ -1,3 +1,4 @@
+# Stock PTP, upload files via vendor commands
 import ptpy, sys
 from random import randrange
 
@@ -19,9 +20,15 @@ with camera.session():
     
     print("Reading file into variable")
     data = file.read()
+
+    code = FUJI_FOLDER
+    if sys.argv[1].endswith(".DAT"):
+        code = FUJI_FPUPDATE
+    elif sys.argv[1].endswith(".SCR"):
+        code = FUJI_AUTO_ACT
     
     # Initialize FPUPDATE.DAT
-    r = camera.custom_send(FUJI_CREATE_FILE, packFile(FUJI_FPUPDATE))
+    r = camera.custom_send(FUJI_CREATE_FILE, packFile(code))
     if r.ResponseCode != "OK":
         print("Error:", r)
         sys.exit(1);

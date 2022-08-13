@@ -1,3 +1,4 @@
+# Load code into firmware patch
 import sys
 import ptpy
 import ctypes

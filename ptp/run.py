@@ -1,3 +1,4 @@
+# Run code without loading
 import ptpy
 import ctypes
 from random import randrange

@@ -6,8 +6,8 @@ from random import randrange
 import hijack
 hijack.setup()
 
-FUJI_CREATE_FILE = 0x900c
-FUJI_UNKNOWN1 = 0x900d
+FUJI_CREATE_FILE = 0x900c # same as 0x100c?
+FUJI_UNKNOWN1 = 0x900d # same as 0x100d?
 FUJI_WRITE_FILE = 0x901d
 
 # These are PTP standard ancillary format codes
@@ -20,7 +20,7 @@ FUJI_XXXXXXXX = 0xb003 # ?
 FUJI_XXXXXXX2 = 0x3001 # ?
 FUJI_XXXXXXX3 = 0x3808 # ?
 
-def packFile(fileCode, string=None):
+def packFile(fileCode, string=None, size=0x989680, storage_id=0x10000001):
     if string == None:
         if fileCode == FUJI_FPUPDATE:
             string = "FPUPDATE.DAT"
@@ -37,10 +37,9 @@ def packFile(fileCode, string=None):
     byte += bytearray(2)
 
     # Prepare Data struct
-    header = bytes([0, 0, 0, 0])
-    header += (fileCode).to_bytes(4, 'little')
-    #header += bytes([0xff, 0xff, 0xff, 0xff]) # not so magic numbers
-    header += bytes([0x34, 0x84, 0xa1, 0x1]) # magic numbers
+    header = (storage_id).to_bytes(4, "little")
+    header += (fileCode).to_bytes(4, "little")
+    header += (size).to_bytes(4, "little") # magic numbers
 
     # 40 characters of blank Space, then carriage return
     header += bytearray(40) + bytes([13])
