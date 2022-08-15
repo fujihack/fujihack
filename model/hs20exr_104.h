@@ -22,6 +22,8 @@ This is an information file for the Fujifilm HS20EXR.
 #define MEM_START 0x00db6568 - 10000
 #define TEXT_START 0x0074e5b0 - 10000
 
+#define MEM_EEP_START 0x4138a1c0
+
 // Empty area is larger than offset, so
 // we will just put in the offset instead
 #define COPY_LENGTH MEM_START - TEXT_START

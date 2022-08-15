@@ -45,7 +45,12 @@ Fujifilm X-F1 Information File
 #define MEM_DUMP_ADDR 0x0143b700
 
 // Where "corrupted" firmware data starts
-#define MEM_FIRM_START 0x96b10c0
+#define MEM_CRYPT_START 0x96b10c0
+
+#define FIRM_CRYPT_START 0x001c8048
+
+// Where unencrypted firmware data starts
+#define MEM_FIRM_START 0xda30e5
 
 // EEPRom data
 #define MEM_EEP_START 0x409a7e00
@@ -107,6 +112,8 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_task_check, 0x00734610)
 	NSTUB(fuji_task_test, 0x00734848)
 
+	NSTUB(apply_eeprom, 0x00633d1c)
+
 	NSTUB(fuji_get_key, 0x00d17d4c)
 
 	NSTUB(fuji_diropen, 0x0070ae18) // ?
@@ -125,9 +132,17 @@ Fujifilm X-F1 Information File
 	NSTUB(FUN_00e12b24, 0x00e12b24)
 	NSTUB(FUN_00debcc8, 0x00debcc8)
 
+	NSTUB(render_eep, 0x00e2e720)
+
 	// uint32_t io[3];
 	// get_io(io, MEM_INPUT_MAP, 10);
 	NSTUB(get_io, 0x0072fe08)
+
+	NSTUB(set_secret_state, 0x00fd5d54)
+
+	NSTUB(run_ffdb, 0x00f14f44)
+
+	NSTUB(test1, 0x00fd2378)
 #endif
 
 // Not working
