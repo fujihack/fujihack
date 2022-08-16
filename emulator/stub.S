@@ -1,0 +1,1 @@
+NSTUB(foo_bar, 0x12345678)

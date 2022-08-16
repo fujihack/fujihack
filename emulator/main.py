@@ -2,7 +2,7 @@ from unicorn import *
 from unicorn.arm_const import *
 import sys, multiprocessing
 
-MAX_MEM = 35 * 1024000
+MAX_MEM = 0x10000000
 
 # Base addr of firmware, injected code should be
 # position independent
@@ -53,12 +53,9 @@ def start():
     print("[I] Allocating " + str(MAX_MEM / 1000 / 1000) + "mb memory...")
     e.mem_map(BASE_ADDR, MAX_MEM, UC_PROT_ALL)
     e.mem_write(BASE_ADDR, firmware)
-
-    # Second base address, not sure what it's used for yet
-    e.mem_map(0x40000000, MAX_MEM, UC_PROT_ALL)
     
     # Write test.o right after firmware
-    fp = open("test.o", "rb")
+    fp = open("test.bin", "rb")
     injection = fp.read()
     e.mem_write(BASE_ADDR + len(firmware), injection)
     print("[I] Injection is", len(injection), "bytes")

@@ -17,19 +17,19 @@ all: test.o $(dump)
 # Recompile when these files are changed
 BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile
 
-test.o: $(BUILD_DEPS) test.c stub.o
-	$(ARMCC)-gcc $(ARMCFLAGS) test.c -o test.o
-	$(ARMCC)-ld test.o stub.o -o test.elf
-	$(ARMCC)-objcopy -O binary test.elf test.o
+test.o: $(BUILD_DEPS) main.o stub.o
+	$(ARMCC)-ld main.o stub.o -o test.elf
+	$(ARMCC)-objcopy -O binary test.elf test.bin
+
+%.o: %.c
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
 # Solely for compiling in stubs
-stub.o: $(BUILD_DEPS)
-	touch stub.S
+stub.o: $(BUILD_DEPS) stub.S
 	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) stub.S -o stub.o
-	$(RM) stub.S
 
 $(dump):
 	cd ..; $(MAKE) lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
 
 clean:
-	$(RM) *.o *.elf stub.S
+	$(RM) *.o *.elf *.bin
