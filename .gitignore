@@ -14,3 +14,4 @@ build.sh
 *.bin
 *.BIN
 __pycache__
+*.exe
