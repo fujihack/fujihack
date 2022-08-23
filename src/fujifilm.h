@@ -1,3 +1,4 @@
+// TODO: Make fujifilm/task.h, screen.h, ptp.h... (???)
 #ifndef FUJI_H
 #define FUJI_H
 
@@ -9,8 +10,7 @@
 #define COL_BLACK 0x00000000
 #define COL_WHITE 0xffffffff
 
-// RTOS malloc, used by some wlan functions.
-// mode is generally -1
+// RTOS malloc, seems to be task specific
 unsigned int fuji_malloc(int n, void *addr, int mode);
 
 // Returns current drive (DOS style)
@@ -31,10 +31,20 @@ void *fuji_fwrite(uint32_t handler, void *fp, int n, const void *data);
 void *fuji_fread(uint32_t handler, void *fp, int n, const void *data);
 void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 
+// There is no file pointer, just a single reading state
+int fuji_dir_open(char *first, char *second, char *buffer);
+int fuji_dir_next(char *buffer);
+
 // Weird OS/timing functions required by file API
 void fuji_toggle();
 void fuji_zero();
 
+#ifdef MEM_EEP_START
+	#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
+	#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
+#endif
+
+// Task creation data struct
 struct FujiTask {
 	uint32_t a;
 	char *b;
@@ -45,6 +55,8 @@ struct FujiTask {
 };
 
 int fuji_task_sleep(int ms);
+
+// Seems to just crash the camera
 int fuji_create_task(int x, int y, struct FujiTask *task);
 
 struct FujiInputMap {
@@ -72,7 +84,7 @@ struct FujiPTPData {
 	// ?????
 };
 
-// Dummy function
+// Function for each PTP command
 void fuji_ptp_function(uint8_t mode, struct FujiPTPParams *params, struct FujiPTPData *data);
 
 // "x" is generally 0

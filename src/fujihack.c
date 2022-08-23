@@ -24,6 +24,7 @@ enum FujiKey {
 	KEY_RIGHT = 0x5,
 	KEY_SHUTTER = 0x8,
 	KEY_DISPBACK = 0x9,
+	KEY_PREVIEW = 0xa2a, // ???
 	KEY_FLASH = 0x1c, // when flash is opened/closed
 	KEY_WHEEL_CLOCKWISE = 0x1f,
 	KEY_WHEEL_COUNTERCLOCKWISE = 0x20,
@@ -87,6 +88,7 @@ void fujihack() {
 			case KEY_UP:
 				menu.cursor--;
 				break;
+#if 0 // no support right now
 			case KEY_RIGHT:
 				if (menu.curr_screen + 1 >= menu.screens) {
 					menu.curr_screen++;
@@ -97,6 +99,7 @@ void fujihack() {
 					menu.curr_screen++;
 				}
 				break;
+#endif
 			case KEY_EFN:
 				generate_nop((uint8_t*)FLASH_TASK_PATCH);
 				fuji_discard_text_buffer();
@@ -105,9 +108,6 @@ void fujihack() {
 		}
 
 		menu_start:;
-
-		uint32_t io[3];
-		get_io(io, MEM_INPUT_MAP, 10);
 
 		menu.i = 0;
 		switch (menu.curr_screen) {
@@ -120,9 +120,6 @@ void fujihack() {
 			menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Key Down: %x", k->key_status);
-			menuPrint(&menu, buffer);
-
-			sqlite_snprintf(sizeof(buffer), buffer, "IO: %x", io[0]);
 			menuPrint(&menu, buffer);
 
 			sqlite_snprintf(sizeof(buffer), buffer, "Gryroscope: %x", k->gyro);

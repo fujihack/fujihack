@@ -5,15 +5,11 @@ help:
 
 model?=xf1_101
 
-# Bring C preprocessor macro into Make
-include ../etc/util.mk
-$(call importMacro, ../model/$(model).h, MEM_FREE_SPACE, %x)
-
 # Target specific dependencies
-HACK_BIN_DEPS=entry.o main.o lib.o stub.o fujihack.o hijack.o screen.o posix.o
+HACK_BIN_DEPS=boot.o main.o lib.o stub.o fujihack.o hijack.o screen.o posix.o
 
 ARMCC?=arm-none-eabi
-ARMCFLAGS?=-fpic -mcpu=cortex-a8 -include ../model/$(model).h -c
+ARMCFLAGS?=-fpic -mcpu=cortex-a7 -include ../model/$(model).h -c
 ARMLDFLAGS?=--gc-sections -Bstatic -T Linker.ld
 
 # Remove unused sections
@@ -45,7 +41,7 @@ run:
 stub.o: stub.S ../model/$(model).h
 	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) $< -o $@
 
-hack.bin: $(HACK_BIN_DEPS)
+hack.bin: $(HACK_BIN_DEPS) Linker.ld
 	$(ARMCC)-ld $(ARMLDFLAGS) $(HACK_BIN_DEPS) -o hack.elf
 	$(ARMCC)-objcopy -O binary hack.elf hack.bin
 	$(ARMCC)-size --format=berkeley --target=binary hack.bin
