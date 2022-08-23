@@ -116,7 +116,8 @@ Fujifilm X-F1 Information File
 
 	NSTUB(fuji_get_key, 0x00d17d4c)
 
-	NSTUB(fuji_diropen, 0x0070ae18) // ?
+	NSTUB(fuji_dir_open, 0x0070ae18) // ?
+	NSTUB(fuji_dir_next, 0x0070acd8)
 
 	NSTUB(sensor_info, 0x00fee158)
 	NSTUB(key_push, 0x011d2650)
@@ -128,21 +129,11 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_show_gui, 0x00e13030)
 	NSTUB(fuji_beep, 0x00e14d18)
 
+	NSTUB(render_eep_menu, 0x00e2e720)
 
-	NSTUB(FUN_00e12b24, 0x00e12b24)
-	NSTUB(FUN_00debcc8, 0x00debcc8)
+	NSTUB(run_s3_file, 0x00fd2480)
 
-	NSTUB(render_eep, 0x00e2e720)
-
-	// uint32_t io[3];
-	// get_io(io, MEM_INPUT_MAP, 10);
-	NSTUB(get_io, 0x0072fe08)
-
-	NSTUB(set_secret_state, 0x00fd5d54)
-
-	NSTUB(run_ffdb, 0x00f14f44)
-
-	NSTUB(test1, 0x00fd2378)
+	NSTUB(fuji_get_task, 0x007332cc)
 #endif
 
 // Not working
