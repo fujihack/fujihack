@@ -28,9 +28,15 @@ def printRegs(e, length):
     print("[I]   In injection:", hex(pc - length), " inst #" + str((pc - length) / 4))
     print("[I]   LR:", hex(lr))
     print("[I]   R0:", hex(r0), "/", r0)
+    print("[I]   R9:", hex(e.reg_read(UC_ARM_REG_R9)))
     print("[I]   Return String: '" + sanitizeString(e, r0) + "'")
-    #print("[O]   ", (e.read()))
-    #print("[I]   MAX_MEM =", MAX_MEM)
+
+'''
+    tmp = e.mem_read(0x20f10e8+0x418, 4)
+    for i in reversed(tmp):
+        print("%x" %i, end="")
+    print("")
+'''
 
 def runEmu(e, start, end, firmware):
     try:
@@ -72,6 +78,7 @@ def start():
     e.reg_write(UC_ARM_REG_LR, end);
 
     print("[I] Starting emulator on new thread...")
+    print("[I] Starting at", hex(start))
     p = multiprocessing.Process(target = runEmu,
         args = (e, start, end, firmware))
     p.start()

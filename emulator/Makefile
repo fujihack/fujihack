@@ -9,19 +9,21 @@ dump?=/home/daniel/Downloads/dump_0x00e_32mb.bin
 ARMCC=arm-none-eabi
 ARMCFLAGS=-c -include ../model/$(model).h -I../src/
 
-ARMCFLAGS+=-fpic
+ARMCFLAGS+=-fpic -mcpu=cortex-a7
 
-all: test.o $(dump)
+ARMLDFLAGS=-nostdlib -nostartfiles -T Linker.ld
+
+all: test.bin $(dump)
 	python3 main.py $(dump)
 
 # Recompile when these files are changed
-BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile
+BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile Linker.ld
 
-test.o: $(BUILD_DEPS) main.o stub.o
-	$(ARMCC)-ld main.o stub.o -o test.elf
+test.bin: $(BUILD_DEPS) main.o stub.o
+	$(ARMCC)-ld main.o stub.o $(ARMLDFLAGS) -o test.elf
 	$(ARMCC)-objcopy -O binary test.elf test.bin
 
-%.o: %.c
+%.o: %.c $(BUILD_DEPS)
 	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
 # Solely for compiling in stubs
