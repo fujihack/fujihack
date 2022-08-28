@@ -15,7 +15,7 @@ MEM_INJECT_ADDR=0
 multi_inject:
 	$(MAKE) clean-out
 	$(MAKE) unpack
-	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRM_DUMP_ADDR) asm_file=main.S
+	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRM_DUMP_ADDR) asm_file=patch/main.S
 	$(MAKE) clean-out
-	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRMWARE_MEMO) asm_file=jump.S
+	$(MAKE) inject input=$(input) FIRMWARE_INJECT_ADDR=$(FIRMWARE_MEMO) asm_file=patch/jump.S
 	$(MAKE) pack

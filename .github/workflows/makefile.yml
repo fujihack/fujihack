@@ -24,7 +24,7 @@ jobs:
       run: wget https://dl.fujifilm-x.com/support/firmware/xf1YbzzDmLK/FPUPDATE.DAT -O ../FPUPDATE-xf1.DAT
     
     - name: XF1 main.S
-      run: make model=xf1_101 input=../FPUPDATE-xf1.DAT asm_file=main.S asm
+      run: make model=xf1_101 input=../FPUPDATE-xf1.DAT asm_file=patch/main.S asm
     - name: XF1 main.S md5sum
       run: md5sum FPUPDATE.DAT
     
