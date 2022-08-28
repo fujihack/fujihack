@@ -14,6 +14,10 @@ _start:
 
 	sub r2, r1 // subtract, r2 == len
 
+	// Skip if GOT is zero
+	cmp r2, #0x0
+	beq skip
+
 	got_top:
 		sub r2, #0x4
 		adr r3, _start // get base addr
@@ -27,6 +31,7 @@ _start:
 	cmp r2, #0x0
 	bne got_top
 
+	skip:
 	adr r0, _start
 	bl entry
 
