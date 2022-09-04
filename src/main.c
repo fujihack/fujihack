@@ -6,8 +6,10 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "fujihack.h"
 #include "fujifilm.h"
+#include "rst.h"
+
+#include "fujihack.h"
 #include "sqlite.h"
 #include "screen.h"
 #include "hijack.h"
@@ -15,8 +17,11 @@
 
 void entry() {
 #if 0
-	int r = fuji_dir_open("A:\\", "*", buffer);
+	// Why is this crashing? Worked before...
+	char buffer[32];
+	int r = fuji_dir_open("C:\\", "*", buffer);
 	r = fuji_dir_next(buffer);
+	SCREENDBG("Hello, %d", r)
 #endif
 #if 0
 	write_file("X:\\DCAA\\auto_act.scr",

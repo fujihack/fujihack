@@ -36,3 +36,4 @@ void console_log(char string[]) {
 		fuji_discard_text_buffer();
 	}
 }
+

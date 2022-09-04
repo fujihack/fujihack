@@ -9,6 +9,8 @@
 _start:
 	push {r1, r2, r3, r4, r5, r6, lr}
 
+	// Need to fix up GOT first. It has addresses starting from the
+	// beginning of the file, not PC relative. This code fixes it.
 	ldr r1, =_got_start
 	ldr r2, =_got_end	
 
