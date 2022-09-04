@@ -4,16 +4,8 @@
 
 #include <stdint.h>
 
-// Fujifilm uses 4 bytes per pixel, multiple layer display system.
-// Each pixel is your typical hex code #aabbcc, with the
-// last 2 bytes are transparency (????)
-#define COL_BLACK 0x00000000
-#define COL_WHITE 0xffffffff
-
-// RTOS malloc, seems to be task specific
-unsigned int fuji_malloc(int n, void *addr, int mode);
-
 // Returns current drive (DOS style)
+// Crashes without SD card (???)
 char fuji_drive();
 
 // Screen text
@@ -69,27 +61,6 @@ struct FujiInputMap {
 	uint32_t b;
 	uint32_t c;
 };
-
-struct FujiPTPParams {
-	uint32_t code; // ptp command code
-	uint32_t transid; // ?
-	uint32_t x; // ?
-	uint32_t length; // ?
-	uint32_t param1;
-	uint32_t param2;
-};
-
-struct FujiPTPData {
-	uint32_t a;
-	// ?????
-};
-
-// Function for each PTP command
-void fuji_ptp_function(uint8_t mode, struct FujiPTPParams *params, struct FujiPTPData *data);
-
-// "x" is generally 0
-void fuji_ptp_finish(struct FujiPTPParams *params, int retcode, int retcode2);
-void fuji_ptp_return(int retcode, int x);
 
 void fuji_init_sqlite();
 
