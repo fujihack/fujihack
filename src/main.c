@@ -15,6 +15,8 @@
 #include "hijack.h"
 #include "parasite.h"
 
+int tetris_task();
+
 void entry() {
 #if 0
 	// Why is this crashing? Worked before...
@@ -31,7 +33,8 @@ void entry() {
 	run_auto_act();
 #endif
 #if 0
-	fujihack_init(base);
+	fuji_discard_text_buffer();
+	generate_branch(MEM_SHOW_PHOTO_PROPERTIES, (uintptr_t)&tetris_task, (uint8_t*)MEM_SHOW_PHOTO_PROPERTIES);
 #endif
 #if 1
 	char *x = (char*)MEM_MODEL_TEXT;

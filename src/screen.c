@@ -1,7 +1,7 @@
 #include "fujihack.h"
 #include "fujifilm.h"
 
-#define LAYER 3
+#define LAYER 2
 
 void disp_pixel(int x, int y, int col) {
 	uint32_t *buf = (uint32_t *)GET_SCREEN_LAYER(LAYER);

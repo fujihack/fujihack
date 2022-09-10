@@ -66,18 +66,6 @@ void fujihack() {
 	struct FujiInputMap *k = (struct FujiInputMap*)MEM_INPUT_MAP;
 	char buffer[32];
 
-	// code to trigger menu on key press
-#if 0
-	if (k->key_status != 128 && k->key_code == KEY_EFN) {
-		k->key_status = 0;
-		k->key_code = 0;
-		fuji_task_sleep(10);
-		goto menu_start;
-	}
-
-	return;
-#endif
-
 	uint8_t count = 0;
 	while (1) {
 		if (k->key_status != 128) {
@@ -106,8 +94,6 @@ void fujihack() {
 				return;
 			}
 		}
-
-		menu_start:;
 
 		menu.i = 0;
 		switch (menu.curr_screen) {
