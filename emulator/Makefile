@@ -11,7 +11,7 @@ ARMCFLAGS=-c -include ../model/$(model).h -I../src/
 
 ARMCFLAGS+=-fpic -mcpu=cortex-a7
 
-ARMLDFLAGS=-nostdlib -nostartfiles -T Linker.ld
+ARMLDFLAGS=-nostdlib -nostartfiles -T ../src/Linker.ld
 
 all: test.bin $(dump)
 	python3 main.py $(dump)
@@ -19,11 +19,16 @@ all: test.bin $(dump)
 # Recompile when these files are changed
 BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile Linker.ld
 
-test.bin: $(BUILD_DEPS) main.o stub.o
-	$(ARMCC)-ld main.o stub.o $(ARMLDFLAGS) -o test.elf
+O_FILES=entry.o main.o stub.o
+
+test.bin: $(BUILD_DEPS) $(O_FILES)
+	$(ARMCC)-ld $(O_FILES) $(ARMLDFLAGS) -o test.elf
 	$(ARMCC)-objcopy -O binary test.elf test.bin
 
 %.o: %.c $(BUILD_DEPS)
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
+
+%.o: %.S $(BUILD_DEPS)
 	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
 # Solely for compiling in stubs

@@ -1,9 +1,14 @@
 /*
-Fujifilm X-F1 Information File
+Fujifilm X-F1
+Mirrorless fixed lens
+
 */
 
 #define MODEL_NAME "Fujifilm XF-1"
 #define MODEL_CODE "000192710001927200019273000192740001927500019276000192770001927800019279000192810001928200019286"
+
+// Firmware doesn't seem to use any thumb code
+#define NO_THUMB
 
 // Confirmed tests:
 #define CAN_DO_EXECUTER
@@ -72,7 +77,10 @@ Fujifilm X-F1 Information File
 
 #define MEM_INPUT_MAP 0x00795370
 #define MEM_LAYER_INFO 0x0152e0f4
-#define MEM_SQLITE 0x0144c670
+#define MEM_SQLITE_STRUCT 0x0144c670
+
+// Beginning of the function that shows additional photo properties
+#define MEM_SHOW_PHOTO_PROPERTIES 0x011dd210
 
 #ifdef STUBS
 	#include "stub.h"
@@ -94,7 +102,7 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_init_sqlite, 0x013c24a8)
 	NSTUB(sqlite_exec, 0x014224b4)
 	NSTUB(sqlite_snprintf, 0x013ff32c)
-	NSTUB(sqlite_malloc, 0x013fddcc)
+	NSTUB(sqlite_mallocAlarm, 0x013fddcc)
 
 	NSTUB(random_strcpy, 0x0072f90c) // good emulator testing function
 	NSTUB(random_strncat, 0x0072f9d8)
@@ -103,11 +111,28 @@ Fujifilm X-F1 Information File
 	NSTUB(fuji_discard_text_buffer, 0x011d1f90)
 	NSTUB(fuji_update_buffer, 0x00e8d418)
 
+	//         Experimental:
+
+	NSTUB(FUN_011d2704, 0x011d2704) // Configures transparency, colors?
+	NSTUB(FUN_011fbb38, 0x011fbb38) // configures order?
+
+	// From show_photo_properties
+	NSTUB(fuji_rst_rect, 0x0122c35c)
+
+	NSTUB(fuji_rst_bmp, 0x0122ea68)
+
+	NSTUB(test_bmp, 0x0122d3d8)
+
+	NSTUB(test_halt, 0x00e8c704)
+
+	NSTUB(uilib_print, 0x011f2a5c)
+
 	NSTUB(fuji_task_sleep, 0x0073ba3c)
 	NSTUB(fuji_create_semaphore, 0x0073b3a4)
+	NSTUB(fuji_return_semaphore, 0x00734848)
+	NSTUB(fuji_get_semaphore, 0x00734938)
 
-	// Experimental:
-
+	NSTUB(fuji_task_suspend, 0x00734038)
 	NSTUB(fuji_task_create, 0x00735c2c)
 	NSTUB(fuji_task_check, 0x00734610)
 	NSTUB(fuji_task_test, 0x00734848)
@@ -134,54 +159,6 @@ Fujifilm X-F1 Information File
 	NSTUB(run_s3_file, 0x00fd2480)
 
 	NSTUB(fuji_get_task, 0x007332cc)
+
+	NSTUB(drive_info, 0x0072bde0)
 #endif
-
-// Not working
-#if 0
-struct C {
-	int a;
-	uint32_t b;
-};
-
-uint32_t id = 0x55;
-
-struct C x;
-x.a = 0x30;
-x.b = 0xb0;
-
-int r = fuji_task_check(id, &x);
-//SCREENDBG("Test %d", r)
-
-if (r == 0) {
-	struct FujiTask task;
-	task.a = id;
-	task.b = "";
-	task.c = 0xd;
-	task.d = 0x1000;
-	task.e = fujihack;
-	task.f = 0;
-
-	int r = fuji_task_create(&task);
-}
-
-
-#endif
-
-/*
-
-Container: 
-    StandardVersion = 100
-    VendorExtensionID = Microsoft
-    VendorExtensionVersion = 100
-    VendorExtensionDesc = fujifilm.co.jp: 1.0; 
-    FunctionalMode = 0
-    OperationsSupported = ['GetDeviceInfo', 'OpenSession', 'CloseSession', 'GetStorageIDs', 'GetStorageInfo', 'GetNumObjects', 'GetObjectHandles', 'GetObjectInfo', 'GetObject', 'GetThumb', 'DeleteObject', 'SendObjectInfo', 'SendObject', 'FormatStore', 'GetDevicePropDesc', 'GetDevicePropValue', 'SetDevicePropValue', 'GetPartialObject', 36876, 36877, 36893, 'GetObjectPropsSupported', 'GetObjectPropDesc', 'GetObjectPropValue', 'GetObjPropList']
-    EventsSupported = ['ObjectAdded', 'ObjectRemoved', 'StoreAdded', 'StoreRemoved', 'DevicePropChanged', 'DeviceInfoChanged', 'RequestObjectTransfer']
-    DevicePropertiesSupported = ['BatteryLevel', 54019, 'SessionInitiatorVendorInfo', 'PerceivedDeviceType']
-    CaptureFormats = []
-    ImageFormats = ['EXIF_JPEG', 'JFIF']
-    Manufacturer = FUJIFILM
-    Model = XF1
-    DeviceVersion = 1.01
-
-*/

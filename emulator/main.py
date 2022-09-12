@@ -4,12 +4,15 @@ import sys, multiprocessing
 
 MAX_MEM = 0x10000000
 
-# Base addr of firmware, injected code should be
+# Base addr of file, injected code should be
 # position independent
 BASE_ADDR = 0x0
 
 def sanitizeString(e, addr):
     final = ""
+
+    #if addr > 0x10000000:
+    #    return "???"
 
     data = e.mem_read(addr, 100)
     for b in data:
@@ -31,12 +34,17 @@ def printRegs(e, length):
     print("[I]   R9:", hex(e.reg_read(UC_ARM_REG_R9)))
     print("[I]   Return String: '" + sanitizeString(e, r0) + "'")
 
-'''
-    tmp = e.mem_read(0x20f10e8+0x418, 4)
-    for i in reversed(tmp):
-        print("%x" %i, end="")
-    print("")
-'''
+def mmio_read(uc, offset, size, data):
+    #printRegs(uc, 0)
+    print(">>> Memory read", hex(offset), size)
+    return uc.mem_read(offset - 0x00000000, 4)
+
+def mmio_write(uc, offset, size, value, data):
+    print(">>> Memory write", hex(offset), size)
+    uc.mem_write(offset - 0x00000000, 4)
+
+def io_write(uc, offset, size, value, data):
+    print("Written")
 
 def runEmu(e, start, end, firmware):
     try:
@@ -73,6 +81,9 @@ def start():
 
     start = BASE_ADDR + len(firmware)
     end = BASE_ADDR + len(firmware) + len(injection)
+
+    # Map 0x4* memory mirror
+    e.mmio_map(0x40000000, 0x50000000, mmio_read, None, mmio_write, None)
 
     # Function returns to end
     e.reg_write(UC_ARM_REG_LR, end);

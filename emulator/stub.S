@@ -1,1 +1,12 @@
-NSTUB(foo_bar, 0x12345678)
+NSTUB(set_selector_state, 0x00fd5d54)
+NSTUB(strcmp_, 0x00fd48a8)
+NSTUB(get_string_from_table, 0x00fd4b90)
+NSTUB(find_text_in_table, 0x00fd4c84)
+NSTUB(get_func_id, 0x00fd4364)
+NSTUB(parse_int, 0x00fd4a10)
+NSTUB(parse_eep, 0x00fd4ac4)
+
+NSTUB(lex_auto_act, 0x00fd4c70)
+NSTUB(set_func_select, 0x00fd44f0)
+NSTUB(exec_file_funcs, 0x00fd446c)
+NSTUB(script_tp, 0x00fd5464)

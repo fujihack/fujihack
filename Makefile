@@ -6,7 +6,7 @@ model?=xf1_101
 input?=$(shell echo ~/Downloads/FPUPDATE.DAT)
 output?=FPUPDATE.DAT
 temp_file?=output
-asm_file?=main.S
+asm_file?=patch/main.S
 
 # Include model info by default
 HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
