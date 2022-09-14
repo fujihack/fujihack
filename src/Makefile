@@ -6,7 +6,7 @@ help:
 model?=xf1_101
 
 # Target specific dependencies
-HACK_BIN_DEPS=boot.o main.o lib.o stub.o hijack.o screen.o posix.o tetris.o
+HACK_BIN_DEPS=boot.o main.o lib.o stub.o hijack.o screen.o posix.o
 
 ARMCC?=arm-none-eabi
 ARMCFLAGS?=-fpic -mcpu=cortex-a7 -include ../model/$(model).h -c
