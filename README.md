@@ -15,11 +15,14 @@ Check out the [FujiHack wiki](https://fujihack.github.io/) for a ton of into, an
 - Harmless code execution hijacks in firmware
 - Patch USB/PTP code to transfer and run custom code
 - Uncovered hidden scripting abilities (see https://github.com/fujihack/fujihack/issues/13)
+- Dump all sections of RAM
+- Modify EEPROM
 - Render text to screen
 - Interface with internal SQLite
 - Read IO: button status, gryoscope, accelerometer
 - Limited rasterizer object rendering
 - Tetris
+- Primitive menus
 - [Wiki](https://fujihack.github.io/)
 
 ## How to Use
@@ -55,5 +58,5 @@ make pack model=xf1 temp_file=output output=FPUPDATE.DAT
 And remember...   
 **If you break it, you get to keep both pieces.**  
 
-Copyright 2021-2022 FujiHack by Cook Board Company LLC and contributors  
+Copyright 2021-2022 FujiHack by Daniel C and contributors  
 FujiHack is licenced under the GNU General Public License v3.0  
