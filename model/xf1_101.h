@@ -113,8 +113,8 @@ Mirrorless fixed lens
 
 	//         Experimental:
 
-	NSTUB(FUN_011d2704, 0x011d2704) // Configures transparency, colors?
-	NSTUB(FUN_011fbb38, 0x011fbb38) // configures order?
+	NSTUB(fuji_rst_config1, 0x011d2704) // Configures transparency, colors?
+	NSTUB(fuji_rst_config2, 0x011fbb38) // configures order?
 
 	// From show_photo_properties
 	NSTUB(fuji_rst_rect, 0x0122c35c)
@@ -125,7 +125,7 @@ Mirrorless fixed lens
 
 	NSTUB(test_halt, 0x00e8c704)
 
-	NSTUB(uilib_print, 0x011f2a5c)
+	NSTUB(fuji_rst_print, 0x011f2a5c)
 
 	NSTUB(fuji_task_sleep, 0x0073ba3c)
 	NSTUB(fuji_create_semaphore, 0x0073b3a4)
