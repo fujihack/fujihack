@@ -18,14 +18,14 @@ Mirrorless fixed lens
 
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
-#define FIRMWARE_PRINTIM 0x00516c90
+#define FIRM_PRINTIM 0x00516c90
 #define MEM_PRINTIM 0x0
-#define FIRMWARE_PRINTIM_MAX 236
+#define FIRM_PRINTIM_MAX 236
 
 // Injection details for "voice memo" feature
-#define FIRMWARE_MEMO 0x0063fe20
+#define FIRM_MEMO 0x0063fe20
 #define MEM_MEMO 0x01397dd8
-#define FIRMWARE_MEMO_MAX 100
+#define FIRM_MEMO_MAX 100
 
 // Memory address where code can be copied. Need
 // A bunch of useless bytes that don't seem important,

@@ -1,3 +1,10 @@
+#ifdef STUB_H
+#error "stub.h included twice. Catastrophic error."
+#endif
+
+#ifndef STUB_H
+#define STUB_H
+
 // Define FPIC when you define STUBS if position
 // independent code is needed
 
@@ -18,4 +25,6 @@
 		.global name; \
 		.extern name; \
 		name = (addr)
+#endif
+
 #endif
