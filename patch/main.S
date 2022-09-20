@@ -54,7 +54,7 @@ custom:
 		eor r5, r5, r5 // reset register
 		mov r5, #0 // reset register again for some reason
 		mov r6, #5 // set action to #5, write byte
-	h:
+	h: 
 
 	// #5 - write byte
 	cmp r6, #5
