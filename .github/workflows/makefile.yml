@@ -20,22 +20,6 @@ jobs:
     - name: Compile firmware utility
       run: make firm model=xf1_101
 
-    - name: XF1 Firmware
-      run: wget https://dl.fujifilm-x.com/support/firmware/xf1YbzzDmLK/FPUPDATE.DAT -O ../FPUPDATE-xf1.DAT
-    
-    - name: XF1 main.S
-      run: make model=xf1_101 input=../FPUPDATE-xf1.DAT asm_file=patch/main.S asm
-    - name: XF1 main.S md5sum
-      run: md5sum FPUPDATE.DAT
-    
-    - name: XF1 voice memo hack
-      run: |
-        make clean
-        cp etc/xf1_memo_config.mak config.mak
-        make multi_inject input=../FPUPDATE-xf1.DAT
-    - name: XF1 voice memo hack md5sum
-      run: md5sum FPUPDATE.DAT
-
     - name: Compile hack.bin
       run: |
         cd src
