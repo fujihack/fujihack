@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 void generate(int x, char *buffer) {
 	int c = 0;
@@ -49,9 +50,36 @@ int read(char *buffer) {
 	return x;
 }
 
-int main() {
-	char b[32] = "AAAAAAAA";
-	generate(0x12345678, b);
-	printf("Text: %s\n", b);
-	printf("int: %X\n", read(b));
+int main(int argc, char *argv[]) {
+	if (argv[1][0] != '-') {
+		puts("-h for info");
+		return 1;
+	}
+
+	switch (argv[1][1]) {
+	case 't':
+		{
+			char b[32] = "AAAAAAAA";
+			int i;
+			for (i = 0; i < 123456; i++) {
+				generate(i, b);
+				if (read(b) != i) {
+					puts("Failed test");
+					return 1;
+				}
+			}
+			printf("Passed 0x%X tests\n", i);
+		}
+		break;
+	case 'd':
+		printf("Decoded: %X/%u\n", read(argv[2]), read(argv[2]));
+		break;
+	case 'g':
+		{
+		char buffer[16];
+		generate(atoi(argv[2]), buffer);
+		printf("Generate: %s\n", buffer);
+		}
+	}
+	return 0;
 }
