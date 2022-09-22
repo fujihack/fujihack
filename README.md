@@ -6,7 +6,7 @@ Fujifilm has used several different firmware formats and RTOSs in the past,
 and this project only works on one. Specifically, this will only work on X/GFX/HS/F/Z/Pro cameras.  
 You can put your firmware file in the web patcher to see if this project supports your type.  
 
-Check out the [FujiHack wiki](https://fujihack.github.io/) for a ton of into, and there's also a [Discord room](https://discord.gg/UZXDktvAZP).
+Check out the [FujiHack wiki](https://fujihack.github.io/) for a ton of info, and there's also a [Discord room](https://discord.gg/UZXDktvAZP).
 
 ## What's been done:
 - Unpack firmware
