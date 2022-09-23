@@ -2,14 +2,14 @@
 _start_:
 	push {r1-r10, lr}
 
-	mov r5, #0x0 // r5 will hold curr line
-
 	// Initialize RST rendering configs
 	// Not exactly necessary
 	mov r0, #0xf
 	bl FIRM_RST_CONFIG1
 	mov r0, #0xa
 	bl FIRM_RST_CONFIG2
+
+	mov r5, #0x1 // r5 will hold curr line
 
 	// Switch curr iteration
 	ldr r0, iteration
@@ -33,8 +33,10 @@ _start_:
 	pop {r1-r10, pc}
 
 i_txt:
-	adr r0, fh_intro
-	bl printRst
+	mov r0, #0x1
+	mov r1, #0x1
+	adr r2, fh_intro
+	bl FIRM_RST_WRITE
 b i_increment
 
 i_search:
@@ -50,11 +52,13 @@ i_search:
 	adr r1, search_ptp
 	str r0, [r1]
 
-	// Print
 	adr r1, buffer
 	bl intToBuffer
-	adr r0, buffer
-	bl printRst
+
+	mov r0, #0x1
+	mov r1, #0x1
+	adr r2, buffer
+	bl FIRM_RST_WRITE
 
 	// Find
 	adr r0, search_ptp_finish
@@ -71,8 +75,11 @@ i_search:
 	// Print
 	adr r1, buffer
 	bl intToBuffer
-	adr r0, buffer
-	bl printRst
+
+	mov r0, #0x1
+	mov r1, #0x3
+	adr r2, buffer
+	bl FIRM_RST_WRITE
 b i_increment
 
 i_hijack:
@@ -90,8 +97,10 @@ i_hijack:
 	adr r2, perm_addr
 	str r1, [r2]
 
-	adr r0, success
-	bl printRst
+	mov r0, #0x1
+	mov r1, #0x1
+	adr r2, success
+	bl FIRM_RST_WRITE
 b i_quit
 
 i_quit:
@@ -101,30 +110,36 @@ i_quit:
 	b i_end
 
 // uintptr_t bruteForceSearch(uint8_t *bytes, int length)
+.global bruteForceSearch
 bruteForceSearch:
-	mov r2, r0
-	movs r0, #0
-	push {r4, lr}
-		.L2:
-		movs r3, #0
-		b .L5
-		.L4:
-		cmp r3, #3
-		beq .L1
-		adds r3, #1
-		.L5:
-		ldrb r4, [r2, r3]
-		ldrb r1, [r3, r0]
-		cmp r4, r1
-		beq .L4
-		adds r0, #1
-		cmp r0, #0xf0000000
-		bne .L2
-		movs r0, #0
-		.L1:
-	pop {r4, pc}
+	mov     r2, r0
+	subs    r1, r1, #2
+	movs    r0, #0
+	push    {r4, r5, lr}
+	.L2:
+	movs    r3, #0
+	b       .L6
+	.L5:
+	cmp     r2, r0
+	beq     .L3
+	cmp     r3, r1
+	bhi     .L1
+	adds    r3, r3, #1
+	.L6:
+	ldrb    r5, [r2, r3]
+	ldrb    r4, [r3, r0]
+	cmp     r5, r4
+	beq     .L5
+	.L3:
+	adds    r0, r0, #1
+	cmp     r0, #16777216
+	bne     .L2
+	movs    r0, #0
+	.L1:
+	pop     {r4, r5, pc}
 
 // findFuncHeader(uint32_t addr)
+.global findFuncHeader
 findFuncHeader:
 	push {r1, lr}
 		ffh:
@@ -133,15 +148,6 @@ findFuncHeader:
 		cmp r1, #0x2d
 		bne ffh
 	pop {r1, pc}
-
-printRst:
-	push {r1, r2, lr}
-		mov r2, r0
-		mov r0, #0x1
-		mov r1, r5
-		bl FIRM_RST_WRITE
-		add r5, #0x2 // increment double line
-	pop {r1, r2, pc}
 
 #include "int.S"
 
@@ -152,7 +158,8 @@ iteration: .int 0x0
 
 // movw r2, #0xa808
 .align 4
-search_ptp: .byte 0x8, 0x28, 0x0a, 0xe3
+.global search_ptp
+search_ptp: .byte 0x8, 0x28, 0xa, 0xe3
 
 // add r2, r3, #0x7000
 .align 4

@@ -1,6 +1,9 @@
 // Converts int to str codes in only ~100 bytes,
 // see etc/ab-int.c
 
+#define INT_C1 'A'
+#define INT_C2 'Z'
+
 // intToBuffer(int x, void *buf)
 .global intToBuffer
 intToBuffer:
@@ -14,15 +17,15 @@ intToBuffer:
 
 	sib_top_1:
 		ldrb r0, [r1, r4] // curr byte
-		mov r2, #'A' // a
-		mov r3, #'A' // b
+		mov r2, #INT_C1 // a
+		mov r3, #INT_C1 // b
 		sib_top:
 			cmp r0, #0x0 // is byte finished?
 			beq sib_end
-			cmp r3, #'Z' // end of b?
+			cmp r3, #INT_C2 // end of b?
 			bne sib_1
 			add r2, #0x1 // decrement a
-			mov r3, #'A' // reset b
+			mov r3, #INT_C1 // reset b
 			sib_1:
 			add r3, #0x1
 			sub r0, #0x1 // dec main value
