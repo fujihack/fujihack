@@ -1,5 +1,5 @@
-.global _start_
-_start_:
+.global _dbg_patch
+_dbg_patch:
 	push {r1-r10, lr}
 
 	// Initialize RST rendering configs
@@ -138,7 +138,7 @@ bruteForceSearch:
 	.L1:
 	pop     {r4, r5, pc}
 
-// findFuncHeader(uint32_t addr)
+// uintptr_t findFuncHeader(uintptr_t addr)
 .global findFuncHeader
 findFuncHeader:
 	push {r1, lr}

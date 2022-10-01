@@ -2,8 +2,8 @@
 
 #define MAX_SIZE 0x100000
 
-.global _start
-_start:
+.global _file_loader
+_file_loader:
 	push {r0, r1, r2, r3, r4, r5, r6, r7, r8, lr}
 
 	// r8 = sqlite_malloc(MAX_SIZE)
