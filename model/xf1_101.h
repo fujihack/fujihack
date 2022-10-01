@@ -17,9 +17,9 @@ Mirrorless fixed lens
 
 #define FIRM_IMG_PROPS 0x00485258
 #define FIRM_IMG_PROPS_MAX 4000
-#define FIRM_RST_WRITE 0x011f2a5c
-#define FIRM_RST_CONFIG1 0x011d2704
-#define FIRM_RST_CONFIG2 0x011fbb38
+#define FIRM_RST_WRITE 0x0049aaa4
+#define FIRM_RST_CONFIG1 0x0047a74c
+#define FIRM_RST_CONFIG2 0x004a3b80
 
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
