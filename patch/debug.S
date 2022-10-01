@@ -84,7 +84,7 @@ b i_increment
 
 i_hijack:
 	ldr r2, search_ptp
-	adr r3, _ptp_hack
+	adr r3, _ptp_9805_hack
 	mov r1, #0x0
 	i_h:
 		ldr r4, [r3, r1]
@@ -109,34 +109,42 @@ i_quit:
 	str r2, [r1]
 	b i_end
 
+// GCC -O4 was better at optimizing this
 // uintptr_t bruteForceSearch(uint8_t *bytes, int length)
 .global bruteForceSearch
 bruteForceSearch:
-	mov     r2, r0
-	subs    r1, r1, #2
-	movs    r0, #0
-	push    {r4, r5, lr}
-	.L2:
-	movs    r3, #0
-	b       .L6
-	.L5:
-	cmp     r2, r0
-	beq     .L3
-	cmp     r3, r1
-	bhi     .L1
-	adds    r3, r3, #1
-	.L6:
-	ldrb    r5, [r2, r3]
-	ldrb    r4, [r3, r0]
-	cmp     r5, r4
-	beq     .L5
-	.L3:
-	adds    r0, r0, #1
+	push    {r4, r5, r6, lr}
+	mov     r5, r0
+	ldrb    r6, [r0]
+	rsb     lr, r0, #0
+	add     r4, r0, r1
+	mov     r0, #0
+	s_L2:
+	ldrb    r3, [r0]
+	cmp     r3, r6
+	bne     s_L5
+	cmp     r0, r5
+	beq     s_L5
+	cmp     r1, #0
+	popeq   {r4, r5, r6, pc}
+	mov     r3, r5
+	b       s_L6
+	s_L4:
+	cmp     r4, r3
+	popeq   {r4, r5, r6, pc}
+	s_L6:
+	ldrb    ip, [r3, #1]!
+	ldrb    r2, [lr, r3]
+	cmp     ip, r2
+	beq     s_L4
+	s_L5:
+	add     r0, r0, #1
+	add     lr, lr, #1
 	cmp     r0, #16777216
-	bne     .L2
-	movs    r0, #0
-	.L1:
-	pop     {r4, r5, pc}
+	bne     s_L2
+	mov     r0, #0
+	pop     {r4, r5, r6, pc}
+
 
 // uintptr_t findFuncHeader(uintptr_t addr)
 .global findFuncHeader
