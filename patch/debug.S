@@ -4,12 +4,11 @@ _dbg_patch:
 
 	// Initialize RST rendering configs
 	// Not exactly necessary
+	// Might be able to tweak 
 	mov r0, #0xf
 	bl FIRM_RST_CONFIG1
 	mov r0, #0xa
 	bl FIRM_RST_CONFIG2
-
-	mov r5, #0x1 // r5 will hold curr line
 
 	// Switch curr iteration
 	ldr r0, iteration
@@ -90,7 +89,7 @@ i_hijack:
 		ldr r4, [r3, r1]
 		str r4, [r2, r1]
 		add r1, #0x4
-		cmp r1, #(40 * 4) // about 40 instructions (?)
+		cmp r1, #(65 * 4) // about 65 instructions (?)
 		bne i_h
 	// Store permanent address for code loading (after PTP code)
 	adr r1, _ptp_hack_end
