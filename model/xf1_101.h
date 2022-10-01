@@ -6,31 +6,29 @@ Mirrorless fixed lens
 
 #define MODEL_NAME "Fujifilm XF-1"
 #define MODEL_CODE "000192710001927200019273000192740001927500019276000192770001927800019279000192810001928200019286"
-
-// Firmware doesn't seem to use any thumb code
-#define NO_THUMB
+#define CODE_ARM // no thumb
 
 // Confirmed tests:
 #define CAN_DO_EXECUTER
 #define CAN_CUSTOM_FIRMWARE
 #define PRINTIM_HACK_WORKS
 #define MEMO_HACK_WORKS
+#define IMG_PROPS_HACK_WORKS
+
+#define FIRM_IMG_PROPS 0x00485258
+#define FIRM_IMG_PROPS_MAX 4000
+#define FIRM_RST_WRITE 0x011f2a5c
+#define FIRM_RST_CONFIG1 0x011d2704
+#define FIRM_RST_CONFIG2 0x011fbb38
 
 // Code that writes "PrintIM" to JPEG images. A safe place
 // To execute code.
 #define FIRM_PRINTIM 0x00516c90
-#define MEM_PRINTIM 0x0
 #define FIRM_PRINTIM_MAX 236
 
 // Injection details for "voice memo" feature
 #define FIRM_MEMO 0x0063fe20
-#define MEM_MEMO 0x01397dd8
 #define FIRM_MEMO_MAX 100
-
-// Memory address where code can be copied. Need
-// A bunch of useless bytes that don't seem important,
-// TODO: This is actually where a screen buffer is...
-#define MEM_FREE_SPACE 0x019a0000
 
 // Where to hack on the PTP thumbnail function, 
 // Seems to have bytes [0xf0, 0x4d, 0x2d, 0xe9]
@@ -79,9 +77,6 @@ Mirrorless fixed lens
 #define MEM_LAYER_INFO 0x0152e0f4
 #define MEM_SQLITE_STRUCT 0x0144c670
 
-// Beginning of the function that shows additional photo properties
-#define MEM_SHOW_PHOTO_PROPERTIES 0x011dd210
-
 #ifdef STUBS
 	#include "stub.h"
 
@@ -121,11 +116,7 @@ Mirrorless fixed lens
 
 	NSTUB(fuji_rst_bmp, 0x0122ea68)
 
-	NSTUB(test_bmp, 0x0122d3d8)
-
-	NSTUB(test_halt, 0x00e8c704)
-
-	NSTUB(fuji_rst_print, 0x011f2a5c)
+	NSTUB(fuji_rst_write, 0x011f2a5c)
 
 	NSTUB(fuji_task_sleep, 0x0073ba3c)
 	NSTUB(fuji_create_semaphore, 0x0073b3a4)
@@ -137,7 +128,7 @@ Mirrorless fixed lens
 	NSTUB(fuji_task_check, 0x00734610)
 	NSTUB(fuji_task_test, 0x00734848)
 
-	NSTUB(apply_eeprom, 0x00633d1c)
+	NSTUB(fuji_apply_eeprom, 0x00633d1c)
 
 	NSTUB(fuji_get_key, 0x00d17d4c)
 
