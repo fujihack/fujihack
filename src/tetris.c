@@ -21,8 +21,8 @@ void pt_draw_block(int bx, int by, int col) {
 
 void tetris_render() {
 	// TODO: document
-	FUN_011d2704(0xd);
-	FUN_011fbb38(10);
+	fuji_rst_config1(0xd);
+	fuji_rst_config2(10);
 
 	char colors[] = ".@#X8#@@";
 
@@ -37,7 +37,7 @@ void tetris_render() {
 
 		line[i] = '\0';
 
-		uilib_print(1, y, line);
+		fuji_rst_print(1, y, line);
 	}
 }
 

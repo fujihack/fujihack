@@ -1,4 +1,4 @@
-// Main init file
+// Main init/start file
 .global _start
 
 // Global Offset Table data from linker
@@ -38,3 +38,13 @@ _start:
 	bl entry
 
 	pop {r1, r2, r3, r4, r5, r6, pc}
+
+#if 0
+#define FIRM_RST_CONFIG1 0
+#define FIRM_RST_CONFIG2 0
+#define FIRM_RST_WRITE 0
+
+.align 4
+#include "../patch/debug.S"
+.align 4
+#endif

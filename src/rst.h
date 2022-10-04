@@ -1,3 +1,4 @@
+// Fuji rasterizer defs
 #ifndef RST_H
 #define RST_H
 
@@ -25,5 +26,9 @@ void fuji_rst_rect(
 	uint8_t color[3];
 	int transparency;
 );
+
+void fuji_rst_write(int x, int dy, char *string);
+void fuji_rst_config1(int x); // color?
+void fuji_rst_config2(int x); // layer?
 
 #endif

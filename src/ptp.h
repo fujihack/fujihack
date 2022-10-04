@@ -6,10 +6,20 @@
 struct FujiPTPParams {
 	uint32_t code; // ptp command code
 	uint32_t transid; // ?
-	uint32_t x; // ?
+	uint32_t sessionid; // ?
 	uint32_t length; // ?
 	uint32_t param1;
 	uint32_t param2;
+};
+
+struct FujiPTPResponse {
+	uint32_t code;
+	uint32_t transid;
+	uint32_t sessionid;
+	uint32_t nparam;
+	uint32_t param1;
+	uint32_t param2;
+	uint32_t param3;
 };
 
 struct FujiPTPData {

@@ -1,3 +1,4 @@
+// Based on guessing addresses of screen buffers, will probably change soon
 #include "fujihack.h"
 #include "fujifilm.h"
 

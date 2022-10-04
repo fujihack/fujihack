@@ -1,11 +1,13 @@
 #ifndef GIMMIE_H
 #define GIMMIE_H
 
-// This is gimmie.h, an old project of mine.
-// You define stuff to get a function.
+// Provides basic stdlib functions, trying to
+// be lightweight
+
 #define GIMMIE_MEMCPY
 #define GIMMIE_STRLEN
 #define GIMMIE_MEMSET
+#define GIMMIE_STRCMP
 
 /* A basic no nonsense divmod function if
  * needed (probably never) */

@@ -31,10 +31,10 @@ int fuji_dir_next(char *buffer);
 void fuji_toggle();
 void fuji_zero();
 
-#ifdef MEM_EEP_START
-	#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
-	#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
-#endif
+#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
+#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
+
+void fuji_apply_eeprom();
 
 // Task creation data struct
 struct FujiTask {
@@ -63,5 +63,11 @@ struct FujiInputMap {
 };
 
 void fuji_init_sqlite();
+
+// Creates a task that is started "ms" miliseconds after this function is called.
+// ms waited will be stored in buf. non zero result for error
+// These were found in firmware by looking at "SoftTimerStart"/"SoftTimerStop"
+int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
+int fuji_wait_task_stop(int bufResult);
 
 #endif
