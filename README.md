@@ -26,7 +26,7 @@ Check out the [FujiHack wiki](https://fujihack.github.io/) for a ton of info, an
 - [Wiki](https://fujihack.github.io/)
 
 ## How to Use
-**Don't, at least not yet. This is still a research project.** 
+**Don't, at least not yet. This is still a research project.**  
 Remember that custom firmware is always dangerous, and can brick devices.  
 If you want to help research, contact me.  
 
