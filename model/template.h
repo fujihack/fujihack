@@ -4,22 +4,12 @@ Fujifilm X-TEMPLATE
 */
 
 #define MODEL_NAME "Fujifilm XXXXX"
+#define MODEL_CODE "Paste_model_code_from_patcher"
 
-// Paste number from firm utility
-//#define MODEL_CODE "XXXX"
+// Uses ARM 32 bit (not thumb) byte code in firmware
+#define CODE_ARM
 
-// Where code thinks the data should be:
-#define MEM_START 0x1f54c3c - 10000
-
-// Where the data actually is:
-#define TEXT_START 0xbf4c84 - 10000
-
-// How much data should be copied
-#define COPY_LENGTH 10000 + 6052
-
-// Function addresses in memory
 #ifdef STUBS
 	#include "stub.h"
-
-	NSTUB(sqlite_snprintf, 0x123456)
+	NSTUB(FUN_0x1234567, 0x123456)
 #endif

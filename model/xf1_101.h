@@ -30,6 +30,10 @@ Mirrorless fixed lens
 #define FIRM_MEMO 0x0063fe20
 #define FIRM_MEMO_MAX 100
 
+// FH debugger searches for this
+#define MEM_PTP_9805 0x00e52c00
+#define MEM_PTP_RETURN 0x00e507c0
+
 // Where to hack on the PTP thumbnail function, 
 // Seems to have bytes [0xf0, 0x4d, 0x2d, 0xe9]
 #define MEM_PTP_THUMBNAIL 0x00e56fbc
@@ -123,6 +127,10 @@ Mirrorless fixed lens
 	NSTUB(fuji_return_semaphore, 0x00734848)
 	NSTUB(fuji_get_semaphore, 0x00734938)
 
+	NSTUB(fuji_wait_task_start, 0x00626044)
+	NSTUB(fuji_wait_task_stop, 0x00625f34)
+
+	// Only works in certain tasks
 	NSTUB(fuji_task_suspend, 0x00734038)
 	NSTUB(fuji_task_create, 0x00735c2c)
 	NSTUB(fuji_task_check, 0x00734610)
