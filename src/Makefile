@@ -9,7 +9,7 @@ model?=xf1_101
 HACK_BIN_DEPS=boot.o main.o lib.o stub.o hijack.o screen.o posix.o util.o
 
 ARMCC?=arm-none-eabi
-ARMCFLAGS?=-fpic -mcpu=cortex-a7 -include ../model/$(model).h -c
+ARMCFLAGS?=-fpic -mcpu=cortex-a5 -include ../model/$(model).h -c
 ARMLDFLAGS?=--gc-sections -Bstatic -T Linker.ld
 
 # Remove unused sections/functions/variables

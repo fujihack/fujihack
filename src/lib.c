@@ -1,16 +1,34 @@
 #ifndef GIMMIE_H
 #define GIMMIE_H
 
-// Provides basic stdlib functions, trying to
-// be lightweight
+// Bare bones replacement for libgcc
 
 #define GIMMIE_MEMCPY
 #define GIMMIE_STRLEN
 #define GIMMIE_MEMSET
 #define GIMMIE_STRCMP
+#define GIMMIE_GDIVMOD
 
-/* A basic no nonsense divmod function if
- * needed (probably never) */
+int gdivmod(int a, int b, int o);
+
+int __aeabi_idiv(int a, int b) {
+	return gdivmod(a, b, 0);
+}
+
+int __aeabi_idivmod(int a, int b) {
+	return gdivmod(a, b, 1);
+}
+
+int __aeabi_uidivmod(int a, int b) {
+	return gdivmod(a, b, 1);
+}
+
+int __aeabi_uidiv(int a, int b) {
+	return gdivmod(a, b, 0);
+}
+
+
+/* A basic no nonsense divmod function */
 #ifdef GIMMIE_GDIVMOD
 int gdivmod(int a, int b, int o) {
 	int di = 0;
