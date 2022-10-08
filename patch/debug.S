@@ -1,13 +1,18 @@
+// This is a debugger program that is applied into
+// the show_photo_properties function (most cameras 2009-2017)
+// Since this function is 4k long, we aren't as restricted on
+// code size.
+
 .global _dbg_patch
 _dbg_patch:
-	push {r1-r10, lr}
+	push {r1-r10, fp, lr}
 
-	// Initialize RST rendering configs
+	// Initialize rasterizer rendering configs
 	// Not exactly necessary
-	// Might be able to tweak 
+	// Might be able to tweak to be transparent, or different colors
 	mov r0, #0xf
 	bl FIRM_RST_CONFIG1
-	mov r0, #0xa
+	mov r0, #0xd
 	bl FIRM_RST_CONFIG2
 
 	// Switch curr iteration
@@ -29,7 +34,7 @@ _dbg_patch:
 	str r1, [r0]
 
 	i_end:
-	pop {r1-r10, pc}
+	pop {r1-r10, fp, pc}
 
 i_txt:
 	mov r0, #0x1
@@ -89,6 +94,12 @@ i_search_err:
 b i_quit
 
 i_hijack:
+	// Store permanent address for code loading (after this file)
+	// This must be done before everything is copied
+	adr r1, _dbg_patch_end
+	adr r2, perm_addr
+	str r1, [r2]
+
 	ldr r2, search_ptp
 	adr r3, _ptp_9805_hack
 	mov r1, #0x0
@@ -96,12 +107,8 @@ i_hijack:
 		ldr r4, [r3, r1]
 		str r4, [r2, r1]
 		add r1, #0x4
-		cmp r1, #(65 * 4) // about 65 instructions (?)
+		cmp r1, #(65 * 4) // about 65 instructions, plus the data under the code
 		bne i_h
-	// Store permanent address for code loading (after PTP code)
-	adr r1, _ptp_hack_end
-	adr r2, perm_addr
-	str r1, [r2]
 
 	mov r0, #0x1
 	mov r1, #0x1
@@ -119,10 +126,10 @@ i_quit:
 // uintptr_t bruteForceSearch(uint8_t *bytes, int length)
 .global bruteForceSearch
 bruteForceSearch:
-	push    {r4, r5, r6, lr}
+	push    {r1-r10, lr}
 	mov     r5, r0
 	add     r4, r0, r1
-	rsb     lr, r0, #0
+	rsb     r8, r0, #0
 	ldrb    r6, [r0]        @ zero_extendqisi2
 	sub     r4, r4, #1 // need to subtract 1 from length
 	mov     r0, #0
@@ -133,24 +140,25 @@ bruteForceSearch:
 	cmp     r0, r5
 	beq     .L5
 	cmp     r1, #1
-	popeq   {r4, r5, r6, pc}
+	popeq   {r1-r10, pc}
 	mov     r3, r5
 	b       .L6
 	.L4:
 	cmp     r4, r3
-	popeq   {r4, r5, r6, pc}
+	popeq   {r1-r10, pc}
 	.L6:
-	ldrb    ip, [r3, #1]!   @ zero_extendqisi2
-	ldrb    r2, [r3, lr]    @ zero_extendqisi2
-	cmp     ip, r2
+	ldrb    r7, [r3, #1]!   @ zero_extendqisi2
+	ldrb    r2, [r3, r8]    @ zero_extendqisi2
+	cmp     r7, r2
 	beq     .L4
 	.L5:
 	add     r0, r0, #1
-	add     lr, lr, #1
+	add     r8, r8, #1
 	cmp     r0, #0x01000000
 	bne     .L2
 	mov     r0, #0
-	pop     {r4, r5, r6, pc}
+	pop     {r1-r10, pc}
+
 // uintptr_t findFuncHeader(uintptr_t addr)
 .global findFuncHeader
 findFuncHeader:
@@ -164,10 +172,10 @@ findFuncHeader:
 
 #include "int.S"
 
+// ptp.S will access search_ptp and search_ptp_finish
+// locally, so that data must follow below to be copied
+#define PTP_ABSOLUTE
 #include "ptp.S"
-
-.align 4
-iteration: .int 0x0
 
 // movw r2, #0xa808
 .align 4
@@ -179,6 +187,9 @@ search_ptp: .byte 0x8, 0x28, 0xa, 0xe3
 search_ptp_finish: .byte 0x7, 0x2a, 0x83, 0xe2
 
 .align 4
+iteration: .int 0x0
+
+.align 4
 fh_intro: .string "FujiHack DBG"
 
 .align 4
@@ -187,5 +198,8 @@ search_err: .string "Search fail"
 .align 4
 success: .string "Hacked"
 
+// After here is both used as code and string buffer,
+// after it is used as code, it should not be used as buffer anymore
 .align 4
 buffer:
+_dbg_patch_end:

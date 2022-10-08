@@ -1,8 +1,6 @@
 // Code to jump to MEM_DUMP_ADDR when the injection trigger
 // function is too small for main.S
 
-// Define stubs.h for a small message
-
 .global _start
 _start:
 	push {r1, r2, r3, r4, r5, r6, r7, r8, lr}

@@ -1,4 +1,6 @@
-// 0x9805 Hijack
+// 0x9805 Hijack - Allows code execution / debugging
+
+
 .extern search_ptp
 .extern search_ptp_finish
 
@@ -65,7 +67,7 @@ _ptp_9805_hack:
 		str r3, [r6]
 	not_8:
 
-	// #9 - Get 32 bit
+	// #9 - Get 32 bit from RAM
 	cmp r0, #PTP_CMD_GET
 	bne not_9
 		ldr r5, [r3] // get uint32_t at param r3
@@ -82,8 +84,12 @@ _ptp_9805_hack:
 
 	adr r0, return_packet
 	mov r1, #0x0
+#ifdef PTP_ABSOLUTE
 	ldr r5, search_ptp_finish
 	blx r5
+#else
+	bl FIRM_PTP_FINISH
+#endif	
 
 	pop {r1-r10, pc}
 
