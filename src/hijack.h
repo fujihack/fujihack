@@ -18,8 +18,8 @@
 // write bl 0
 #define CRASHFUNC(addr) ((uint32_t*)addr)[0] = 0xebffbffe;
 
-void generate_branch(uint32_t base, uint32_t to, uint8_t *buffer);
-void generate_call(uint32_t base, uint32_t to, uint8_t *buffer);
-void generate_nop(uint8_t *buffer);
+void generate_branch(void *base, void *to, void *buffer);
+void generate_call(void *base, void *to, void *buffer);
+void generate_nop(void *buffer);
 
 #endif
