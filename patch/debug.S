@@ -126,38 +126,38 @@ i_quit:
 // uintptr_t bruteForceSearch(uint8_t *bytes, int length)
 .global bruteForceSearch
 bruteForceSearch:
-	push    {r1-r10, lr}
+	push    {r4, r5, lr}
 	mov     r5, r0
-	add     r4, r0, r1
-	rsb     r8, r0, #0
-	ldrb    r6, [r0]        @ zero_extendqisi2
-	sub     r4, r4, #1 // need to subtract 1 from length
+	sub     r4, r1, #1
+	rsb     lr, r0, #0
+	add     r4, r5, r4
 	mov     r0, #0
-	.L2:
-	ldrb    r3, [r0]        @ zero_extendqisi2
-	cmp     r3, r6
-	bne     .L5
-	cmp     r0, r5
-	beq     .L5
-	cmp     r1, #1
-	popeq   {r1-r10, pc}
-	mov     r3, r5
-	b       .L6
-	.L4:
-	cmp     r4, r3
-	popeq   {r1-r10, pc}
 	.L6:
-	ldrb    r7, [r3, #1]!   @ zero_extendqisi2
-	ldrb    r2, [r3, r8]    @ zero_extendqisi2
-	cmp     r7, r2
-	beq     .L4
-	.L5:
-	add     r0, r0, #1
-	add     r8, r8, #1
-	cmp     r0, #0x01000000
+	cmp     r0, r5
+	beq     .L2
+	ldrb    r2, [r5]        @ zero_extendqisi2
+	ldrb    r3, [r0]        @ zero_extendqisi2
+	cmp     r2, r3
 	bne     .L2
+	cmp     r1, #1
+	popeq   {r4, r5, pc}
+	mov     r3, r5
+	b       .L4
+	.L5:
+	cmp     r3, r4
+	popeq   {r4, r5, pc}
+	.L4:
+	ldrb    ip, [r3, #1]!   @ zero_extendqisi2
+	ldrb    r2, [r3, lr]    @ zero_extendqisi2
+	cmp     ip, r2
+	beq     .L5
+	.L2:
+	add     r0, r0, #1
+	cmp     r0, #0x02000000
+	add     lr, lr, #1
+	bne     .L6
 	mov     r0, #0
-	pop     {r1-r10, pc}
+	pop     {r4, r5, pc}
 
 // uintptr_t findFuncHeader(uintptr_t addr)
 .global findFuncHeader
