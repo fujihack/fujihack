@@ -1,3 +1,4 @@
+// Defines fujihack specific utils, menus
 #ifndef FUJIHACK_H
 #define FUJIHACK_H
 
@@ -14,6 +15,7 @@ void enable_script_flag();
 
 #define SCREENDBG(...) SCREENWRT(1, 1, __VA_ARGS__)
 
+// Menus init, typically not called
 void fujihack_init();
 
 #endif

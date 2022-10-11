@@ -2,6 +2,9 @@
 #ifndef RST_H
 #define RST_H
 
+// Most of these can be figured out by looking in RAM for
+// "Script version", "Software version" strings
+
 #include <stdint.h>
 
 #define RGB(r, g, b) (uint8_t[]){r, g, b}
@@ -28,7 +31,9 @@ void fuji_rst_rect(
 );
 
 void fuji_rst_write(int x, int dy, char *string);
-void fuji_rst_config1(int x); // color?
-void fuji_rst_config2(int x); // layer?
+
+// These are typically used in order in source code
+void fuji_rst_config1(unsigned short x); // Layer, or something, typically 0xf
+void fuji_rst_config2(unsigned short x); // BG/FG color
 
 #endif

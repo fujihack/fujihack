@@ -2,6 +2,9 @@
 #include "fujihack.h"
 #include "fujifilm.h"
 
+// This is all a bunch of crap
+#if 0
+
 #define LAYER 2
 
 void disp_pixel(int x, int y, int col) {
@@ -38,3 +41,4 @@ void console_log(char string[]) {
 	}
 }
 
+#endif

@@ -1,7 +1,3 @@
-#ifndef MODEL_NAME
-	#include "../model/xf1_101.h"
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>

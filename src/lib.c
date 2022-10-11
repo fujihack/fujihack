@@ -27,7 +27,6 @@ int __aeabi_uidiv(int a, int b) {
 	return gdivmod(a, b, 0);
 }
 
-
 /* A basic no nonsense divmod function */
 #ifdef GIMMIE_GDIVMOD
 int gdivmod(int a, int b, int o) {

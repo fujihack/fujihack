@@ -2,6 +2,11 @@
 #ifndef FUJI_H
 #define FUJI_H
 
+// Make text editor linter happy
+#ifndef MODEL_NAME
+	#include "../model/xf1_101.h"
+#endif
+
 #include <stdint.h>
 
 // Returns current drive (DOS style)
@@ -12,28 +17,54 @@ char fuji_drive();
 #define TEXT_BLACK 7
 #define TEXT_WHITE 1
 
-// Write ASCII text rows to screen
+// Write ASCII text rows to screen (permanent)
+// Found by looking for "EEPRom Setting Mode"
 void fuji_screen_write(char string[], int x, int y, int foreground_color, int background_color);
 
 // Delete text buffer, does not take effect until screen updates
 void fuji_discard_text_buffer();
 
+// Found by looking for WT logging function
 void *fuji_fopen(uint32_t handler, const char string[], int flag);
 void *fuji_fwrite(uint32_t handler, void *fp, int n, const void *data);
 void *fuji_fread(uint32_t handler, void *fp, int n, const void *data);
 void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
 
-// There is no file pointer, just a single reading state
-int fuji_dir_open(char *first, char *second, char *buffer);
-int fuji_dir_next(char *buffer);
-
 // Weird OS/timing functions required by file API
+// Crashes if these aren't used
 void fuji_toggle();
 void fuji_zero();
 
-#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
-#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
+// There is no file pointer, just a single reading state
+// Found by looking for functions referencing "*.*"
+int fuji_dir_open(char *first, char *second, char *buffer);
+int fuji_dir_next(char *buffer);
 
+// We should be nice when there isn't much defined in model header file
+
+// TODO: Custom handlers
+#ifndef FUJI_FOPEN_HANDLER
+	#define FUJI_FOPEN_HANDLER 0
+#endif
+#ifndef FUJI_FREAD_HANDLER
+	#define FUJI_FREAD_HANDLER 0
+#endif
+#ifndef FUJI_FWRITE_HANDLER
+	#define FUJI_FWRITE_HANDLER 0
+#endif
+#ifndef FUJI_FCLOSE_HANDLER
+	#define FUJI_FCLOSE_HANDLER 0
+#endif
+
+#ifdef MEM_EEP_START
+	#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
+	#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
+#else
+	#define GET_EEP(x) /* */
+	#define SET_EEP(x) /* */
+#endif
+
+// Found in EEPRom setting menu code
 void fuji_apply_eeprom();
 
 // Task creation data struct
@@ -46,9 +77,10 @@ struct FujiTask {
 	uint32_t f;
 };
 
+// Found in script WAIT and WAIT_SET code
 int fuji_task_sleep(int ms);
 
-// Seems to just crash the camera
+// Called to init tasks on startup
 int fuji_create_task(int x, int y, struct FujiTask *task);
 
 struct FujiInputMap {
@@ -62,6 +94,8 @@ struct FujiInputMap {
 	uint32_t c;
 };
 
+// Highest level void function that initializes SQLite
+// (Look for unusual SQLite code formatting)
 void fuji_init_sqlite();
 
 // Creates a task that is started "ms" miliseconds after this function is called.
