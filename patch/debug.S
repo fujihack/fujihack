@@ -47,10 +47,13 @@ i_search:
 	// Find
 	adr r0, search_ptp
 	mov r1, #0x4
-	bl bruteForceSearch
+	adr r3, bruteForceSearch
+	blx r3
+
 	cmp r0, #0x0 // check err
 	beq i_search_err
-	bl findFuncHeader
+	adr r3, findFuncHeader
+	blx r3
 
 	// Store
 	adr r1, search_ptp
@@ -58,7 +61,8 @@ i_search:
 
 	// Print
 	adr r1, buffer
-	bl intToBuffer
+	adr r3, intToBuffer
+	blx r3
 	mov r0, #0x1
 	mov r1, #0x1
 	adr r2, buffer
@@ -67,10 +71,12 @@ i_search:
 	// Find
 	adr r0, search_ptp_finish
 	mov r1, #0x4
-	bl bruteForceSearch
+	adr r3, bruteForceSearch
+	blx r3
 	cmp r0, #0x0
 	beq i_search_err
-	bl findFuncHeader
+	adr r3, findFuncHeader
+	blx r3
 
 	// Store
 	adr r1, search_ptp_finish
@@ -78,7 +84,8 @@ i_search:
 
 	// Print
 	adr r1, buffer
-	bl intToBuffer
+	adr r3, intToBuffer
+	blx r3
 
 	mov r0, #0x1
 	mov r1, #0x3
@@ -126,10 +133,10 @@ i_quit:
 // uintptr_t bruteForceSearch(uint8_t *bytes, int length)
 .global bruteForceSearch
 bruteForceSearch:
-	push    {r4, r5, lr}
+	push    {r4, r5, r6, r7, lr}
 	mov     r5, r0
 	sub     r4, r1, #1
-	rsb     lr, r0, #0
+	rsb     r7, r0, #0
 	add     r4, r5, r4
 	mov     r0, #0
 	.L6:
@@ -140,24 +147,24 @@ bruteForceSearch:
 	cmp     r2, r3
 	bne     .L2
 	cmp     r1, #1
-	popeq   {r4, r5, pc}
+	popeq   {r4, r5, r6, r7, pc}
 	mov     r3, r5
 	b       .L4
 	.L5:
 	cmp     r3, r4
-	popeq   {r4, r5, pc}
+	popeq   {r4, r5, r6, r7, pc}
 	.L4:
-	ldrb    ip, [r3, #1]!   @ zero_extendqisi2
-	ldrb    r2, [r3, lr]    @ zero_extendqisi2
-	cmp     ip, r2
+	ldrb    r6, [r3, #1]!   @ zero_extendqisi2
+	ldrb    r2, [r3, r7]    @ zero_extendqisi2
+	cmp     r6, r2
 	beq     .L5
 	.L2:
 	add     r0, r0, #1
 	cmp     r0, #0x02000000
-	add     lr, lr, #1
+	add     r7, r7, #1
 	bne     .L6
 	mov     r0, #0
-	pop     {r4, r5, pc}
+	pop     {r4, r5, r6, r7, pc}
 
 // uintptr_t findFuncHeader(uintptr_t addr)
 .global findFuncHeader
@@ -193,7 +200,7 @@ iteration: .int 0x0
 fh_intro: .string "FujiHack DBG"
 
 .align 4
-search_err: .string "Search fail"
+search_err: .string "Failed"
 
 .align 4
 success: .string "Hacked"
