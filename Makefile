@@ -1,61 +1,46 @@
-include etc/util.mk
 -include config.mak
 
-# Defaults, tweak these via CLI or config.mak
 model?=xf1_101
-input?=$(shell echo ~/Downloads/FPUPDATE.DAT)
-output?=FPUPDATE.DAT
-temp_file?=output
-asm_file?=patch/main.S
 
-# Include model info by default
-HOST_CFLAGS=-include "model/$(model).h" -D "MODEL=\"$(model)\""
+# Used to get the top level, if in subdir
+TOPL?=.
+
+RM=rm -rf
+CP=cp
+PYTHON3=python3
+
 ARMCC?=arm-none-eabi
-ARMCFLAGS?=-mcpu=cortex-a8 -c -D STUBS --include model/$(model).h
 
+# Different msg if in different dir
+ifeq ($(TOPL),.)
 help:
-	@echo "Parameters:"
-	@echo "  model      Used for camera info, see model/. Can be left blank if you are just unpacking."
-	@echo "  input      Input the stock firmware file downloaded from Fujfilm"
-	@echo "  output     Where you want the modified FPUPDATE.DAT to go."
-	@echo "  temp_file  Where you want to unpacked data to go."
-	@echo "Example:"
-	@echo "  make unpack input=~/Downloads/FPUPDATE.DAT temp_file=output"
+	@echo "Can be built in src/ or minimal/"
+else
+help:
+	@echo "Targets: hack hack.bin"
+endif
 
-# Use the firm program to send injection into 
-inject.bin: $(asm_file)
-	$(ARMCC)-gcc $(ARMCFLAGS) $(asm_file) -o inject.o
-	$(ARMCC)-ld -Bstatic inject.o -o inject.elf
-	$(ARMCC)-objcopy -O binary inject.elf inject.bin
+# phony target to load hack onto camera
+hack: hack.bin
+	$(PYTHON3) $(TOPL)/ptp/load.py -l hack.bin
 
-inject: firm inject.bin
-	# Import macros
-	$(call importMacro, model/$(model).h, MEM_PRINTIM, %x, MEM_INJECT_ADDR)
-	$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM, %x, FIRMWARE_INJECT_ADDR)
-	$(call importMacro, model/$(model).h, FIRMWARE_PRINTIM_MAX, %u, FIRMWARE_INJECT_MAX)
+# Changing any of these could make compilation different
+EXTERN_DEPS=Makefile $(TOPL)/model/$(model).h *.h $(wildcard $(TOPL)patch/*)
 
-	./firm $@ -j inject.bin -a 0x$(FIRMWARE_INJECT_ADDR) -x $(FIRMWARE_INJECT_MAX)
+# output rule for C files
+%.o: %.c $(EXTERN_DEPS)
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
-asm: unpack inject pack
+# output rule for assembly files
+%.o: %.S $(EXTERN_DEPS)
+	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
-pack unpack lay: firm
-	./firm $@ -m $(model) -i $(input) -o $(output) -t $(temp_file)
+# only stub.S is compiled with stubs
+# Also, it depends on the model file
+stub.o: stub.S ../model/$(model).h
+	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) $< -o $@
 
-# Route makefile target into firmware program
-firm: firm.c
-	$(CC) $(HOST_CFLAGS) firm.c -o firm
+clean:
+	$(RM) *.elf *.o *.bin
 
-upload_ptp:
-	python3 ptp/firmware.py $(output)
-
-# Force compilation of firm every time. The compiled binary
-# is model specific.
-.PHONY: firm
-
-clean-out:
-	$(RM) firm *.o *.out *.elf *.bin
-
-clean: clean-out
-	$(RM) output* firm *.DAT
-
-.PHONY: pack unpack lay asm clean help inject upload_ptp
+.PHONY: hack help clean

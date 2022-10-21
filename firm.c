@@ -1,3 +1,4 @@
+// This file is deprecated, but left as a reference
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
