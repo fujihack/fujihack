@@ -35,10 +35,16 @@ EXTERN_DEPS=Makefile $(TOPL)/model/$(model).h *.h $(wildcard $(TOPL)patch/*)
 %.o: %.S $(EXTERN_DEPS)
 	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
-# only stub.S is compiled with stubs
-# Also, it depends on the model file
+# stub.S is compiled with stubs from model header file
 stub.o: stub.S ../model/$(model).h
 	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) $< -o $@
+
+RARCH=armv5te-unknown-linux-musleabi
+RFLAGS=-C opt-level=2 --target $(RARCH) --emit asm --crate-type rlib
+%.o: %.rs $(EXTERN_DEPS)
+	rustc $(RFLAGS) $< -o $<.s
+	$(ARMCC)-gcc $(ARMCFLAGS) $<.s -o $@
+	$(RM) $<.s
 
 clean:
 	$(RM) *.elf *.o *.bin

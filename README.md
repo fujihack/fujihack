@@ -37,7 +37,7 @@ firm.c utility will most likely be phased out web tools are spiffier.
 
 ## PTP/USB Debugger
 The main firmware patch allows you to run custom code over USB, through the PTP protocol.  
-This requires arm-none-eabi-gcc, python3, and ptpy. You can install ptpy with pip.
+This requires `arm-none-eabi-gcc`, `python3`, and `ptpy`. You can install `ptpy` with `pip3`.
 ```
 pip3 install ptpy
 ```
@@ -52,6 +52,13 @@ script in the `ptp/` directory.
 
 The makefile is set up to remove all unused variables and function in order to save space,  
 the patch normally writes into a limited area in RAM.
+
+## Rust support
+fujihack has very basic Rust integration. To use it you will need rustup:
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add armv5te-unknown-linux-musleabi
+```
 
 ## Firmware utility (firm.c)
 **The plan is to phase out the firm.c utility in favor of the web patcher.**  
