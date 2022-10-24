@@ -6,14 +6,24 @@ pub mod c {
 }
 
 #[no_mangle]
+fn __aeabi_unwind_cpp_pr0() {}
+
+#[no_mangle]
 fn panic() {
 	loop {}
+}
+
+// Thanks to u/timerot Reddit
+macro_rules! cstr {
+    ($data:literal) => {
+        &concat!($data, "\0").as_bytes()[0] as *const u8
+    }
 }
 
 #[no_mangle]
 pub fn foo_bar() -> u32 {
 	unsafe {
-		c::fuji_screen_write("Hello, Rust\0".as_ptr(), 1, 1, 0, 7);
+		c::fuji_screen_write(cstr!("Hello, World"), 1, 1, 0, 7);
 	}
 
 	return 0;

@@ -1,6 +1,6 @@
 TOPL=../
-include ../Makefile
 -include ../config.mak
+include ../Makefile
 
 # Target specific dependencies
 HACK_BIN_DEPS=boot.o main.o lib.o stub.o hijack.o screen.o posix.o util.o rust.o 
@@ -21,3 +21,5 @@ hack.bin: $(HACK_BIN_DEPS)
 font.bin: font/font.h
 	$(ARMCC)-gcc -c font/font.c -o font.o
 	$(ARMCC)-objcopy -O binary font.o font.bin
+
+# Compiling rules are defined in ../Makefile

@@ -14,8 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install deps
+    - name: Install APT deps
       run: sudo apt install gcc make gcc-arm-none-eabi wget
+
+	- name: Install rust
+	  run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        rustup target add armv5te-unknown-linux-musleabi
 
     - name: Compile firmware utility
       run: make firm model=xf1_101
