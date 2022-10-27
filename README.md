@@ -11,29 +11,30 @@ Check out the [FujiHack wiki](https://fujihack.github.io/) for a ton of info, an
 ## What's been done:
 - Unpack, repack, and modify firmware
 - Harmless code execution hijacks in firmware (functionality must be replaced)
+- Debugger custom firmware, with brute force searching mechanism.
 - Patch USB/PTP code to transfer and run custom code, quickly debug and experiment
 - Uncovered hidden scripting abilities (see https://github.com/fujihack/fujihack/issues/13)
-- Dump all sections of RAM
+- Dump all sections of RAM (IO regions still a mystery)
 - Modify EEPROM
-- Render text to screen
+- Draw text to screen
 - Interface with internal SQLite
 - Read IO: button status, gryoscope, accelerometer
 - Limited rasterizer object rendering
+- Primitive live screen buffer drawing
 - Task creation/suspending/closing/sleeping
 - Primitive card speed tests
-- Tetris
+- Gyroscope tetris
 - Primitive menus
 - [Wiki](https://fujihack.github.io/)
 
-## How to Use
-**Don't, at least not yet. This is still a research project.**  
-Remember that custom firmware is always dangerous, and can brick devices.  
-If you want to help research, contact me.  
+## How to Use  
+- Remember that custom firmware is always dangerous, and can brick devices.  
+- If it blows up your camera, you are responsible for cleaning up the mess.
 
 ## Web Patcher
 A [web based patcher](https://fujihack.github.io/patcher/) is in the works.  
-It has the ability to unpack and export firmware file binaries. Use at your own risk.  
-firm.c utility will most likely be phased out web tools are spiffier.  
+It has the ability to unpack, inject, patch, and repack firmware. Use at your own risk.  
+firm.c utility will be likely be phased out web tools are spiffier.  
 
 ## PTP/USB Debugger
 The main firmware patch allows you to run custom code over USB, through the PTP protocol.  
@@ -47,8 +48,10 @@ placing a config.mak at the top directory, or defining in CLI like so:
 make hack.bin model=xf1
 ```
 That target will compile `hack.bin`, which is the bare ARM binary that is sent over by USB  
-to the camera. The `hack` can be used to compile, and then send to the camera with a python  
+to the camera. The `hack` target can be used to compile, and then send code to the camera with a python  
 script in the `ptp/` directory.
+
+You can place custom code in `main.c`.
 
 The makefile is set up to remove all unused variables and function in order to save space,  
 the patch normally writes into a limited area in RAM.
@@ -58,25 +61,6 @@ fujihack has very basic Rust integration. To use it you will need rustup:
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup target add armv5te-unknown-linux-musleabi
-```
-
-## Firmware utility (firm.c)
-**The plan is to phase out the firm.c utility in favor of the web patcher.**  
-The Makefile will compile firm.c, as well as the assembly injection hacks.  
-Type `make help` for some info.  
-
-### Unpacking
-This will simply output a bit flipped version of `input` into `temp_file`.  
-The output will remove the header, which ends after **`532`** bytes.  
-```
-make unpack input=~/Downloads/FPUPDATE.DAT temp_file=output
-```
-### Packing
-Packing will bit flip `temp_file`, increment the firmware version by one,  
-and copy back into `output`.
-
-```
-make pack model=xf1 temp_file=output output=FPUPDATE.DAT
 ```
 
 ![img](https://danielc.dev/filedump/IMG_0010.JPG)
