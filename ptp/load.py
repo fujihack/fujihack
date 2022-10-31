@@ -26,6 +26,7 @@ def runCode(file):
     camera = ptpy.PTPy()
 
     with camera.session():
+        #camera.custom_recv(HIJACK, [SETADDR, 0x00f2edf0])
         camera.custom_recv(HIJACK, [RESET])
         percent = 0
         byte = 0
@@ -36,8 +37,8 @@ def runCode(file):
                 camera.custom_recv(HIJACK, [WRITE, i])
             percent = (byte / len(c)) * 100
             byte += 1
-            if (percent % 10) == 0:
-                print(str(percent) + "%")
+            if (round(percent) % 2) == 0:
+                print(str(round(percent)) + "%")
         run(camera)
 
 def run(camera = None):
@@ -55,13 +56,17 @@ def dumpRam(file):
     
     with camera.session():
         camera.custom_recv(HIJACK, [RESET])
+        camera.custom_recv(HIJACK, [SETADDR], 0x0)
 
-        # Dump 64 mb
-        for i in range(64000000):
+        # Dump 32 mb
+        for i in range(32000000):
             if (i % 10000) == 0:
                 print("Read", i, "bytes")
             x = camera.custom_recv(HIJACK, [GET])
-            #x.write(bytesarray(x......))
+            f.write(x.Parameter[0])
+            f.flush()
+            if (i % 100001) == 0:
+            	print((i - 1) / 1000, "kilobytes") 
 
 def parseCli():
     for i in range(len(sys.argv)):

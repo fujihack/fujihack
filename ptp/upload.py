@@ -8,7 +8,7 @@ from fuji import *
 # PTPy seems to handle large packets fine
 # The PTP spec says the max size is 512 bytes but
 # somehow 50k works fine??
-PACKET_DATA_SIZE = 1024 * 12
+PACKET_DATA_SIZE = 50000
 
 camera = ptpy.PTPy()
 
