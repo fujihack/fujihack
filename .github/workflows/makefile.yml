@@ -26,6 +26,4 @@ jobs:
       run: make firm model=xf1_101
 
     - name: Compile hack.bin
-      run: |
-        cd src
-        make hack.bin
+      run: cd src; make hack.bin model=xf1_101
