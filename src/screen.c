@@ -3,17 +3,17 @@
 #include "fujifilm.h"
 
 // This is all a bunch of crap
-#if 0
+#if 1
 
-#define LAYER 2
+uint32_t screen_buffer = GET_SCREEN_LAYER(0);
 
 void disp_pixel(int x, int y, int col) {
-	uint32_t *buf = (uint32_t *)GET_SCREEN_LAYER(LAYER);
+	uint32_t *buf = (uint32_t *)screen_buffer;
 	buf[SCREEN_WIDTH * y + x] = col;
 }
 
 void disp_clear(int col) {
-	uint32_t *buf = (uint32_t *)GET_SCREEN_LAYER(LAYER);
+	uint32_t *buf = (uint32_t *)screen_buffer;
 	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
 		buf[i] = col;
 	}

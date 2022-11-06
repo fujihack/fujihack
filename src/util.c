@@ -46,19 +46,12 @@ void enable_script_flag() {
 #endif
 
 // Card benchmarking
-#define TEST_WRITES 1024
-#define TEST_TIMER 100
+#define TEST_WRITES 256
 #define TEST_MB 128
 #define TEST_SIZE (TEST_MB * 1000 * 1000)
 
-int timer_stayalive = 0;
-uint32_t timer = 0;
-void timer_callback() {
-	while (1) {
-		if (timer_stayalive) return;
-		fuji_task_sleep(TEST_TIMER);
-		timer += TEST_TIMER;
-	}
+unsigned int timer_ms() {
+	return ((uint32_t*)0x007b3588)[0];
 }
 
 int cardspeed() {
@@ -67,15 +60,13 @@ int cardspeed() {
 
 	SCREENWRT(1, 1, "Timer start")
 
+	unsigned int x = timer_ms();
+
 	fuji_toggle();
 	void *fp = fuji_fopen(FUJI_FOPEN_HANDLER, file, 1);
 	fuji_toggle();
 	fuji_zero();
 
-	if (fuji_wait_task_start(0, 0, timer_callback, 0)) {
-		return 1;
-	}
-	
 	for (int i = 0; i < TEST_WRITES; i++) {
 		fuji_toggle();
 		fuji_fwrite(FUJI_FWRITE_HANDLER, fp, TEST_SIZE / TEST_WRITES, (void*)0x0);
@@ -83,13 +74,13 @@ int cardspeed() {
 		fuji_zero();
 	}
 
-	timer_stayalive = 1;
-
 	fuji_toggle();
 	fuji_fclose(FUJI_FCLOSE_HANDLER, fp, 0, (char*)0);
 	fuji_toggle();
 	fuji_zero();
 
-	SCREENWRT(1, 2, "Speed test: %dmbs", 1000 / (timer / TEST_MB))
+	x = timer_ms() - x - 20;
+
+	SCREENWRT(1, 2, "%u Speed test: %dmbs", TEST_MB, 1000 / (x / TEST_MB))
 	return 0;
 }

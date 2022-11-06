@@ -20,5 +20,6 @@
 void generate_branch(void *base, void *to, void *buffer);
 void generate_call(void *base, void *to, void *buffer);
 void generate_nop(void *buffer);
+void generate_nops(void *buffer, int n);
 
 #endif

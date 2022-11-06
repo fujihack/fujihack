@@ -38,17 +38,3 @@ _start:
 	bl entry
 
 	pop {r1, r2, r3, r4, r5, r6, pc}
-
-// For debugging patches
-#if 0
-#undef FIRM_RST_CONFIG1
-#undef FIRM_RST_CONFIG2
-#undef FIRM_RST_WRITE
-#define FIRM_RST_CONFIG1 0
-#define FIRM_RST_CONFIG2 0
-#define FIRM_RST_WRITE 0
-
-.align 4
-#include "../patch/debug.S"
-.align 4
-#endif

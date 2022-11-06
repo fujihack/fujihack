@@ -10,14 +10,12 @@
 #include "screen.h"
 #include "hijack.h"
 
+// Main entry file, nothing much to see.
+
 void entry() {
-#if 0
-	cardspeed();
-#endif
-#if 1
-	strcpy((char*)MEM_MODEL_TEXT, "Hello, World");
-#endif
-#if 0
-	memory_dump("X:\\RAM.BIN", 0x0);
-#endif
+	// Print custom text to PTP/USB "VendorExtensionDesc"
+	strcpy((char*)MEM_PTP_TEXT, "Hello, World");
+
+	// Dump 256mb RAM
+	//memory_dump("X:\\RAM.BIN", 0x0);
 }

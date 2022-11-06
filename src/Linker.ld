@@ -1,5 +1,4 @@
-/* Daniel's Idiot friendly bare metal ARM linker script
-   2022 */
+/* Daniel's Idiot friendly bare metal ARM linker script */
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 
