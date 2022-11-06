@@ -70,7 +70,7 @@ i_search:
 
 	// Find
 	adr r0, search_ptp_finish
-	mov r1, #0x4
+	mov r1, #0xc
 	adr r3, bruteForceSearch
 	blx r3
 	cmp r0, #0x0
