@@ -11,5 +11,5 @@
 #include <hijack.h>
 
 void entry() {
-	
+	strcpy((char*)MEM_PTP_TEXT, "Hello, World");
 }
