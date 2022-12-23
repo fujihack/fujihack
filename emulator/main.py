@@ -1,12 +1,14 @@
 from unicorn import *
 from unicorn.arm_const import *
-import sys, multiprocessing
+import sys, multiprocessing, os
 
 MAX_MEM = 0x10000000
 
 # Base addr of file, injected code should be
 # position independent
 BASE_ADDR = 0x0
+
+start_inject = 0
 
 def sanitizeString(e, addr):
     final = ""
@@ -27,6 +29,14 @@ def printRegs(e, length):
     pc = e.reg_read(UC_ARM_REG_PC)
     lr = e.reg_read(UC_ARM_REG_LR)
 
+    if pc >= start_inject:
+        print("[I]   Custom PC: ", hex(pc - start_inject))
+        os.system("arm-none-eabi-addr2line -e test.elf " + hex(pc - start_inject))
+
+    if lr >= start_inject:
+        print("[I]   Custom LR: ", hex(lr - start_inject))
+        os.system("arm-none-eabi-addr2line -e test.elf " + hex(lr - start_inject))
+
     print("[I]   At PC:", hex(pc), "/", pc)
     print("[I]   In injection:", hex(pc - length), " inst #" + str((pc - length) / 4))
     print("[I]   LR:", hex(lr))
@@ -36,15 +46,23 @@ def printRegs(e, length):
 
 def mmio_read(uc, offset, size, data):
     #printRegs(uc, 0)
-    print(">>> Memory read", hex(offset), size)
-    return uc.mem_read(offset - 0x00000000, 4)
+    print("[I] Mirror memory read", hex(offset), size)
+    return uc.mem_read(offset, data)
 
 def mmio_write(uc, offset, size, value, data):
-    print(">>> Memory write", hex(offset), size)
-    uc.mem_write(offset - 0x00000000, 4)
+    print("[I] Mirror memory write", hex(offset), size)
+    uc.mem_write(offset, value.to_bytes(size, byteorder="little"))
 
-def io_write(uc, offset, size, value, data):
-    print("Written")
+dbg_string = ""
+def dbg_write(uc, offset, size, value, data):
+    global dbg_string
+    dbg_string += chr(value)
+    if value == 0:
+        print(">>>", dbg_string)
+        dbg_string = ""
+
+def dbg_read(uc, offset, size, value, data):
+    print("IO Read")
 
 def runEmu(e, start, end, firmware):
     try:
@@ -57,11 +75,12 @@ def runEmu(e, start, end, firmware):
     printRegs(e, len(firmware))
 
 def start():
+    global start_inject
     e = Uc(UC_ARCH_ARM, UC_MODE_ARM)
 
     print("[I] Loading code...")
     fp = open(sys.argv[1], "rb")
-    firmware = fp.read()
+    firmware = fp.read(60000000)
     print("[I] Firmware is", len(firmware), "bytes")
 
     print("[I] Allocating " + str(MAX_MEM / 1000 / 1000) + "mb memory...")
@@ -69,6 +88,7 @@ def start():
     e.mem_write(BASE_ADDR, firmware)
     
     # Write test.o right after firmware
+    start_inject = BASE_ADDR + len(firmware)
     fp = open("test.bin", "rb")
     injection = fp.read()
     e.mem_write(BASE_ADDR + len(firmware), injection)
@@ -83,7 +103,9 @@ def start():
     end = BASE_ADDR + len(firmware) + len(injection)
 
     # Map 0x4* memory mirror
-    e.mmio_map(0x40000000, 0x50000000, mmio_read, None, mmio_write, None)
+    e.mmio_map(0x40000000, 0x10000000, mmio_read, None, mmio_write, None)
+
+    e.mmio_map(0x10000000, 1024, dbg_read, None, dbg_write, None)
 
     # Function returns to end
     e.reg_write(UC_ARM_REG_LR, end);
@@ -93,7 +115,7 @@ def start():
     p = multiprocessing.Process(target = runEmu,
         args = (e, start, end, firmware))
     p.start()
-    p.join(1)
+    p.join(20)
     if p.is_alive():
         print("[-] Thread timeout! Killing...")
         p.kill()

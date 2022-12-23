@@ -4,14 +4,21 @@
 #include <hijack.h>
 #include <fujifilm.h>
 
-char buffer[16];
+char buffer[32];
 
-uint32_t x = 0xdeadBEEF;
+// Log to string custom IO
+void iolog(char *string) {
+	uint8_t *io = (uint8_t*)0x10000000;
+	while (*string != '\0') {
+		io[0] = *string;
+		string++;
+	}
+
+	io[0] = '\0';
+}
 
 void *entry() {
-	uint8_t *t = (uint8_t*)0x40000008;
-
-	sqlite_snprintf(sizeof(buffer), buffer, "Hello %X", x);
-	return buffer;
+	foo_bar();
+	return 0;
 }
 

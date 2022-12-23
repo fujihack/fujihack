@@ -1,42 +1,23 @@
+all: test.bin $(dump)
+	python3 main.py $(dump)
+
+TOPL=..
 -include ../config.mak
+include ../Makefile
 
 # Installation:
 # pip3 install unicorn
 
-model?=xf1_101
-dump?=/home/daniel/Downloads/dump_0x00e_32mb.bin
+dump?=~/Documents/dump/RAM.BIN
 
-ARMCC=arm-none-eabi
-ARMCFLAGS=-c -include ../model/$(model).h -I../src/
-
+ARMCFLAGS=-c -g -include ../model/$(model).h -I../src/
 ARMCFLAGS+=-fpic -mcpu=cortex-a7
-
 ARMLDFLAGS=-nostdlib -nostartfiles -T ../src/Linker.ld
 
-all: test.bin $(dump)
-	python3 main.py $(dump)
-
 # Recompile when these files are changed
-BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile Linker.ld
-
-O_FILES=entry.o main.o stub.o
+BUILD_DEPS=../model/stub.h ../model/$(model).h main.py Makefile ../src/Linker.ld ../patch/*
+O_FILES=entry.o main.o stub.o rust.o
 
 test.bin: $(BUILD_DEPS) $(O_FILES)
 	$(ARMCC)-ld $(O_FILES) $(ARMLDFLAGS) -o test.elf
 	$(ARMCC)-objcopy -O binary test.elf test.bin
-
-%.o: %.c $(BUILD_DEPS)
-	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
-
-%.o: %.S $(BUILD_DEPS)
-	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
-
-# Solely for compiling in stubs
-stub.o: $(BUILD_DEPS) stub.S
-	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) stub.S -o stub.o
-
-$(dump):
-	cd ..; $(MAKE) lay INPUT_FILE=~/Downloads/FPUPDATE-$(MODEL).DAT
-
-clean:
-	$(RM) *.o *.elf *.bin
