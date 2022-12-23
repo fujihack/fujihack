@@ -12,22 +12,25 @@ void HandleDestroy() { }
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 320
 
-#define MEM_SCREEN_BUFFER (0x01901800 + (640 * 4 * 170) - 520)
+#define MEM_SCREEN_BUFFER (0x01901800 + (640 * 4 * 167) - 520)
 #define GET_SCREEN_LAYER(x) (MEM_SCREEN_BUFFER + (SCREEN_WIDTH * SCREEN_HEIGHT * 4) * x)
 
+#define ALL 0x01cebe00
 
 int main()
 {
+	printf("%X\n", ALL);
+
 	CNFGSetup("Fuji Emulator screen", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	uint32_t data[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 	FILE *fp = fopen("/home/daniel/Documents/dump/RAM1.BIN", "r");
-	fseek(fp, GET_SCREEN_LAYER(3), SEEK_SET);
+	fseek(fp, ALL, SEEK_SET);
 	fread(data, 1, sizeof(data), fp);
 	fclose(fp);
 
-	printf("0x%x\n", GET_SCREEN_LAYER(3));
+	printf("0x%x\n", ALL);
 
 	while(CNFGHandleInput())
 	{

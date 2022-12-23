@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 		}
 		break;
 	case 'd':
-		printf("Decoded: %X/%u\n", read(argv[2]), read(argv[2]));
+		printf("Decoded: %08X/%u\n", read(argv[2]), read(argv[2]));
 		break;
 	case 'g':
 		{
