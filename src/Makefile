@@ -5,7 +5,7 @@ include ../Makefile
 # Target specific dependencies
 HACK_BIN_DEPS=boot.o main.o lib.o stub.o hijack.o screen.o posix.o util.o rust.o 
 
-ARMCFLAGS?=-fpic -mcpu=cortex-a5 -include ../model/$(model).h -c -marm -mapcs-frame -O2
+ARMCFLAGS?=-fpack-struct -fpic -mcpu=cortex-a5 -include ../model/$(model).h -c -marm -mapcs-frame -O2
 ARMLDFLAGS?=--gc-sections -Bstatic -T Linker.ld
 
 # Remove unused sections/functions/variables

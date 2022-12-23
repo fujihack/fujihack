@@ -1,4 +1,6 @@
 // Documents Fujifilm's "Syslog"
+#ifndef SYSLOG_H
+#define SYSLOG_H
 
 struct SyslogHeader {
 	char msg[0x14]; // only this is null terminated
@@ -28,3 +30,5 @@ struct SyslogMsg {
   
   char msg[8];
 }
+
+#endif

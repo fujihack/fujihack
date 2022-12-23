@@ -24,12 +24,15 @@ clean:
 endif
 
 ifndef model
-    $(error define model via CLI or by config.mak)
+$(error define model via CLI or by config.mak)
 endif
 
 # phony target to load hack onto camera
 hack: hack.bin
 	$(PYTHON3) $(TOPL)/ptp/load.py -l hack.bin
+
+run: hack.bin
+	$(PYTHON3) $(TOPL)/ptp/load.py -r
 
 # Changing any of these could make compilation different
 EXTERN_DEPS=Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
@@ -52,4 +55,4 @@ RFLAGS=-C opt-level=2 --target $(RARCH) --emit obj --crate-type rlib
 %.o: %.rs $(EXTERN_DEPS) $(wildcard *.rs)
 	$(RUSTC) $(RFLAGS) $< -o $@
 
-.PHONY: hack help clean
+.PHONY: hack help clean run
