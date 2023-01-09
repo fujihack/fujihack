@@ -104,4 +104,6 @@ void fuji_init_sqlite();
 int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
 int fuji_wait_task_stop(int bufResult);
 
+int fuji_load_flash(int sector, int length, void *buffer, void (*callback)(int size), int flag);
+
 #endif
