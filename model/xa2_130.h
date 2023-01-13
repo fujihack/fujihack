@@ -22,6 +22,9 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define FIRM_PTP_FINISH 0x0087b94c
 #define FIRM_PTP_MAX 3000
 
+#define FUJI_FOPEN_HANDLER 0x00ea9708
+#define FUJI_FWRITE_HANDLER 0x00ea9690
+#define FUJI_FCLOSE_HANDLER 0x00ea96e0
 
 #ifdef STUBS
 	#include "stub.h"
@@ -33,7 +36,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_fwrite, 0x006f0f5c)
 
 	NSTUB(fuji_file_wait, 0x00ea95e4)
-	NSTUB(fuji_reset, 0x00ea966c)
+	NSTUB(fuji_file_reset, 0x00ea966c)
 
 	NSTUB(fuji_screen_write, 0x010f0904)
 	NSTUB(fuji_discard_text_buffer, 0x00d3570c)
