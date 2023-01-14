@@ -26,17 +26,22 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define FUJI_FWRITE_HANDLER 0x00ea9690
 #define FUJI_FCLOSE_HANDLER 0x00ea96e0
 
+#define MEM_PTP_TEXT 0x00d6bfd0
+
 #ifdef STUBS
 	#include "stub.h"
 
 	NSTUB(fuji_drive, 0x006f3f08)
-	NSTUB(fuji_fopen, 0x00712178)
+	NSTUB(fuji_fopen, 0x006f0e48)
 	NSTUB(fuji_fread, 0x006f0efc)
 	NSTUB(fuji_fclose, 0x006f0fbc)
 	NSTUB(fuji_fwrite, 0x006f0f5c)
+	NSTUB(fuji_get_error, 0x006f8ba8)
 
 	NSTUB(fuji_file_wait, 0x00ea95e4)
 	NSTUB(fuji_file_reset, 0x00ea966c)
+
+	NSTUB(fuji_io_lock, 0x00649eb4)
 
 	NSTUB(fuji_screen_write, 0x010f0904)
 	NSTUB(fuji_discard_text_buffer, 0x00d3570c)

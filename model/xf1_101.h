@@ -109,7 +109,7 @@ Mirrorless fixed lens
 	//         Experimental:
 
 	NSTUB(fuji_create_semaphore, 0x0073b3a4)
-	NSTUB(fuji_return_semaphore, 0x00734848)
+	NSTUB(fuji_release_semaphore, 0x00734848)
 	NSTUB(fuji_get_semaphore, 0x00734938)
 
 	NSTUB(fuji_wait_task_start, 0x00626044)
