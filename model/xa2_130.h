@@ -28,6 +28,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define MEM_PTP_TEXT 0x00d6bfd0
 
+// Screen buffers accessible from 0x007fd328
+
 #ifdef STUBS
 	#include "stub.h"
 
