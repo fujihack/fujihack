@@ -82,8 +82,8 @@ Mirrorless fixed lens
 
 	//NSTUB(fuji_malloc, 0x0073a2cc)
 
-	NSTUB(fuji_toggle, 0x00fd5a1c)
-	NSTUB(fuji_zero, 0x00fd4590)
+	NSTUB(fuji_file_wait, 0x00fd5a1c)
+	NSTUB(fuji_file_reset, 0x00fd4590)
 
 	//NSTUB(fuji_create_fixedmemory, 0x0073a4f4)
 

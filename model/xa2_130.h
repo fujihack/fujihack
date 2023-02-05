@@ -18,17 +18,24 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define FIRM_RST_CONFIG1 0x00592bd4
 #define FIRM_RST_CONFIG2 0x005b81e0
 
-#define FIRM_PTP_9805 0x008722f8
-#define FIRM_PTP_FINISH 0x0087b94c
-#define FIRM_PTP_MAX 3000
+//#define FIRM_PTP_9805 0x008722f8
+//#define FIRM_PTP_FINISH 0x0087b94c
+//#define FIRM_PTP_MAX 3000
 
 #define FUJI_FOPEN_HANDLER 0x00ea9708
 #define FUJI_FWRITE_HANDLER 0x00ea9690
 #define FUJI_FCLOSE_HANDLER 0x00ea96e0
 
+#define FIRM_USB_SCREEN 0x005ae41c
+
 #define MEM_PTP_TEXT 0x00d6bfd0
 
+#define MEM_PTP_9805 0x00D60870
+#define MEM_PTP_RETURN 0x00D5EAAC
+
 // Screen buffers accessible from 0x007fd328
+
+#define MEM_INPUT_MAP 0x00931c80
 
 #ifdef STUBS
 	#include "stub.h"
@@ -43,6 +50,10 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_file_wait, 0x00ea95e4)
 	NSTUB(fuji_file_reset, 0x00ea966c)
 
+	NSTUB(fuji_wait_task_start, 0x00670134)
+	NSTUB(fuji_wait_task_stop, 0x0067032c)
+	NSTUB(fuji_task_sleep, 0x006f84e8)
+
 	NSTUB(fuji_io_lock, 0x00649eb4)
 
 	NSTUB(fuji_screen_write, 0x010f0904)
@@ -51,4 +62,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_rst_write, 0x01110340)
 	NSTUB(fuji_rst_config1, 0x010f2b8c)
 	NSTUB(fuji_rst_config2, 0x01118198)
+
+	NSTUB(sqlite_snprintf, 0x013ee680)
+
+	NSTUB(fuji_press_key, 0x00ea93f8)
 #endif
