@@ -27,12 +27,18 @@ ifndef model
 $(error define model via CLI or by config.mak)
 endif
 
-# phony target to load hack onto camera
-hack: hack.bin
-	$(PYTHON3) $(TOPL)/ptp/load.py -l hack.bin
+ifdef WIN
+FUJI_OUT=fuji.exe
+else
+FUJI_OUT=fuji
+endif
 
-run: hack.bin
-	$(PYTHON3) $(TOPL)/ptp/load.py -r
+build-fuji:
+	cd $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
+
+# phony target to load hack onto camera (PTP/USB)
+hack: build-fuji hack.bin
+	$(TOPL)/ptp/$(FUJI_OUT) -r hack.bin
 
 # Changing any of these could make compilation different
 EXTERN_DEPS=Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
@@ -50,6 +56,7 @@ stub.o: stub.S ../model/$(model).h
 	$(ARMCC)-gcc -D FPIC -D STUBS $(ARMCFLAGS) $< -o $@
 
 # Support rust files -> emit ARM asm -> regular ELF files
+# TODO: armv7a-none-eabi may be better
 RARCH=armv5te-unknown-linux-musleabi
 RFLAGS=-C opt-level=2 --target $(RARCH) --emit obj --crate-type rlib
 %.o: %.rs $(EXTERN_DEPS) $(wildcard *.rs)
