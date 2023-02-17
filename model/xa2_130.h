@@ -29,13 +29,14 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define FIRM_USB_SCREEN 0x005ae41c
 
 #define MEM_PTP_TEXT 0x00d6bfd0
-
 #define MEM_PTP_9805 0x00D60870
 #define MEM_PTP_RETURN 0x00D5EAAC
 
 // Screen buffers accessible from 0x007fd328
 
 #define MEM_INPUT_MAP 0x00931c80
+
+#define RTOS_FUNCTIONS 0x0004dae0
 
 #ifdef STUBS
 	#include "stub.h"
@@ -53,6 +54,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_wait_task_start, 0x00670134)
 	NSTUB(fuji_wait_task_stop, 0x0067032c)
 	NSTUB(fuji_task_sleep, 0x006f84e8)
+	NSTUB(fuji_task_event, 0x006f983c)
 
 	NSTUB(fuji_io_lock, 0x00649eb4)
 
@@ -64,6 +66,11 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_rst_config2, 0x01118198)
 
 	NSTUB(sqlite_snprintf, 0x013ee680)
+	NSTUB(fuji_init_sqlite, 0x01254c2c)
+	NSTUB(sqlite_exec, 0x0141611c)
+	NSTUB(sqlite_mallocAlarm, 0x013ed0f0)
 
 	NSTUB(fuji_press_key, 0x00ea93f8)
+
+	NSTUB(fuji_get_task_id, 0x007332cc)
 #endif
