@@ -42,16 +42,17 @@ enum FujiFileError {
 	// 2
 };
 
-// Returns an file IO ID (increments like a stack).
-// Flag is 1 for writing, 0 for reading
-// handler recieves 4 parameters (??)
-int fuji_fopen(void (*handler)(int error, int id, int, int), const char string[], int flag);
+#define FUJI_FILE_HANDLER void (*handler)(int error, int id, int, int)
 
-int fuji_fwrite(uint32_t handler, int fp, int n, const void *data);
-int fuji_fread(void (*handler)(int error, int id, int, int), int fp, int n, void *data);
-int fuji_fclose(uint32_t handler, int fp, int x, int y);
+// Returns an file IO ID (increments like a stack).
+int fuji_fopen(FUJI_FILE_HANDLER, const char string[], int flag);
+
+int fuji_fwrite(FUJI_FILE_HANDLER, int fp, int n, const void *data);
+int fuji_fread(FUJI_FILE_HANDLER, int fp, int n, void *data);
+int fuji_fclose(FUJI_FILE_HANDLER, int fp, int x, int y);
 int fuji_fstats(int fp, struct FujiStats *s, int fp2);
 
+// Context sensitive, crashes in USB task
 int fuji_get_error(int type, int *result, int flag);
 
 // Weird OS/timing functions required by file API
