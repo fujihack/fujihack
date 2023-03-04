@@ -50,6 +50,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 	NSTUB(fuji_file_wait, 0x00ea95e4)
 	NSTUB(fuji_file_reset, 0x00ea966c)
+	NSTUB(fuji_file_stats, 0x006f1684)
 
 	NSTUB(fuji_wait_task_start, 0x00670134)
 	NSTUB(fuji_wait_task_stop, 0x0067032c)

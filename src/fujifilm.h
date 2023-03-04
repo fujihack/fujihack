@@ -24,11 +24,35 @@ void fuji_screen_write(char string[], int x, int y, int foreground_color, int ba
 // Delete text buffer, does not take effect until screen updates
 void fuji_discard_text_buffer();
 
-// Found by looking for WT logging function
-void *fuji_fopen(uint32_t handler, const char string[], int flag);
-void *fuji_fwrite(uint32_t handler, void *fp, int n, const void *data);
-void *fuji_fread(uint32_t handler, void *fp, int n, const void *data);
-void *fuji_fclose(uint32_t handler, void *fp, int x, char *y);
+// Note: FILE IO functions found by looking for WT logging function
+
+struct FujiStats {
+	uint32_t blah[52];
+	uint32_t size;	
+};
+
+enum FujiFileError {
+	FUJI_OK = 0,
+	FUJI_TOO_MANY_HANDLES = 8,
+	FUJI_EOF = 14,
+	// 9
+	// 14
+	// 1
+	// 5
+	// 2
+};
+
+// Returns an file IO ID (increments like a stack).
+// Flag is 1 for writing, 0 for reading
+// handler recieves 4 parameters (??)
+int fuji_fopen(void (*handler)(int error, int id, int, int), const char string[], int flag);
+
+int fuji_fwrite(uint32_t handler, int fp, int n, const void *data);
+int fuji_fread(void (*handler)(int error, int id, int, int), int fp, int n, void *data);
+int fuji_fclose(uint32_t handler, int fp, int x, int y);
+int fuji_fstats(int fp, struct FujiStats *s, int fp2);
+
+int fuji_get_error(int type, int *result, int flag);
 
 // Weird OS/timing functions required by file API
 // Crashes if these aren't used
@@ -95,7 +119,7 @@ struct FujiInputMap {
 };
 
 // Highest level void function that initializes SQLite
-// (Look for unusual SQLite code formatting)
+// (Look for unusual SQLite code formatting), "FFDB"
 void fuji_init_sqlite();
 
 // Creates a task that is started "ms" miliseconds after this function is called.

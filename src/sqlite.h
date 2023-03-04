@@ -18,6 +18,7 @@ struct SQLiteDB {};
 void sqlite_snprintf(int size, char *buf, char *fmt, ...);
 
 // https://www.sqlite.org/c3ref/exec.html
+// Look for "SELECT name, rootpage, sql FROM '%q'.%s"
 int sqlite_exec(
 	struct SQLiteDB *db,
 	char *sql,
