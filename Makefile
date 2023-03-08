@@ -10,18 +10,22 @@ PYTHON3=python3
 
 ARMCC?=arm-none-eabi
 
+# Add multiple locations to find GCC and libc libs
+ARMCCLOC=/home/$(USER)/gcc-arm-none-eabi-5_4-2016q3
+ARMLDFLAGS+=-L$(ARMCCLOC)/arm-none-eabi/lib -L$(ARMCCLOC)/lib/gcc/arm-none-eabi/5.4.1
+ARMLDFLAGS+=-L/usr/lib/arm-none-eabi/newlib/ -L/usr/lib/gcc/arm-none-eabi/10.3.1/
+
 # Different msg if in different dir
 ifeq ($(TOPL),.)
 help:
 	@echo "Can be built in src/ or minimal/"
-clean:
-	$(RM) src/*.elf src/*.o src/*.bin minimal/*.elf minimal/*.o minimal/*.bin
 else
 help:
 	@echo "Targets: hack hack.bin"
-clean:
-	$(RM) *.elf *.o *.bin ../src/*.elf ../src/*.o ../src/*.bin
 endif
+
+clean:
+	$(RM) *.elf *.o *.bin $(TOPL)/src/*.elf $(TOPL)/src/*.o $(TOPL)/src/*.bin $(TOPL)/frontier/core/*.o $(TOPL)/frontier/mjs/*.o
 
 ifndef model
 $(error define model via CLI or by config.mak)
@@ -62,4 +66,4 @@ RFLAGS=-C opt-level=2 --target $(RARCH) --emit obj --crate-type rlib
 %.o: %.rs $(EXTERN_DEPS) $(wildcard *.rs)
 	$(RUSTC) $(RFLAGS) $< -o $@
 
-.PHONY: hack help clean run
+.PHONY: hack help clean run build-fuji

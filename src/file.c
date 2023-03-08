@@ -1,5 +1,4 @@
-// This will provide POSIX wrappers over Fujifilm RTOS functions
-// for compatibility.
+// POSIX Compliant layer over Fuji RTOS API
 
 #include <stdio.h>
 #include <sys/stat.h>
@@ -26,10 +25,10 @@ int _open(char *pathname, int oflag, int rflag) {
 		flag = 2;
 	}
 
-	fuji_toggle();
+	fuji_file_wait();
 	int f = fuji_fopen(file_handler, pathname, flag);
-	fuji_toggle();
-	fuji_zero();
+	fuji_file_wait();
+	fuji_file_reset();
 
 	if (last_file_error == 0) {
 		return f;
@@ -39,10 +38,10 @@ int _open(char *pathname, int oflag, int rflag) {
 }
 
 int _write(int fd, void *buf, int bytes) {
-	fuji_toggle();
+	fuji_file_wait();
 	fuji_fwrite(file_handler, fd, bytes, buf);
-	fuji_toggle();
-	fuji_zero();
+	fuji_file_wait();
+	fuji_file_reset();
 
 	if (last_file_error == 0) {
 		return last_file_x;
@@ -52,10 +51,10 @@ int _write(int fd, void *buf, int bytes) {
 }
 
 int _read(int fd, void *buf, int bytes) {
-	fuji_toggle();
+	fuji_file_wait();
 	fuji_fread(file_handler, fd, bytes, buf);
-	fuji_toggle();
-	fuji_zero();
+	fuji_file_wait();
+	fuji_file_reset();
 
 	if (last_file_error == 0) {
 		return last_file_x;
@@ -65,10 +64,10 @@ int _read(int fd, void *buf, int bytes) {
 }
 
 int _close(int fd) {
-	fuji_toggle();
+	fuji_file_wait();
 	fuji_fclose(file_handler, fd, 0, 0);
-	fuji_toggle();
-	fuji_zero();
+	fuji_file_wait();
+	fuji_file_reset();
 	return 0;
 }
 

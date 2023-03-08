@@ -1,6 +1,3 @@
-[submodule "src/font"]
-	path = src/font
-	url = https://github.com/petabyt/font
 [submodule "ptp/camlib"]
 	path = ptp/camlib
 	url = https://github.com/petabyt/camlib

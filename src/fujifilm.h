@@ -57,8 +57,8 @@ int fuji_get_error(int type, int *result, int flag);
 
 // Weird OS/timing functions required by file API
 // Crashes if these aren't used
-void fuji_toggle();
-void fuji_zero();
+void fuji_file_wait();
+void fuji_file_reset();
 
 // There is no file pointer, just a single reading state
 // Found by looking for functions referencing "*.*"
