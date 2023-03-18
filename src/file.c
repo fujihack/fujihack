@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <sys/stat.h>
+#include <errno.h>
 
-#include "fujifilm.h"
-#include "fujihack.h"
+#include "io.h"
 
 int last_file_error = 0;
 int last_file_x = 0;

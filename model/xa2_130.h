@@ -8,35 +8,38 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define MODEL_NAME "Fujifilm X-A2"
 #define MODEL_CODE "00050701000507020005070400050709"
 #define FIRM_URL "https://dl.fujifilm-x.com/support/firmware/x-a2-130-oqijkawt/FWUP0006.DAT"
-#define CODE_ARM
 #define S3_FILE "C:\\IMFIDX10\\LX30B.S3"
+#define CODE_ARM
 
-// Dead code (doesn't work in camera, not in manual)
+#define SCREEN_WIDTH 720
+#define SCREEN_HEIGHT 480
+
+// Dead code, can be used as temporary space
 #define FIRM_IMG_PROPS 0x00598aec
 #define FIRM_IMG_PROPS_MAX 2000
 #define FIRM_RST_WRITE 0x005b0388
 #define FIRM_RST_CONFIG1 0x00592bd4
 #define FIRM_RST_CONFIG2 0x005b81e0
 
-//#define FIRM_PTP_9805 0x008722f8
-//#define FIRM_PTP_FINISH 0x0087b94c
-//#define FIRM_PTP_MAX 3000
-
-#define FUJI_FOPEN_HANDLER 0x00ea9708
-#define FUJI_FWRITE_HANDLER 0x00ea9690
-#define FUJI_FCLOSE_HANDLER 0x00ea96e0
-
+// Prints "USB"
 #define FIRM_USB_SCREEN 0x005ae41c
 
 #define MEM_PTP_TEXT 0x00d6bfd0
 #define MEM_PTP_9805 0x00D60870
 #define MEM_PTP_RETURN 0x00D5EAAC
 
-// Screen buffers accessible from 0x007fd328
+#define MEM_OPENGL_BUFFERS 0x007fd324
 
 #define MEM_INPUT_MAP 0x00931c80
 
-#define RTOS_FUNCTIONS 0x0004dae0
+// sqlite3_mem_methods
+#define SQLITE_MEM_METHODS 0x01427bf8
+
+// temporary flash buffer for decoding
+#define MEM_FLASH_DUMP 0x3e40000
+
+// Managed by "timer" task
+#define MEM_MS_TIMER 0x00917ce0
 
 #ifdef STUBS
 	#include "stub.h"
@@ -47,10 +50,11 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_fclose, 0x006f0fbc)
 	NSTUB(fuji_fwrite, 0x006f0f5c)
 	NSTUB(fuji_get_error, 0x006f8ba8)
+	NSTUB(fuji_fseek, 0x006f10d8)
 
 	NSTUB(fuji_file_wait, 0x00ea95e4)
 	NSTUB(fuji_file_reset, 0x00ea966c)
-	NSTUB(fuji_file_stats, 0x006f1684)
+	NSTUB(fuji_fstats, 0x006f1684)
 
 	NSTUB(fuji_wait_task_start, 0x00670134)
 	NSTUB(fuji_wait_task_stop, 0x0067032c)
@@ -67,7 +71,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_rst_config2, 0x01118198)
 
 	NSTUB(sqlite_snprintf, 0x013ee680)
-	NSTUB(fuji_init_sqlite, 0x01254c2c)
+	NSTUB(fuji_init_sqlite, 0x01258e80)
 	NSTUB(sqlite_exec, 0x0141611c)
 	NSTUB(sqlite_mallocAlarm, 0x013ed0f0)
 
@@ -75,3 +79,5 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 	NSTUB(fuji_get_task_id, 0x007332cc)
 #endif
+
+#define MEM_RTOS_FUNCTIONS 0x0004dae0

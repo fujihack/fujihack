@@ -6,6 +6,10 @@ void abort() {
 	
 }
 
+long int sys_timestamp() {
+	return ((long int)MEM_MS_TIMER)[0];
+}
+
 int _gettimeofday() {
 	return 0;
 }
@@ -21,3 +25,4 @@ int _kill(int pid, int sig) {
 int _isatty(int fd) {
 	return 1;
 }
+

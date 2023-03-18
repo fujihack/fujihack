@@ -1,23 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <errno.h>
+#include <sys.h>
 
-#include "fujifilm.h"
-#include "rst.h"
+//#include "io.h"
+//#include "rst.h"
 
-#include "fujihack.h"
 #include "sqlite.h"
-#include "screen.h"
-#include "hijack.h"
+//#include "screen.h"
+//#include "hijack.h"
+//#include <mjs.h>
 
-// Main entry file, nothing much to see.
+void entry(uintptr_t base) {
+	sys_init_mem();
 
-void entry() {
-
-	// Print custom text to PTP/USB "VendorExtensionDesc"
-	strcpy((char*)MEM_PTP_TEXT, "Hello, World");
-
-	// Dump 256mb RAM
-	//memory_dump("X:\\RAM.BIN", 0x0);
+	sprintf(buffer, "demo: %X", 123);
+	uart_str(buffer);
 }

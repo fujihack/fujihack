@@ -3,6 +3,8 @@ OUTPUT_ARCH(arm)
 ENTRY(_start)
 
 SECTIONS {
+	. = 0x3e40000;
+
 	/* Stores code and stuff */
 	. = ALIGN(4);
 	.text : {
@@ -49,4 +51,6 @@ SECTIONS {
 		*(.data*)
 		_data_end = .;
 	}
+
+	_symbol_table_start = .;
 }

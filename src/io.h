@@ -1,6 +1,8 @@
-// TODO: Make fujifilm/task.h, screen.h, ptp.h... (???)
-#ifndef FUJI_H
-#define FUJI_H
+// Fujifilm IO
+#ifndef FUJI_IO_H
+#define FUJI_IO_H
+
+#pragma pack(push, 1)
 
 // Make text editor linter happy
 #ifndef MODEL_NAME
@@ -13,22 +15,15 @@
 // Crashes without SD card (???)
 char fuji_drive();
 
-// Screen text
-#define TEXT_BLACK 7
-#define TEXT_WHITE 1
-
-// Write ASCII text rows to screen (permanent)
-// Found by looking for "EEPRom Setting Mode"
-void fuji_screen_write(char string[], int x, int y, int foreground_color, int background_color);
-
-// Delete text buffer, does not take effect until screen updates
-void fuji_discard_text_buffer();
-
 // Note: FILE IO functions found by looking for WT logging function
 
 struct FujiStats {
-	uint32_t blah[52];
-	uint32_t size;	
+	char filename[0x30];
+	uint32_t a;
+	uint32_t size;
+	uint32_t b;
+	char created[0x48];
+	char modified[0x48];
 };
 
 enum FujiFileError {
@@ -42,21 +37,24 @@ enum FujiFileError {
 	// 2
 };
 
+// fseek whence
+#define FUJI_FILE_SET 0
+#define FUJI_FILE_CURR 1
+
 #define FUJI_FILE_HANDLER void (*handler)(int error, int id, int, int)
 
 // Returns an file IO ID (increments like a stack).
 int fuji_fopen(FUJI_FILE_HANDLER, const char string[], int flag);
-
 int fuji_fwrite(FUJI_FILE_HANDLER, int fp, int n, const void *data);
 int fuji_fread(FUJI_FILE_HANDLER, int fp, int n, void *data);
 int fuji_fclose(FUJI_FILE_HANDLER, int fp, int x, int y);
+int fuji_fseek(FUJI_FILE_HANDLER, int fp, int pos, int a, int whence);
 int fuji_fstats(int fp, struct FujiStats *s, int fp2);
 
 // Context sensitive, crashes in USB task
 int fuji_get_error(int type, int *result, int flag);
 
-// Weird OS/timing functions required by file API
-// Crashes if these aren't used
+// Used inbetween file operations to gain access to filesystem
 void fuji_file_wait();
 void fuji_file_reset();
 
@@ -64,33 +62,6 @@ void fuji_file_reset();
 // Found by looking for functions referencing "*.*"
 int fuji_dir_open(char *first, char *second, char *buffer);
 int fuji_dir_next(char *buffer);
-
-// We should be nice when there isn't much defined in model header file
-
-// TODO: Custom handlers
-#ifndef FUJI_FOPEN_HANDLER
-	#define FUJI_FOPEN_HANDLER 0
-#endif
-#ifndef FUJI_FREAD_HANDLER
-	#define FUJI_FREAD_HANDLER 0
-#endif
-#ifndef FUJI_FWRITE_HANDLER
-	#define FUJI_FWRITE_HANDLER 0
-#endif
-#ifndef FUJI_FCLOSE_HANDLER
-	#define FUJI_FCLOSE_HANDLER 0
-#endif
-
-#ifdef MEM_EEP_START
-	#define GET_EEP(x) ((uint8_t*)MEM_EEP_START)[x]
-	#define SET_EEP(x, v) ((uint8_t*)MEM_EEP_START)[x] = (uint8_t)v;
-#else
-	#define GET_EEP(x) /* */
-	#define SET_EEP(x) /* */
-#endif
-
-// Found in EEPRom setting menu code
-void fuji_apply_eeprom();
 
 // Task creation data struct
 struct FujiTask {
@@ -129,6 +100,9 @@ void fuji_init_sqlite();
 int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
 int fuji_wait_task_stop(int bufResult);
 
+// Used by OS to decompress firmware from flash (syslog DECE)
 int fuji_load_flash(int sector, int length, void *buffer, void (*callback)(int size), int flag);
+
+#pragma pack(pop)
 
 #endif

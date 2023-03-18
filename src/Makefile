@@ -1,3 +1,4 @@
+# Makefile for Fujihack + Frontier
 TOPL=../
 -include ../config.mak
 include ../Makefile
@@ -6,14 +7,16 @@ FRONTIER=$(TOPL)frontier
 FRONTIER_CORE=$(FRONTIER)/core/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
-HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o
-HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o)
-HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
+HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o
+#HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o)
+#HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
+
+ARMCFLAGS+=-I$(FRONTIER_JS)
 
 WRAPS=--wrap=_malloc_r
 
-ARMCFLAGS+=-fpic -mcpu=cortex-a7 -include ../model/$(model).h -c -marm -O2
-ARMLDFLAGS+=-Bstatic -T Linker.ld $(WRAPS)
+ARMCFLAGS+=-mcpu=cortex-a7 -include ../model/$(model).h -c -marm -O4
+ARMLDFLAGS+=-Bstatic -T Linker.ld $(WRAPS) -lc -lgcc -lm
 
 ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
 
@@ -22,9 +25,10 @@ ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
 #ARMCFLAGS+=-fdata-sections -ffunction-sections
 #ARMLDFLAGS+=--gc-sections
 
-hack.bin: $(HACK_BIN_DEPS)
+hack.bin: $(HACK_BIN_DEPS) build-frontier
 	$(ARMCC)-ld $(HACK_BIN_DEPS) $(ARMLDFLAGS) -lc -lgcc -o hack.elf
 	$(ARMCC)-objcopy -O binary hack.elf hack.bin
+	$(TOPL)/frontier/pack.o -i hack.elf -o hack.bin -s
 	$(ARMCC)-size --format=berkeley --target=binary hack.bin
 
 # Compiling rules are defined in ../Makefile

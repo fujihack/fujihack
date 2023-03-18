@@ -1,7 +1,6 @@
 #include <string.h>
 
-#include "fujihack.h"
-#include "fujifilm.h"
+#include "io.h"
 #include "sqlite.h"
 #include "screen.h"
 #include "hijack.h"

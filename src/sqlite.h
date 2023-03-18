@@ -29,6 +29,18 @@ int sqlite_exec(
 
 void *sqlite_mallocAlarm(int n);
 
+// Is filled a few ms after sqlite initialization
+struct sqlite3_mem_methods {
+	void *(*xMalloc)(int);         /* Memory allocation function */
+	void (*xFree)(void*);          /* Free a prior allocation */
+	void *(*xRealloc)(void*,int);  /* Resize an allocation */
+	int (*xSize)(void*);           /* Return the size of an allocation */
+	int (*xRoundup)(int);          /* Round up request size to allocation size */
+	int (*xInit)(void*);           /* Initialize the memory allocator */
+	void (*xShutdown)(void*);      /* Deinitialize the memory allocator */
+	void *pAppData;                /* Argument to xInit() and xShutdown() */
+};
+
 // Macros from SQLite
 #define SQLITE_OK           0   /* Successful result */
 /* beginning-of-error-codes */

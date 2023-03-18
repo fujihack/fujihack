@@ -1,6 +1,21 @@
-// Fuji rasterizer defs
+// Fuji rasterizer and screen related things
 #ifndef RST_H
 #define RST_H
+
+// Screen text
+#define TEXT_BLACK 7
+#define TEXT_BLUE 1
+#define TEXT_WHITE 0
+
+// Delete text buffer, does not take effect until screen updates
+void fuji_discard_text_buffer();
+
+// Write permanent ASCII text to screen
+void fuji_screen_write(char string[], int x, int y, int foreground_color, int background_color);
+
+// These are typically used in order in source code
+void fuji_rst_config1(unsigned short x); // Layer, or something, typically 0xf
+void fuji_rst_config2(unsigned short x); // BG/FG color
 
 // Most of these can be figured out by looking in RAM for
 // "Script version", "Software version" strings
@@ -31,9 +46,5 @@ void fuji_rst_rect(
 );
 
 void fuji_rst_write(int x, int dy, char *string);
-
-// These are typically used in order in source code
-void fuji_rst_config1(unsigned short x); // Layer, or something, typically 0xf
-void fuji_rst_config2(unsigned short x); // BG/FG color
 
 #endif

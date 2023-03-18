@@ -68,6 +68,8 @@ Mirrorless fixed lens
 
 #define MEM_INPUT_MAP 0x00795370
 
+#define MEM_MS_TIMER 0x007b3588
+
 #define MEM_SQLITE_STRUCT 0x0144c670
 
 #ifdef STUBS
@@ -79,6 +81,7 @@ Mirrorless fixed lens
 	NSTUB(fuji_fread, 0x0072b618)
 	NSTUB(fuji_fwrite, 0x0072b428)
 	NSTUB(fuji_fclose, 0x0072b250)
+	NSTUB(fuji_fseek, 0x0072b08c)
 
 	//NSTUB(fuji_malloc, 0x0073a2cc)
 
