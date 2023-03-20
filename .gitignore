@@ -15,3 +15,4 @@ build.sh
 *.BIN
 __pycache__
 *.exe
+ptp/fuji

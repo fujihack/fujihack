@@ -35,7 +35,7 @@ struct RstTextEntry {
 	uint8_t bg;
 	uint8_t fg;
 	uint8_t unicode_string[66]; // separated by 0xE1 instead of 0x0
-}
+};
 
 // Screen text
 // TODO: rename -> FUJI_
