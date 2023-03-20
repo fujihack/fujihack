@@ -1,3 +1,6 @@
 [submodule "ptp/camlib"]
 	path = ptp/camlib
 	url = https://github.com/petabyt/camlib
+[submodule "frontier"]
+	path = frontier
+	url = https://github.com/petabyt/frontier

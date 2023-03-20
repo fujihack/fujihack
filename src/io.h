@@ -1,13 +1,8 @@
-// Fujifilm IO
+// Fujifilm I/O
 #ifndef FUJI_IO_H
 #define FUJI_IO_H
 
 #pragma pack(push, 1)
-
-// Make text editor linter happy
-#ifndef MODEL_NAME
-	#include "../model/xf1_101.h"
-#endif
 
 #include <stdint.h>
 

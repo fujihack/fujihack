@@ -9,7 +9,7 @@ OUT_UNIX=$(OUT) $(addprefix camlib/src/,backend.o libusb.o)
 CFLAGS=-I camlib/src/
 
 fuji: $(OUT_UNIX)
-	$(CC) $(OUT_UNIX) -lusb -o fuji
+	$(CC) $(OUT_UNIX) -lusb-1.0 -o fuji
 
 libwpd.dll:
 	wget https://github.com/petabyt/libwpd/releases/download/0.1.1/libwpd_x64.dll -O libwpd.dll

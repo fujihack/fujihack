@@ -2,6 +2,8 @@
 #ifndef RST_H
 #define RST_H
 
+#pragma pack(push, 1)
+
 // Screen text
 #define TEXT_BLACK 7
 #define TEXT_BLUE 1
@@ -21,6 +23,38 @@ void fuji_rst_config2(unsigned short x); // BG/FG color
 // "Script version", "Software version" strings
 
 #include <stdint.h>
+
+struct RstText {
+	uint32_t length; // number of entries
+	uint32_t active; // 1 or 0
+};
+
+struct RstTextEntry {
+	uint8_t x;
+	uint8_t y;
+	uint8_t bg;
+	uint8_t fg;
+	uint8_t unicode_string[66]; // separated by 0xE1 instead of 0x0
+}
+
+// Screen text
+// TODO: rename -> FUJI_
+#define TEXT_BLACK 7
+#define TEXT_BLUE 1
+#define TEXT_WHITE 0
+
+// Delete text buffer, does not take effect until screen updates
+void fuji_discard_text_buffer();
+
+// Write permanent ASCII text to screen
+void fuji_screen_write(char string[], int x, int y, int foreground_color, int background_color);
+
+// These are typically used in order in source code
+void fuji_rst_config1(unsigned short x); // Layer, or something, typically 0xf
+void fuji_rst_config2(unsigned short x); // BG/FG color
+
+// Most of these can be figured out by looking in RAM for
+// "Script version", "Software version" strings
 
 #define RGB(r, g, b) (uint8_t[]){r, g, b}
 
@@ -46,5 +80,7 @@ void fuji_rst_rect(
 );
 
 void fuji_rst_write(int x, int dy, char *string);
+
+#pragma pack(pop)
 
 #endif

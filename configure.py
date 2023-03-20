@@ -1,3 +1,4 @@
+# TODO: define WIN=1 in config.mak if necessary
 import os, platform, subprocess
 
 try:

@@ -41,6 +41,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 // Managed by "timer" task
 #define MEM_MS_TIMER 0x00917ce0
 
+#define MEM_TEXT_LAYERS 0x16facb4
+
 #ifdef STUBS
 	#include "stub.h"
 

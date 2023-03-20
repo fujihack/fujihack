@@ -7,6 +7,7 @@ RUSTC=rustc
 RM=rm -rf
 CP=cp
 PYTHON3=python3
+CD=cd
 
 ARMCC?=arm-none-eabi
 
@@ -38,7 +39,10 @@ FUJI_OUT=fuji
 endif
 
 build-fuji:
-	cd $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
+	$(CD) $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
+
+build-frontier:
+	$(CD) $(TOPL)/frontier && $(MAKE) pack.o
 
 # phony target to load hack onto camera (PTP/USB)
 hack: build-fuji hack.bin

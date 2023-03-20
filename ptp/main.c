@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdint.h>
-
+#include <string.h>
 #include <camlib.h>
 #include <ptpbackend.h>
 #include <operations.h>
 #include <ptp.h>
+
+#define FUJI_CREATE_FILE 0x900c // same as 0x100c?
+#define FUJI_UNKNOWN1 0x900d // same as 0x100d?
+#define FUJI_WRITE_FILE 0x901d
 
 #define FUJI_HIJACK 0x9805
 
@@ -79,6 +83,68 @@ int run_code(struct PtpRuntime *r, char *file) {
 	return 0;
 }
 
+#define PTP_OC_Fuji_CreateFile
+
+int test_upload(struct PtpRuntime *r, char *file) {
+	struct UintArray *ids;
+
+	int ret = ptp_get_storage_ids(r, &ids);
+	if (ret) {
+		return ret;
+	}
+
+	FILE *f = fopen(file, "rb");
+	if (f == NULL) {
+		puts("Can't open file");
+		return 1;
+	}
+	
+	fseek(f, 0, SEEK_END);
+	int size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	char *string = "AUTO_ACT.SCR";
+
+	char info[256];
+	memset(info, 0, sizeof(info));
+	((uint32_t *)(info))[0] = ids->data[0];
+	((uint32_t *)(info))[1] = 0x3002;
+	((uint32_t *)(info))[2] = size;
+	memset(info + 12, 0, 40);
+
+	((char *)(info + 12 + 40))[0] = '\r';
+	for (int i = 0; string[i] != '\0'; i++) {
+		((char *)(info + 12 + 40 + 1))[i * 2] = string[i];
+		((char *)(info + 12 + 40 + 1))[i * 2 + 1] = '\0';
+	}
+
+	int length = 12 + 40 + 1 + (strlen(string) * 2) + 2;
+
+	struct PtpCommand cmd;
+	cmd.code = FUJI_CREATE_FILE;
+	cmd.param_length = 0;
+
+	int x = ptp_generic_send_data(r, &cmd, info, 256);
+	printf("Result: %X\n", x);
+	printf("Result: %X\n", ptp_get_return_code(r));
+
+	void *file_data = malloc(size);
+	fread(file_data, size, 1, f);
+
+	cmd.code = FUJI_WRITE_FILE;
+	cmd.param_length = 0;
+
+	x = ptp_generic_send_data(r, &cmd, file_data, size);
+	printf("Result: %X\n", x);
+	printf("Result: %X\n", ptp_get_return_code(r));
+	printf("Wrote %d\n", size);
+
+	fclose(f);
+
+	ptp_close_session(r);
+	ptp_device_close(r);
+}
+
 int main(int argc, char *argv[]) {
 	struct PtpRuntime r;
 	ptp_generic_init(&r);
@@ -101,6 +167,8 @@ int main(int argc, char *argv[]) {
 		switch (argv[i][1]) {
 		case 'r':
 			return run_code(&r, argv[i + 1]);
+		case 's':
+			return test_upload(&r, argv[i + 1]);
 		}
 	}
 }
