@@ -44,7 +44,6 @@ int fuji_fwrite(FUJI_FILE_HANDLER, int fp, int n, const void *data);
 int fuji_fread(FUJI_FILE_HANDLER, int fp, int n, void *data);
 int fuji_fclose(FUJI_FILE_HANDLER, int fp, int x, int y);
 int fuji_fseek(FUJI_FILE_HANDLER, int fp, int pos, int a, int whence);
-int fuji_fstats(int fp, struct FujiStats *s, int fp2);
 
 // Context sensitive, crashes in USB task
 int fuji_get_error(int type, int *result, int flag);

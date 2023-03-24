@@ -6,11 +6,11 @@
 #include <operations.h>
 #include <ptp.h>
 
-#define FUJI_CREATE_FILE 0x900c // same as 0x100c?
-#define FUJI_UNKNOWN1 0x900d // same as 0x100d?
-#define FUJI_WRITE_FILE 0x901d
+#define PTP_OC_FUJI_SendObjectInfo 0x900c
+#define FUJI_UNKNOWN1 0x900d
+#define PTP_OC_FUJI_SendObject 0x901d
 
-#define FUJI_HIJACK 0x9805
+#define PTP_OC_FujiHack 0x9805
 
 #define FH_ZERO 4
 #define FH_WRITE 5
@@ -21,7 +21,7 @@
 
 int fh_cmd(struct PtpRuntime *r, int a, int b) {
 	struct PtpCommand cmd;
-	cmd.code = FUJI_HIJACK;
+	cmd.code = PTP_OC_FujiHack;
 	cmd.param_length = 2;
 	cmd.params[0] = a;
 	cmd.params[1] = b;
@@ -83,8 +83,6 @@ int run_code(struct PtpRuntime *r, char *file) {
 	return 0;
 }
 
-#define PTP_OC_Fuji_CreateFile
-
 int test_upload(struct PtpRuntime *r, char *file) {
 	struct UintArray *ids;
 
@@ -121,7 +119,7 @@ int test_upload(struct PtpRuntime *r, char *file) {
 	int length = 12 + 40 + 1 + (strlen(string) * 2) + 2;
 
 	struct PtpCommand cmd;
-	cmd.code = FUJI_CREATE_FILE;
+	cmd.code = PTP_OC_FUJI_SendObjectInfo;
 	cmd.param_length = 0;
 
 	int x = ptp_generic_send_data(r, &cmd, info, 256);
@@ -131,7 +129,7 @@ int test_upload(struct PtpRuntime *r, char *file) {
 	void *file_data = malloc(size);
 	fread(file_data, size, 1, f);
 
-	cmd.code = FUJI_WRITE_FILE;
+	cmd.code = PTP_OC_FUJI_SendObject;
 	cmd.param_length = 0;
 
 	x = ptp_generic_send_data(r, &cmd, file_data, size);

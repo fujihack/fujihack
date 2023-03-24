@@ -42,14 +42,14 @@ build-fuji:
 	$(CD) $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
 
 build-frontier:
-	$(CD) $(TOPL)/frontier && $(MAKE) pack.o
+	$(CD) $(TOPL)/frontier/emulator && $(MAKE)
 
 # phony target to load hack onto camera (PTP/USB)
 hack: build-fuji hack.bin
 	$(TOPL)/ptp/$(FUJI_OUT) -r hack.bin
 
 # Changing any of these could make compilation different
-EXTERN_DEPS=Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
+#EXTERN_DEPS=Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
 
 # output rule for C files
 %.o: %.c $(EXTERN_DEPS)

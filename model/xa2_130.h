@@ -66,7 +66,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_io_lock, 0x00649eb4)
 
 	NSTUB(fuji_screen_write, 0x010f0904)
-	NSTUB(fuji_discard_text_buffer, 0x00d3570c)
+	NSTUB(fuji_discard_text_buffer, 0x010f0a70)
 
 	NSTUB(fuji_rst_write, 0x01110340)
 	NSTUB(fuji_rst_config1, 0x010f2b8c)

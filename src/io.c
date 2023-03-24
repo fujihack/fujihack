@@ -1,21 +1,10 @@
+#include <stdarg.h>
+#include <stdio.h>
+
 #include "io.h"
 #include "rst.h"
 #include "sqlite.h"
 #include "screen.h"
-
-__asm__(
-	".global sprintf\n"
-	"sprintf:\n"
-	//"mov r7, r6\n"
-	//"mov r6, r5\n"
-	//"mov r5, r4\n"
-	//"mov r4, r3\n"
-	"mov r3, r2\n"
-	"mov r2, r1\n"
-	"mov r1, r0\n"
-	"mov r0, #0xffff\n"
-	"b sqlite_snprintf\n"
-);
 
 // int errno_ = 0;
 // 
@@ -26,11 +15,34 @@ __asm__(
 int col_y = 1;
 void uart_str(char *string) {
 	if (col_y == 10) {
-		fuji_discard_text_buffer();
-		fuji_discard_text_buffer();
+		// TODO: clear layers manually
+		//0x16facb4
 		col_y = 0;
 	}
 
 	fuji_screen_write(string, 1, col_y, 0, 7);
 	col_y++;
+
+	fuji_task_sleep(100);
 }
+
+int printf(const char *format, ...) {
+	char buffer[512];
+	va_list aptr;
+
+	va_start(aptr, format);
+	int w = vsnprintf(buffer, sizeof(buffer), format, aptr);
+	va_end(aptr);
+
+	buffer[sizeof(buffer) - 1] = '\0';
+
+	uart_str(buffer);
+
+	return w;
+}
+
+int puts(const char *x) {
+	uart_str(x);
+	return 0;
+}
+

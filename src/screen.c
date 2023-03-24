@@ -1,11 +1,10 @@
 #include <stdint.h>
 
-#include "fujihack.h"
-#include "fujifilm.h"
+#include "io.h"
 #include "rst.h"
 
 uintptr_t screen_buffer;
-int sys_bmp_init() {
+int sys_init_bmp() {
 	// Write some permanent text so that a new layer is always present
 	fuji_screen_write("new layer", 1, 1, TEXT_WHITE, TEXT_BLACK);
 
