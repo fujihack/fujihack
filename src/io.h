@@ -6,6 +6,20 @@
 
 #include <stdint.h>
 
+enum FujiKey {
+	KEY_OK = 0x1,
+	KEY_UP = 0x2,
+	KEY_DOWN = 0x3,
+	KEY_RIGHT = 0x5,
+	KEY_LEFT = 0x4,
+	KEY_SHUTTER1 = 0x7,
+	KEY_SHUTTER2 = 0x8,
+	KEY_DISPBACK = 0x9,
+	KEY_EFN = 0x36,
+	KEY_SCROLL_DOWN = 0x3a,
+	KEY_FN = 0x2f,
+};
+
 // Returns current drive (DOS style)
 // Crashes without SD card (???)
 char fuji_drive();

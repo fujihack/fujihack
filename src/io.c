@@ -1,36 +1,89 @@
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <bmp.h>
+
 #include "io.h"
 #include "rst.h"
 #include "sqlite.h"
 #include "screen.h"
 
-__asm__(
-	".global sprintf\n"
-	"sprintf:\n"
-	//"mov r7, r6\n"
-	//"mov r6, r5\n"
-	//"mov r5, r4\n"
-	//"mov r4, r3\n"
-	"mov r3, r2\n"
-	"mov r2, r1\n"
-	"mov r1, r0\n"
-	"mov r0, #0xffff\n"
-	"b sqlite_snprintf\n"
-);
+// Custom implementation of fuji_screen_write
+#if 0
+void fuji_screen_write_(char *text, int x, int y, int fg, int bg) {
+	struct RstText *rst = (struct RstText *)MEM_TEXT_LAYERS;
+	struct RstTextEntry *entry = MEM_TEXT_LAYERS + sizeof(struct RstText);
+	entry[rst->length].y = y * 2 - 1;
+	entry[rst->length].x = x;
+	entry[rst->length].fg = bg;
+	entry[rst->length].bg = fg;
 
-// int errno_ = 0;
-// 
-// void *__errno() {
-	// return &errno_;
-// }
+	memset(entry[rst->length].unicode_string, 0x0, 66);
 
-int col_y = 1;
-void uart_str(char *string) {
-	if (col_y == 10) {
-		fuji_discard_text_buffer();
-		fuji_discard_text_buffer();
-		col_y = 0;
+	int i;
+	for (i = 0; i < 65; i++) {
+		entry[rst->length].unicode_string[i * 2] = text[i];
+		entry[rst->length].unicode_string[i * 2 + 1] = 0xe1;
+		if (text[i] == '\0') {
+			break;
+		}
 	}
 
-	fuji_screen_write(string, 1, col_y, 0, 7);
-	col_y++;
+	rst->length++;
+	rst->active = 0;
+	fuji_task_sleep(10);
+	rst->active = 1;
+}
+#endif
+
+int stop_logs = 0;
+int col_y = 1;
+void screen_log(char *string) {
+	if (string == 0) return;
+	if (string[0] == '@') return;
+
+	char max[32];
+	memcpy(max, string, 32);
+	max[31] = '\0';
+
+	font_print_string(10, 10 + (18 * col_y), max, 0xffffff);
+
+	if (col_y == 24) {
+		col_y = 0;
+		bmp_clear(0);
+	} else {
+		col_y++;
+	}
+
+	fuji_task_sleep(0);
+	bmp_apply();
+}
+
+void uart_str(char *string) {
+	screen_log(string);
+}
+
+int printf(const char *format, ...) {
+	char buffer[512];
+	va_list aptr;
+
+	va_start(aptr, format);
+	int w = vsnprintf(buffer, sizeof(buffer), format, aptr);
+	va_end(aptr);
+
+	buffer[sizeof(buffer) - 1] = '\0';
+
+	uart_str(buffer);
+
+	return w;
+}
+
+int puts(const char *x) {
+	uart_str(x);
+	return 0;
+}
+
+int putchar(int c) {
+	return 0;
 }

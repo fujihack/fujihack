@@ -2,6 +2,8 @@
 #ifndef PATCH_H
 #define PATCH_H
 
+#include <stdint.h>
+
 void _ptp_9805_hack();
 int _file_loader();
 int _dbg_patch();
