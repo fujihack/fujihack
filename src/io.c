@@ -1,10 +1,12 @@
 #include <stdarg.h>
 #include <stdio.h>
-
+#include <string.h>
 #include "io.h"
 #include "rst.h"
 #include "sqlite.h"
 #include "screen.h"
+
+#include <bmp.h>
 
 // int errno_ = 0;
 // 
@@ -12,18 +14,54 @@
 	// return &errno_;
 // }
 
-int col_y = 1;
-void uart_str(char *string) {
-	if (col_y == 10) {
-		// TODO: clear layers manually
-		//0x16facb4
-		col_y = 0;
+#if 0
+void fuji_screen_write_(char *text, int x, int y, int fg, int bg) {
+	struct RstText *rst = (struct RstText *)MEM_TEXT_LAYERS;
+	struct RstTextEntry *entry = MEM_TEXT_LAYERS + sizeof(struct RstText);
+	entry[rst->length].y = y * 2 - 1;
+	entry[rst->length].x = x;
+	entry[rst->length].fg = bg;
+	entry[rst->length].bg = fg;
+
+	memset(entry[rst->length].unicode_string, 0x0, 66);
+
+	int i;
+	for (i = 0; i < 65; i++) {
+		entry[rst->length].unicode_string[i * 2] = text[i];
+		entry[rst->length].unicode_string[i * 2 + 1] = 0xe1;
+		if (text[i] == '\0') {
+			break;
+		}
 	}
 
-	fuji_screen_write(string, 1, col_y, 0, 7);
-	col_y++;
+	rst->length++;
+	rst->active = 0;
+	fuji_task_sleep(10);
+	rst->active = 1;
+}
+#endif
 
-	fuji_task_sleep(100);
+int stop_logs = 0;
+int col_y = 1;
+void uart_str(char *string) {
+	if (string == 0) return;
+	if (string[0] == '@') return;
+
+	char max[32];
+	memcpy(max, string, 32);
+	max[31] = '\0';
+
+	font_print_string(10, 10 + (18 * col_y), max, 0xffffff);
+
+	if (col_y == 24) {
+		col_y = 0;
+		bmp_clear(0);
+	} else {
+		col_y++;
+	}
+
+	fuji_task_sleep(0);
+	bmp_apply();
 }
 
 int printf(const char *format, ...) {
@@ -46,3 +84,6 @@ int puts(const char *x) {
 	return 0;
 }
 
+int putchar(int c) {
+	return 0;
+}

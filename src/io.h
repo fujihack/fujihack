@@ -6,6 +6,20 @@
 
 #include <stdint.h>
 
+enum FujiKey {
+	KEY_OK = 0x1,
+	KEY_UP = 0x2,
+	KEY_DOWN = 0x3,
+	KEY_RIGHT = 0x5,
+	KEY_LEFT = 0x4,
+	KEY_SHUTTER1 = 0x7,
+	KEY_SHUTTER2 = 0x8,
+	KEY_DISPBACK = 0x9,
+	KEY_EFN = 0x36,
+	KEY_SCROLL_DOWN = 0x3a,
+	KEY_FN = 0x2f,
+};
+
 // Returns current drive (DOS style)
 // Crashes without SD card (???)
 char fuji_drive();
@@ -44,6 +58,7 @@ int fuji_fwrite(FUJI_FILE_HANDLER, int fp, int n, const void *data);
 int fuji_fread(FUJI_FILE_HANDLER, int fp, int n, void *data);
 int fuji_fclose(FUJI_FILE_HANDLER, int fp, int x, int y);
 int fuji_fseek(FUJI_FILE_HANDLER, int fp, int pos, int a, int whence);
+int fuji_fstats(int fp, struct FujiStats *s, int fp2);
 
 // Context sensitive, crashes in USB task
 int fuji_get_error(int type, int *result, int flag);

@@ -3,7 +3,7 @@ TOPL=..
 include ../Makefile
 
 # Add in files from ../src
-HACK_BIN_DEPS=$(addprefix ../src/,boot.o lib.o load.o)
+HACK_BIN_DEPS=boot.o $(addprefix ../src/,lib.o load.o)
 HACK_BIN_DEPS+=stub.o main.o
 
 # output rule for C files

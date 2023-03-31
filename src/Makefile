@@ -8,7 +8,7 @@ FRONTIER_CORE=$(FRONTIER)/src/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
 HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o doom.o
-#HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o)
+HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o)
 #HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
 
 DOOM=/home/daniel/Documents/fdoom/doomgeneric
@@ -20,8 +20,17 @@ ARMCFLAGS+=-I$(FRONTIER_JS) -I$(DOOM)
 
 #WRAPS=--wrap=_malloc_r
 
-ARMCFLAGS+=-mcpu=cortex-a7 -include ../model/$(model).h -c -marm -O2 -I$(TOPL)/src
-ARMLDFLAGS+=-Bstatic -T Linker.ld $(WRAPS) -lc -lgcc -lm
+ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5
+ARMLDFLAGS+=-T Linker.ld $(WRAPS) -lc -lgcc -lm
+
+doom.o: ARMCFLAGS+=-O4
+/home/daniel/Documents/fdoom/doomgeneric/i_video.o: ARMCFLAGS+=-O4
+/home/daniel/Documents/fdoom/doomgeneric/v_video.o: ARMCFLAGS+=-O4
+/home/daniel/Documents/fdoom/doomgeneric/r_plane.o: CFLAGS+=-O4
+/home/daniel/Documents/fdoom/doomgeneric/w_wad.o: CFLAGS+=-O3
+/home/daniel/Documents/fdoom/doomgeneric/d_iwad.o: CFLAGS+=-O3
+/home/daniel/Documents/fdoom/doomgeneric/p_pspr.o: CFLAGS+=-O4
+/home/daniel/Documents/fdoom/doomgeneric/i_system.o: CFLAGS+=-O3
 
 ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
 
@@ -32,6 +41,10 @@ ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
 
 dummy: hack.bin
 	$(TOPL)/ptp/fuji -s hack.bin
+
+clean2:
+	rm ../../fdoom/doomgeneric/*.o
+	$(RM) $(HACK_BIN_DEPS)
 
 hack.bin: $(HACK_BIN_DEPS) build-frontier
 	$(ARMCC)-ld $(HACK_BIN_DEPS) $(ARMLDFLAGS) -lc -lgcc -o hack.elf
