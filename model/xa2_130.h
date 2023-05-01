@@ -36,7 +36,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define SQLITE_MEM_METHODS 0x01427bf8
 
 // temporary flash buffer for decoding
-#define MEM_FLASH_DUMP 0x3e40000
+#define MEM_FLASH_DUMP 0x10000000
 
 // Managed by "timer" task
 #define MEM_MS_TIMER 0x00917ce0
