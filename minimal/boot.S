@@ -43,7 +43,6 @@ _start:
 	strlo r0,[r1],#4                // clear 4 bytes
 	blo   2b                        // loop until done
 		
-	adr r0, _start
 	bl entry
 
 	pop {r1, r2, r3, r4, r5, r6, pc}

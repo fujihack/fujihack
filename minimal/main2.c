@@ -7,14 +7,13 @@
 #include <rst.h>
 #include <sqlite.h>
 #include <screen.h>
+#include <task.h>
 
 typedef void func(void);
 
 void entry() {
 	func* f = (func*)fh_load();
-	if (f == 0) {
-		SCREENDBG("Fujihack Load Error");
-	} else {
-		f();
-	}
+	f();
+
+	strcpy((char*)MEM_PTP_TEXT, "finished execution");
 }

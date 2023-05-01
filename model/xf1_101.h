@@ -72,6 +72,8 @@ Mirrorless fixed lens
 
 #define MEM_SQLITE_STRUCT 0x0144c670
 
+#define MEM_FLASH_DUMP 0x496b10c0
+
 #ifdef STUBS
 	#include "stub.h"
 

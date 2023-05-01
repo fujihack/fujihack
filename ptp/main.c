@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <camlib.h>
@@ -145,6 +146,37 @@ int test_upload(struct PtpRuntime *r, char *file) {
 	ptp_device_close(r);
 }
 
+int dump_ram(struct PtpRuntime *r, char *file) {
+	FILE *f = fopen(file, "wb");
+	if (f == NULL) {
+		puts("Can't create file");
+		return 1;
+	}
+
+	#define START 0xfe000000
+	#define END   0xff000000
+
+	for (int i = START; i < END; i += 64) {
+		int ret = fh_cmd(r, FH_GET, i);
+		if (ret) return 1;
+		uint32_t dat = ptp_get_param(r, 0);
+		fwrite(&dat, 4, 1, f);
+		fflush(f);
+		//printf("%X\n", dat);
+	}
+
+	fclose(f);
+}
+
+int test(struct PtpRuntime *r) {
+	int ret = fh_cmd(r, FH_GET, 0xfe000000);
+	if (ret) return 1;
+	uint32_t dat = ptp_get_param(r, 0);	
+	printf("Dat: %X\n", dat);
+
+	return 0;
+}
+
 int main(int argc, char *argv[]) {
 	struct PtpRuntime r;
 	ptp_generic_init(&r);
@@ -167,8 +199,15 @@ int main(int argc, char *argv[]) {
 		switch (argv[i][1]) {
 		case 'r':
 			return run_code(&r, argv[i + 1]);
+		case 'd':
+			return dump_ram(&r, argv[i + 1]);
 		case 's':
 			return test_upload(&r, argv[i + 1]);
+		case 't':
+			return test(&r);
 		}
 	}
+
+	puts("No args.");
+	return 1;
 }

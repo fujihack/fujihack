@@ -1,11 +1,6 @@
 # TODO: define WIN=1 in config.mak if necessary
 import os, platform, subprocess
 
-try:
-    import ptpy
-except e:
-    print("couldn't import ptpy")
-
 def checkCommand(shell):
     return subprocess.check_call(["which", shell])
 

@@ -7,8 +7,8 @@ FRONTIER=$(TOPL)frontier
 FRONTIER_CORE=$(FRONTIER)/src/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
-HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o
-HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o)
+HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o hijack.o
+HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o fault.o)
 #HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
 
 ARMCFLAGS+=-I$(FRONTIER_JS)
@@ -29,7 +29,6 @@ dummy: hack.bin
 	$(TOPL)/ptp/fuji -s hack.bin
 
 clean2:
-	rm ../../fdoom/doomgeneric/*.o
 	$(RM) $(HACK_BIN_DEPS)
 
 hack.bin: $(HACK_BIN_DEPS) build-frontier

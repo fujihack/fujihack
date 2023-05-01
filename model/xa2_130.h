@@ -36,12 +36,14 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define SQLITE_MEM_METHODS 0x01427bf8
 
 // temporary flash buffer for decoding
-#define MEM_FLASH_DUMP 0x3e40000
+#define MEM_FLASH_DUMP 0x10000000
 
 // Managed by "timer" task
 #define MEM_MS_TIMER 0x00917ce0
 
 #define MEM_TEXT_LAYERS 0x16facb4
+
+#define MEM_DEV_MODE_FUNC 0x00d35774
 
 #ifdef STUBS
 	#include "stub.h"
@@ -79,7 +81,27 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 	NSTUB(fuji_press_key, 0x00ea93f8)
 
-	NSTUB(fuji_get_task_id, 0x007332cc)
+	NSTUB(fuji_get_task_id, 0x006f84b8)
 #endif
 
 #define MEM_RTOS_FUNCTIONS 0x0004dae0
+
+/*
+Found IO table starting at 0xfff20000 with size 4
+Found IO table starting at 0xfff22000 with size 4
+Found IO table starting at 0xfff30414 with size 796
+Found IO table starting at 0xfff38000 with size 4
+Found IO table starting at 0xfff39c04 with size 8
+Found IO table starting at 0xfff3c000 with size 12
+Found IO table starting at 0xfff3f000 with size 4
+Found IO table starting at 0xfff44000 with size 4
+Found IO table starting at 0xfff48004 with size 4
+Found IO table starting at 0xfff61000 with size 4
+Found IO table starting at 0xfff70000 with size 4
+Found IO table starting at 0xfff78018 with size 12
+Found IO table starting at 0xfff84080 with size 4
+Found IO table starting at 0xfff88000 with size 4
+Found IO table starting at 0xfffa0004 with size 4096
+Found IO table starting at 0xfffa8004 with size 60
+Found IO table starting at 0xfffb2004 with size 4
+*/

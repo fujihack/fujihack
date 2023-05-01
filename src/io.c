@@ -84,6 +84,6 @@ int puts(const char *x) {
 	return 0;
 }
 
-int putchar(int c) {
+int sys_put_char(int c) {
 	return 0;
 }

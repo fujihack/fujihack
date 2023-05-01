@@ -10,7 +10,7 @@ HACK_BIN_DEPS+=stub.o main.o
 %.o: %.c $(EXTERN_DEPS)
 	$(ARMCC)-gcc $(ARMCFLAGS) $< -o $@
 
-ARMCFLAGS=-fpic -include ../model/$(model).h -c -I ../src/
+ARMCFLAGS=-fpic -mcpu=cortex-a5 -include ../model/$(model).h -c -I ../src/
 ARMLDFLAGS=--gc-sections -Bstatic -T Linker.ld
 
 hack.bin: $(HACK_BIN_DEPS) $(EXTERN_DEPS)

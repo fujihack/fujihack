@@ -10,15 +10,19 @@ enum FujiKey {
 	KEY_OK = 0x1,
 	KEY_UP = 0x2,
 	KEY_DOWN = 0x3,
-	KEY_RIGHT = 0x5,
 	KEY_LEFT = 0x4,
+	KEY_RIGHT = 0x5,
+	KEY_POWER = 0x6,
 	KEY_SHUTTER1 = 0x7,
 	KEY_SHUTTER2 = 0x8,
 	KEY_DISPBACK = 0x9,
 	KEY_EFN = 0x36,
 	KEY_SCROLL_DOWN = 0x3a,
 	KEY_FN = 0x2f,
+	KEY_CMD = 0x2b, // press scroll wheel down
 };
+
+void fuji_press_key(int code, int status);
 
 // Returns current drive (DOS style)
 // Crashes without SD card (???)
@@ -103,14 +107,19 @@ struct FujiInputMap {
 // (Look for unusual SQLite code formatting), "FFDB"
 void fuji_init_sqlite();
 
-// Creates a task that is started "ms" miliseconds after this function is called.
-// ms waited will be stored in buf. non zero result for error
-// These were found in firmware by looking at "SoftTimerStart"/"SoftTimerStop"
-int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
-int fuji_wait_task_stop(int bufResult);
-
 // Used by OS to decompress firmware from flash (syslog DECE)
 int fuji_load_flash(int sector, int length, void *buffer, void (*callback)(int size), int flag);
+
+struct FujiFlashRequest {
+	uint32_t sector; // 0
+	uint32_t length; // 1
+	uint32_t x; // 2
+	uintptr_t buffer; // 3
+	uint32_t z;
+	uint32_t y; // 4
+	uint32_t max; // 5
+	uintptr_t callback;
+};
 
 #pragma pack(pop)
 
