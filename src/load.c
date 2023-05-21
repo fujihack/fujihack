@@ -12,6 +12,8 @@ void file_handler(int error, int x, int y, int z) {
 }
 
 void *fh_load() {
+	((uint32_t *)MEM_RUN_DEV_MODE)[0] = 0xe12fff1e;
+
 	fuji_file_wait();
 	int fp = fuji_fopen(file_handler, "C:\\DCAA\\AUTO_ACT.SCR", 0);
 	fuji_file_wait();

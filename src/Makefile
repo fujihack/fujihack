@@ -8,14 +8,14 @@ FRONTIER_CORE=$(FRONTIER)/src/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
 HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o
-HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o)
+HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o ui.o)
 #HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
 
 ARMCFLAGS+=-I$(FRONTIER_JS)
 
 #WRAPS=--wrap=_malloc_r
 
-ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5
+ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5 -fpic
 ARMLDFLAGS+=-T Linker.ld $(WRAPS) -lc -lgcc -lm
 
 ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
@@ -29,7 +29,6 @@ dummy: hack.bin
 	$(TOPL)/ptp/fuji -s hack.bin
 
 clean2:
-	rm ../../fdoom/doomgeneric/*.o
 	$(RM) $(HACK_BIN_DEPS)
 
 hack.bin: $(HACK_BIN_DEPS) build-frontier

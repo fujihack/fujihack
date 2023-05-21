@@ -3,6 +3,38 @@
 #include <stdarg.h>
 #include <sys/stat.h>
 
+#include <sys.h>
+#include "io.h"
+
+int sys_check_key(int key) {
+	if (key == SYS_BUTTON_QUIT) {
+		key = KEY_DISPBACK;
+	} else if (key == SYS_BUTTON_DOWN) {
+		key = KEY_DOWN;
+	} else if (key == SYS_BUTTON_UP) {
+		key = KEY_UP;
+	} else if (key == SYS_BUTTON_LEFT) {
+		key = KEY_LEFT;
+	} else if (key == SYS_BUTTON_RIGHT) {
+		key = KEY_RIGHT;
+	} else if (key == SYS_BUTTON_LEFT) {
+		key = KEY_LEFT;
+	} else if (key == SYS_BUTTON_OK) {
+		key = KEY_OK;
+	}
+
+	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
+	if (m->key_code == key && m->key_status == 0x80) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+void msleep(int ms) {
+	fuji_task_sleep(ms);
+}
+
 // TODO: move to assembly
 void exit(int status) {
 

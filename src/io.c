@@ -47,7 +47,7 @@ void screen_log(char *string) {
 	memcpy(max, string, 32);
 	max[31] = '\0';
 
-	font_print_string(10, 10 + (18 * col_y), max, 0xffffff);
+	bmp_string(10, 10 + (18 * col_y), max, 0xffffff);
 
 	if (col_y == 24) {
 		col_y = 0;
@@ -84,6 +84,6 @@ int puts(const char *x) {
 	return 0;
 }
 
-int putchar(int c) {
+int sys_putchar(int c) {
 	return 0;
 }

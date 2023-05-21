@@ -32,3 +32,11 @@ void bmp_clear(uint32_t rgb) {
 		buf[i] = rgb;
 	}
 }
+
+int bmp_screen_height() {
+	return 480;
+}
+
+int bmp_screen_width() {
+	return 720;
+}

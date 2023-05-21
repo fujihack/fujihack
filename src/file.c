@@ -8,6 +8,8 @@
 
 int last_file_error = 0;
 int last_file_x = 0;
+
+// Holds the current file position at index fd
 int opens[100] = {0};
 
 void file_handler(int error, int x, int y, int z) {
