@@ -6,6 +6,8 @@
 #define STUB_H
 
 #ifdef FPIC
+	#error "This feature is deprecated"
+
 	// Define a trampoline, instead of relying on the
 	// compiler to generate exactly what I want.
 	#define NSTUB(name, addr) \

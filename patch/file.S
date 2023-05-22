@@ -1,82 +1,85 @@
-// This code is ran in preview menu
+// Patch to load executable binary from AUTO_ACT.SCR - requires RAM stubs
+// This is designed to be executed in the INSTAX selection menu
 
-#define MAX_SIZE 0x100000
+.global _start
+_start:
+	push {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, lr}
 
-.global _file_loader
-_file_loader:
-	push {r0, r1, r2, r3, r4, r5, r6, r7, r8, lr}
+	ldr r9, _fuji_file_reset
+	ldr r7, _fuji_file_wait
 
-	// r8 = sqlite_malloc(MAX_SIZE)
-	bl fuji_init_sqlite
-	mov r0, #0x100000
-	bl sqlite_malloc
-	mov r8, r4
+	blx r7 // fuji_file_wait()
 
-	// file[0] = fuji_drive();
-	adr r1, file
-	bl fuji_drive
-	strb r0, [r1]
+	adr r0, handler
+	adr r1, filename
+	mov r2, #0x0 // read mode
+	ldr r8, _fuji_fopen
+	blx r8 // fuji_fopen()
+	mov r6, r0 // store fd in r6
+	blx r7 // fuji_file_wait()
 
-	// filep = fuji_fopen(FUJI_FOPEN_HANDLER, file, 1)
-	bl fuji_toggle
-	ldr r0, =FUJI_FOPEN_HANDLER
-	adr r1, file
-	mov r2, #0x1
-	bl fuji_fopen
-	adr r1, filep
-	str r0, [r1]
-	bl fuji_toggle
+	blx r9 // fuji_file_reset()
 
-	bl fuji_zero
 
-	// fread(FUJI_FREAD_HANDLER, filep, MAX_SIZE, r8)
-	bl fuji_toggle
-	ldr r0, =FUJI_FREAD_HANDLER
-	adr r1, file
-	mov r2, #MAX_SIZE // size
-	mov r3, r8 // set to alloc'd addr
-	bl fuji_fread
-	bl fuji_toggle
+	ldr r8, temp_buf // load addr buffer
+	cmp r8, #0x0 // is err clear?
+	bne err
 
-	bl fuji_zero
 
-	// fuji_fclose(FUJI_FCLOSE_HANDLER, filep, 0x0, 0x0)
-	bl fuji_toggle
-	ldr r0, =FUJI_FCLOSE_HANDLER
-	adr r1, file
-	mov r2, #0x0
-	mov r3, #0x0
-	bl fuji_fread
-	bl fuji_toggle
+	blx r7 // fuji_file_wait()
 
-	bl fuji_zero
+	adr r0, handler
+	mov r1, r6 // fd
+	mov r2, #0xffffffff // read -1 bytes (?)
+	ldr r3, temp_buf
+	ldr r8, _fuji_fread
+	blx r8 // fuji_fread()
 
-	// fuji_screen_write(run_fujihack, 1, 1, 0, 7)
-	adr r0, run_fujihack
-	mov r1, #0x1
-	mov r2, #0x1
-	mov r3, #0x0
-	mov r4, #0x7
-	bl fuji_screen_write
+	blx r7 // fuji_file_wait()
+	blx r9 // fuji_file_reset()	
 
-	blx r8
 
-	// fuji_screen_write(press_ok, 1, 2, 0, 7)
-	adr r0, press_ok
-	mov r1, #0x1
-	mov r2, #0x2
-	mov r3, #0x0
-	mov r4, #0x7
-	bl fuji_screen_write
+	blx r7 // fuji_file_wait()
 
-	bl fuji_screen_clear
+	adr r0, handler
+	mov r1, r6 // fd
+	ldr r8, _fuji_fclose
+	blx r8 // fuji_fclose()
 
-	exit:
+	blx r7 // fuji_file_wait()
+	blx r9 // fuji_file_reset()
+
+	// call read contents
+	ldr r3, temp_buf
+	blx r3
+	
+	b quit
+
+	err:
+	// TODO: brief error message
+
+	quit:
 	pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, pc}
-filep: .int 0x0
-run_once: .byte 0x0
-.align 4
-file: .string "X:\\FH.BIN"
-run_fujihack: .string "Run FujiHack.."
-press_ok: .string "Press OK"
-bxlr: bx lr
+
+// Handler to store IO result in temp buffer
+handler:
+	push {r1, lr}
+
+	adr r1, temp_buf
+	str r0, [r1]
+
+	ldr r1, _fuji_file_reset
+	blx r1
+	
+	pop {r1, pc}
+
+// Pull the constants from header file stubs
+_fuji_file_wait: .int fuji_file_wait
+_fuji_file_reset: .int fuji_file_reset
+_fuji_fopen: .int fuji_fopen
+_fuji_fread: .int fuji_fread
+_fuji_fclose: .int fuji_fclose
+
+temp_buf: .int MEM_FLASH_DUMP
+
+filename: .string "C:\\DCAA\\AUTO_ACT.SCR"

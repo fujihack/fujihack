@@ -38,6 +38,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 // temporary flash buffer for decoding
 #define MEM_FLASH_DUMP 0x10000000
 
+#define MEM_RUN_DEV_MODE 0x00d35774
+
 // Managed by "timer" task
 #define MEM_MS_TIMER 0x00917ce0
 
