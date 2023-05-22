@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#include "io.h"
+#include "ff_io.h"
 
 int last_file_error = 0;
 int last_file_x = 0;

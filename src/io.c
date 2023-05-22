@@ -4,10 +4,9 @@
 
 #include <bmp.h>
 
-#include "io.h"
-#include "rst.h"
-#include "sqlite.h"
-#include "screen.h"
+#include "ff_io.h"
+#include "ff_screen.h"
+#include "ff_sqlite.h"
 
 // Custom implementation of fuji_screen_write
 #if 0

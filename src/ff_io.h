@@ -1,6 +1,6 @@
 // Fujifilm I/O
-#ifndef FUJI_IO_H
-#define FUJI_IO_H
+#ifndef FF_IO_H
+#define FF_IO_H
 
 #pragma pack(push, 1)
 
@@ -17,6 +17,8 @@ enum FujiKey {
 	KEY_SHUTTER2 = 0x8,
 	KEY_DISPBACK = 0x9,
 	KEY_PLAY = 0xb,
+
+	// May differ across devices
 	KEY_Q = 0x32,
 	KEY_REC = 0x34,
 	KEY_EFN = 0x36,
@@ -72,7 +74,7 @@ void fuji_file_wait();
 void fuji_file_reset();
 
 // There is no file pointer, just a single reading state
-// Found by looking for functions referencing "*.*"
+// (Found by looking for functions referencing "*.*")
 int fuji_dir_open(char *first, char *second, char *buffer);
 int fuji_dir_next(char *buffer);
 
@@ -86,7 +88,7 @@ struct FujiTask {
 	uint32_t f;
 };
 
-// Found in script WAIT and WAIT_SET code
+// (Found in script WAIT and WAIT_SET code)
 int fuji_task_sleep(int ms);
 
 // Called to init tasks on startup
@@ -103,12 +105,11 @@ struct FujiInputMap {
 	uint32_t c;
 };
 
-// Highest level void function that initializes SQLite
-// (Look for unusual SQLite code formatting), "FFDB"
-void fuji_init_sqlite();
-
 // Creates a task that is started "ms" miliseconds after this function is called.
-// ms waited will be stored in buf. non zero result for error
+// Returns a task ID, which is used in fuji_wait_task_stop
+// ms: task is called after x ms or called every x ms
+// option1: 0 for timeout delayed call, 1 is for repeating called
+// buf: Pointer to 12 byte structure
 // These were found in firmware by looking at "SoftTimerStart"/"SoftTimerStop"
 int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
 int fuji_wait_task_stop(int bufResult);

@@ -1,7 +1,6 @@
-#ifndef EEPROM_H
-#define EEPROM_H
-
-// Fujifilm EEPROM stubs
+// Fujifilm EEPROM stubs (generally very similar across devices)
+#ifndef FF_EEPROM_H
+#define FF_EEPROM_H
 
 // 4 byte string, the expected filename for the firmware update
 #define EEP_FIRM_NUM 0x1c0
@@ -18,7 +17,7 @@
 	#define SET_EEP(x) /* */
 #endif
 
-// Found in EEPRom setting menu code
+// Found in 'EEPRom setting menu' code
 void fuji_apply_eeprom();
 
 #endif

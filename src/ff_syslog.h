@@ -2,6 +2,10 @@
 #ifndef SYSLOG_H
 #define SYSLOG_H
 
+#include <stdint.h>
+
+#pragma pack(push, 1)
+
 struct SyslogHeader {
 	char msg[0x14]; // only this is null terminated
 	uint16_t of_0x14;
@@ -30,5 +34,7 @@ struct SyslogMsg {
   
   char msg[8];
 }
+
+#pragma pack(pop)
 
 #endif

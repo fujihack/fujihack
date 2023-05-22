@@ -11,7 +11,6 @@
 #include <ui.h>
 
 #include "fujihack.h"
-#include "sqlite.h"
 
 int main_menu() {
 	ui_text("FrontierOS software demo", 0xffffff);

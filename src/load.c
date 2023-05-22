@@ -1,6 +1,6 @@
 // Load Frontier hack.bin
-#include "sqlite.h"
-#include "io.h"
+#include "ff_sqlite.h"
+#include "ff_io.h"
 
 int last_file_error = 0;
 int last_file_x = 0;

@@ -1,10 +1,11 @@
+// Defines POSIX and Frontier interface
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <sys/stat.h>
 
 #include <sys.h>
-#include "io.h"
+#include "ff_io.h"
 
 int sys_check_key(int key) {
 	if (key == SYS_BUTTON_QUIT) {

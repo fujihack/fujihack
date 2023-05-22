@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include "io.h"
-#include "rst.h"
+#include "ff_io.h"
+#include "ff_screen.h"
 
 uintptr_t screen_buffer;
 int sys_init_bmp() {

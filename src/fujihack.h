@@ -1,4 +1,4 @@
-// Defines fujihack specific utils, menus
+// Some handy debugging macros and stuff
 #ifndef FUJIHACK_H
 #define FUJIHACK_H
 

@@ -4,8 +4,8 @@
 #include <string.h>
 #include <errno.h>
 
-#include "io.h"
-#include "sqlite.h"
+#include "ff_io.h"
+#include "ff_sqlite.h"
 
 void sys_init_mem() {
 	struct sqlite3_mem_methods *m = (struct sqlite3_mem_methods *)SQLITE_MEM_METHODS;

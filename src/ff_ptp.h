@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#pragma pack(push, 1)
+
 struct FujiPTPParams {
 	uint32_t code; // ptp command code
 	uint32_t transid; // ?
@@ -33,5 +35,7 @@ void fuji_ptp_function(uint8_t mode, struct FujiPTPParams *params, struct FujiPT
 // "x" is generally 0
 void fuji_ptp_finish(struct FujiPTPParams *params, int retcode, int retcode2);
 void fuji_ptp_return(int retcode, int x);
+
+#pragma pack(pop)
 
 #endif

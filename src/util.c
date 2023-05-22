@@ -1,9 +1,8 @@
 #include <string.h>
 
-#include "io.h"
-#include "sqlite.h"
-#include "screen.h"
-#include "hijack.h"
+#include "ff_io.h"
+#include "ff_sqlite.h"
+#include "ff_screen.h"
 
 #define DUMP_SIZE_MB 256
 #define DUMP_SIZE DUMP_SIZE_MB * 1000 * 1000

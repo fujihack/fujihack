@@ -11,6 +11,10 @@
 2010-01-05 15:30:36 2...
 */
 
+// Highest level void function that initializes SQLite
+// (Look for unusual SQLite code formatting, "FFDB")
+void fuji_init_sqlite();
+
 // Empty for now
 struct SQLiteDB {};
 
