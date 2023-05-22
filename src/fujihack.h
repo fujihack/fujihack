@@ -15,7 +15,6 @@ void enable_script_flag();
 
 #define SCREENDBG(...) SCREENWRT(1, 1, __VA_ARGS__)
 
-// Menus init, typically not called
-void fujihack_init();
+int fh_load();
 
 #endif

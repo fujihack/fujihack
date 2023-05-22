@@ -2,11 +2,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include <io.h>
-#include <rst.h>
-#include <sqlite.h>
-#include <screen.h>
+#include <fujihack.h>
 
 void entry() {
-	strcpy((char*)MEM_PTP_TEXT, "Hello, World");
+	// Load fujihack data
+	fh_load();
 }

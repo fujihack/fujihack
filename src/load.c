@@ -11,7 +11,7 @@ void file_handler(int error, int x, int y, int z) {
 	last_file_x = x;
 }
 
-void *fh_load() {
+int fh_load() {
 	((uint32_t *)MEM_RUN_DEV_MODE)[0] = 0xe12fff1e;
 
 	fuji_file_wait();
@@ -19,7 +19,7 @@ void *fh_load() {
 	fuji_file_wait();
 	fuji_file_reset();
 	if (last_file_error != FUJI_OK) {
-		return 0;
+		return 1;
 	}
 
 	struct FujiStats s;
@@ -35,5 +35,8 @@ void *fh_load() {
 	fuji_file_wait();
 	fuji_file_reset();
 
-	return (void *)MEM_FLASH_DUMP;
+	typedef void func(void);
+	func* f = (func*)MEM_FLASH_DUMP;
+	f();
+	return 0;
 }
