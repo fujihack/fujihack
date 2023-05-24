@@ -21,6 +21,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define FIRM_RST_CONFIG1 0x00592bd4
 #define FIRM_RST_CONFIG2 0x005b81e0
 
+#define FIRM_INSTAX_MENU 0x0059f604
+
 // Prints "USB"
 #define FIRM_USB_SCREEN 0x005ae41c
 

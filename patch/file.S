@@ -3,7 +3,12 @@
 
 .global _start
 _start:
-	push {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, lr}
+	push {r1, r2, r3, r4, r5, r6, r7, r8, sb, sl, fp, lr}
+
+	mov r0, #0xf
+	bl FIRM_RST_CONFIG1
+	mov r0, #0xf
+	bl FIRM_RST_CONFIG2
 
 	ldr r9, _fuji_file_reset
 	ldr r7, _fuji_file_wait
@@ -21,7 +26,7 @@ _start:
 	blx r9 // fuji_file_reset()
 
 
-	ldr r8, temp_buf // load addr buffer
+	ldrb r8, err_code // load addr buffer
 	cmp r8, #0x0 // is err clear?
 	bne err
 
@@ -52,21 +57,30 @@ _start:
 	// call read contents
 	ldr r3, temp_buf
 	blx r3
-	
+
+	// Default success message
+	adr r2, message
 	b quit
 
+	// Err message
 	err:
-	// TODO: brief error message
+	adr r2, err_msg
 
+	// Always print text when quit
 	quit:
-	pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, pc}
+	mov r0, #0x3
+	mov r1, #0x3
+	bl FIRM_RST_WRITE
+	
+	mov r0, #0x0
+	pop {r1, r2, r3, r4, r5, r6, r7, r8, sb, sl, fp, pc}
 
 // Handler to store IO result in temp buffer
 handler:
 	push {r1, lr}
 
-	adr r1, temp_buf
-	str r0, [r1]
+	adr r1, err_code
+	strb r0, [r1]
 
 	ldr r1, _fuji_file_reset
 	blx r1
@@ -82,4 +96,8 @@ _fuji_fclose: .int fuji_fclose
 
 temp_buf: .int MEM_FLASH_DUMP
 
+// Doesn't need to be aligned
+err_code: .byte 0x0
 filename: .string "C:\\DCAA\\AUTO_ACT.SCR"
+message: .string "Fujihacked!"
+err_msg: .string "File Err!"
