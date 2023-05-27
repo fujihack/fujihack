@@ -7,7 +7,7 @@ FRONTIER=$(TOPL)frontier
 FRONTIER_CORE=$(FRONTIER)/src/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
-HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o
+HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o remap.o video.o
 HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o ui.o)
 #HACK_BIN_DEPS+=$(addprefix $(FRONTIER_JS),mjs.o)
 

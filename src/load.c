@@ -12,7 +12,12 @@ void file_handler(int error, int x, int y, int z) {
 }
 
 int fh_load() {
-	((uint32_t *)MEM_RUN_DEV_MODE)[0] = 0xe12fff1e;
+	// Temporary disable the menu while writing
+	//((uint32_t *)MEM_RUN_DEV_MODE)[0] = 0xe12fff1e;
+
+
+	//char export[] = {0x0, 0x0, 0xa0, 0xe3, 0x1e, 0xff, 0x2f, 0xe1, };
+	//memcpy((uint32_t *)MEM_RUN_DEV_MODE, export, sizeof(export));
 
 	fuji_file_wait();
 	int fp = fuji_fopen(file_handler, "C:\\DCAA\\AUTO_ACT.SCR", 0);

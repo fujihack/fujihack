@@ -7,7 +7,7 @@
 
 // No data before _start!
 _start:
-	push {r1, r2, r3, r4, r5, r6, lr}
+	push {r1, r2, r3, r4, r5, r6, r7, r8, sb, sl, fp, lr}
 
 	// Need to fix up GOT first. It has addresses starting from the
 	// beginning of the file, not PC relative. This code fixes it.
@@ -45,4 +45,4 @@ _start:
 		
 	bl entry
 
-	pop {r1, r2, r3, r4, r5, r6, pc}
+	pop {r1, r2, r3, r4, r5, r6, r7, r8, sb, sl, fp, pc}

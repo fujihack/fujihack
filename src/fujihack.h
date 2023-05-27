@@ -4,6 +4,9 @@
 
 #include <stdint.h>
 
+int fh_start_remap_shutter();
+int fh_infinite_record_limit();
+
 void memory_dump(char file[], uintptr_t location);
 int cardspeed();
 void enable_script_flag();

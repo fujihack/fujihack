@@ -26,6 +26,8 @@ enum FujiKey {
 	KEY_FN = 0x2f,
 };
 
+void fuji_press_key(int code, int down);
+
 // Returns current drive (DOS style)
 // Crashes without SD card (???)
 char fuji_drive();
@@ -55,6 +57,9 @@ enum FujiFileError {
 // fseek whence
 #define FUJI_FILE_SET 0
 #define FUJI_FILE_CURR 1
+
+#define FUJI_FILE_READ 0
+#define FUJI_FILE_WRITE 1
 
 #define FUJI_FILE_HANDLER void (*handler)(int error, int id, int, int)
 
@@ -105,13 +110,20 @@ struct FujiInputMap {
 	uint32_t c;
 };
 
+struct FujiTaskBuffer {
+	int a;
+	int b;
+	int c;
+	int d;
+	int e;
+};
+
 // Creates a task that is started "ms" miliseconds after this function is called.
 // Returns a task ID, which is used in fuji_wait_task_stop
 // ms: task is called after x ms or called every x ms
 // option1: 0 for timeout delayed call, 1 is for repeating called
-// buf: Pointer to 12 byte structure
 // These were found in firmware by looking at "SoftTimerStart"/"SoftTimerStop"
-int fuji_wait_task_start(int ms, int option1, void (*callback)(), int *buf);
+int fuji_wait_task_start(int ms, int option1, void (*callback)(), struct FujiTaskBuffer *buf);
 int fuji_wait_task_stop(int bufResult);
 
 // Used by OS to decompress firmware from flash (syslog DECE)

@@ -25,7 +25,7 @@ int sys_check_key(int key) {
 	}
 
 	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
-	if (m->key_code == key && m->key_status == 0x80) {
+	if (m->key_code == key && m->key_status == 0x0) {
 		return 1;
 	} else {
 		return 0;

@@ -48,6 +48,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define MEM_TEXT_LAYERS 0x16facb4
 
+#define MEM_GET_REC_LIMIT 0x010e5d2c
+
 #ifdef STUBS
 	#include "stub.h"
 
@@ -83,6 +85,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(sqlite_mallocAlarm, 0x013ed0f0)
 
 	NSTUB(fuji_press_key, 0x00ea93f8)
+	NSTUB(fuji_press_key_keyword, 0x00ea98c4)
 
 	NSTUB(fuji_get_task_id, 0x007332cc)
 #endif
