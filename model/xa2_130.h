@@ -35,11 +35,10 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define MEM_INPUT_MAP 0x00931c80
 
-// sqlite3_mem_methods
-#define SQLITE_MEM_METHODS 0x01427bf8
-
 // temporary flash buffer for decoding
 #define MEM_FLASH_DUMP 0x10000000
+
+#define MEM_EEP_START 0x41acd800
 
 #define MEM_RUN_DEV_MODE 0x00d35774
 
@@ -91,3 +90,6 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #endif
 
 #define MEM_RTOS_FUNCTIONS 0x0004dae0
+
+// sqlite3_mem_methods
+#define SQLITE_MEM_METHODS 0x01427bf8

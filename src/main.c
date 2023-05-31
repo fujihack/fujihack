@@ -17,7 +17,7 @@ int loaded = 0;
 
 int main_menu() {
 	ui_text("Fujihack pre-release - Written by Daniel Cook", 0xffffff);
-	ui_text("Powered by FrontierOS", 0xffffff);
+	ui_text("Running on the Fujifilm X-A2", 0xffffff);
 
 	if (ui_button("Quit all")) {
 		return 1;
@@ -27,9 +27,18 @@ int main_menu() {
 		
 	}
 
+	if (ui_button("Test button 2")) {
+		
+	}
+
 	ui_text("Active hacks:", 0xffff11);
 	ui_text("- Shutter button remap", 0xffff11);
 	ui_text("- Extend record limit", 0xffff11);
+
+	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
+	char buffer[64];
+	sprintf(buffer, "[-] Keys: %X %X", m->key_code, m->key_status);
+	ui_text(buffer, 0xffff11);
 
 	return 0;
 }
@@ -37,12 +46,10 @@ int main_menu() {
 
 int hijack_menu() {
 	if (!loaded) {
-		sys_init_mem();
 		sys_init_bmp();
+		sys_init_mem();
 		ui_reset();
 		loaded = 1;
-
-		fuji_task_sleep(100);
 
 		fh_infinite_record_limit();
 		fh_start_remap_shutter();
@@ -51,8 +58,12 @@ int hijack_menu() {
 	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
 	if (m->key_status == 0x0) {
 		if (ui_frame(main_menu) == 1) {
+			// NOP out function
 			char export[] = {0x0, 0x0, 0xa0, 0xe3, 0x1e, 0xff, 0x2f, 0xe1, };
 			memcpy((void *)MEM_RUN_DEV_MODE, export, sizeof(export));
+
+			// Press back again, to escape from the hijacked menu
+			fuji_press_key_keyword("DISP_B", "ON");
 		}
 	}
 
@@ -67,5 +78,10 @@ void entry(uintptr_t base) {
 		(uint32_t)hijack_menu,
 	};
 
-	memcpy((void *)MEM_RUN_DEV_MODE, inst, sizeof(inst));
+	if (memcmp((void *)MEM_RUN_DEV_MODE, inst, sizeof(inst))) {
+		memcpy((void *)MEM_RUN_DEV_MODE, inst, sizeof(inst));
+		// TODO: Find a way to paint menu after this
+	} else {
+		loaded = 1;
+	}
 }

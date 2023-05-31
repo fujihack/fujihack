@@ -4,6 +4,17 @@
 
 #pragma pack(push, 1)
 
+// Fuji seems indecisive on what buffer to use - below is repeated 3 times @ MEM_OPENGL_BUFFERS
+// but dat1 and dat2 is different. Don't know what it means, or if it's a part of OpenGL itself.
+// Controlled by vglib task.
+struct OpenGLBuffers {
+	uint16_t dat1;
+	uint16_t dat2;
+	uint32_t layer1;
+	uint32_t layer2;
+	uint32_t layer3;
+};
+
 // Screen text
 #define TEXT_BLACK 7
 #define TEXT_BLUE 1
