@@ -22,8 +22,5 @@ jobs:
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         rustup target add armv5te-unknown-linux-musleabi
 
-    - name: Compile firmware utility
-      run: make firm model=xf1_101
-
-    - name: Compile hack.bin
-      run: cd src; make hack.bin model=xf1_101
+    - name: Compile xa2_130
+      run: cd src && make hack.bin model=xa2_130
