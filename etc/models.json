@@ -1,0 +1,394 @@
+[
+  {
+    "name": "GFX 50S",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-Pro2",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-M1",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-E2S",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-A3",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-T3",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-T100",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-T30",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-T2",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-E3",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-A1",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-H1",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "GFX 50R",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-A5",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-A2",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-E2",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-T10",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-T20",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-A10",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X100F",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X30",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-T1",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X100T",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X70",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "XF10",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "FinePix XP120",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "XQ1",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "Finepix XP170",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix XP130",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix XP140 XP141",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": false
+  },
+  {
+    "name": "Finepix XP170",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "Finepix XP170",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "Finepix XP170",
+    "gps_support": false,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "XQ2",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix XP200",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S8400W S8450",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S9900W S9950",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix Z1100EXR",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix F800EXR",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S9900W S9950",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S1",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S8200W",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S9400W S9450",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix F900EXR",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix Z1000EXR",
+    "gps_support": false,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix F1000EXR",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S9400W S9450",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix S8400W S8450",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "FinePix Z2000EXR",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "X-A20",
+    "gps_support": true,
+    "has_bluetooth": false,
+    "capture_support": false,
+    "firm_update_support": false
+  },
+  {
+    "name": "GFX 100",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-A7",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-Pro3",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X100V",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-T200",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  },
+  {
+    "name": "X-T4",
+    "gps_support": true,
+    "has_bluetooth": true,
+    "capture_support": true,
+    "firm_update_support": true
+  }
+]
