@@ -1,12 +1,12 @@
 #ifdef STUB_H
-#error "stub.h included twice. Catastrophic error."
+#error "stub.h included twice. Catastrophic error. Tell daniel if it bursts into flames."
 #endif
 
 #ifndef STUB_H
 #define STUB_H
 
 #ifdef FPIC
-	#warning "This feature is deprecated"
+	#warning "This feature will be deprecated, eventually"
 
 	// Define a trampoline, instead of relying on the
 	// compiler to generate exactly what I want.

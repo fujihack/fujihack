@@ -8,7 +8,7 @@
 void *heap_end = NULL;
 
 void sys_init_mem() {
-	heap_end = (void *)MEM_FLASH_DUMP + (1 * 1024 * 1024);
+	heap_end = (void *)MEM_UNUSED_SPACE + (1 * 1024 * 1024);
 }
 
 void *_sbrk(int incr) {

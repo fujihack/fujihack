@@ -14,9 +14,10 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 #define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 480
 
-// Dead code, can be used as temporary space
+// Dead code on this model, can be used as dummy space
 #define FIRM_IMG_PROPS 0x00598aec
 #define FIRM_IMG_PROPS_MAX 2000
+
 #define FIRM_RST_WRITE 0x005b0388
 #define FIRM_RST_CONFIG1 0x00592bd4
 #define FIRM_RST_CONFIG2 0x005b81e0
@@ -35,8 +36,8 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define MEM_INPUT_MAP 0x00931c80
 
-// temporary flash buffer for decoding
-#define MEM_FLASH_DUMP 0x10000000
+// Quest to find an area that the camera doesn't care about
+#define MEM_UNUSED_SPACE 0x0142a640
 
 #define MEM_EEP_START 0x41acd800
 

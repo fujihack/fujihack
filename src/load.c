@@ -31,7 +31,7 @@ int fh_load() {
 	fuji_fstats(fp, &s, fp);
 
 	fuji_file_wait();
-	fuji_fread(file_handler, fp, s.size, (void *)MEM_FLASH_DUMP);
+	fuji_fread(file_handler, fp, s.size, (void *)MEM_UNUSED_SPACE);
 	fuji_file_wait();
 	fuji_file_reset();
 
@@ -41,7 +41,7 @@ int fh_load() {
 	fuji_file_reset();
 
 	typedef void func(void);
-	func* f = (func*)MEM_FLASH_DUMP;
+	func* f = (func*)MEM_UNUSED_SPACE;
 	f();
 	return 0;
 }

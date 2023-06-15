@@ -94,7 +94,7 @@ _fuji_fopen: .int fuji_fopen
 _fuji_fread: .int fuji_fread
 _fuji_fclose: .int fuji_fclose
 
-temp_buf: .int MEM_FLASH_DUMP
+temp_buf: .int MEM_UNUSED_SPACE
 
 // Doesn't need to be aligned
 err_code: .byte 0x0
