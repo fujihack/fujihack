@@ -6,7 +6,7 @@
 #include <ff_io.h>
 #include <ff_screen.h>
 
-void dump_handler(int error, int x, int y, int z) {
+static void handler(int error, int x, int y, int z) {
 	fuji_file_reset();
 }
 
