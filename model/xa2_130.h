@@ -24,6 +24,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define FIRM_INSTAX_MENU 0x0059f604
 #define FIRM_INSTAX_MENU_MAX 400
+#define MEM_INSTAX_MENU 0x010ff5bc
 
 // Prints "USB"
 #define FIRM_USB_SCREEN 0x005ae41c
@@ -50,6 +51,9 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 
 #define MEM_GET_REC_LIMIT 0x010e5d2c
 
+#define MEM_SEARCHTBL_CALL_HIJACK 0x012598a4
+#define MEM_SEARCHTBL_TASK 0x01259874
+
 #ifdef STUBS
 	#include "stub.h"
 
@@ -73,7 +77,7 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(fuji_io_lock, 0x00649eb4)
 
 	NSTUB(fuji_screen_write, 0x010f0904)
-	NSTUB(fuji_discard_text_buffer, 0x00d3570c)
+	NSTUB(fuji_discard_text_buffer, 0x010f0a70)
 
 	NSTUB(fuji_rst_write, 0x01110340)
 	NSTUB(fuji_rst_config1, 0x010f2b8c)
@@ -85,9 +89,9 @@ https://en.wikipedia.org/wiki/Fujifilm_X-A2
 	NSTUB(sqlite_mallocAlarm, 0x013ed0f0)
 
 	NSTUB(fuji_press_key, 0x00ea93f8)
-	NSTUB(fuji_press_key_keyword, 0x00ea98c4)
+	NSTUB(fuji_press_key_alias, 0x00ea98c4)
 
-	NSTUB(fuji_get_task_id, 0x007332cc)
+	NSTUB(fuji_get_task_id, 0x006f84b8)
 #endif
 
 #define MEM_RTOS_FUNCTIONS 0x0004dae0
