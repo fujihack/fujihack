@@ -23,7 +23,7 @@ int bmp_apply() {
 
 void bmp_pixel(int x, int y, uint32_t rgb) {
 	// Fuji is indecisive about which buffer to use, just painting to both is easier
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		uintptr_t *ptr = (uintptr_t *)(MEM_OPENGL_BUFFERS);
 		screen_buffer = ptr[i];
 
@@ -33,21 +33,21 @@ void bmp_pixel(int x, int y, uint32_t rgb) {
 }
 
 void bmp_clear(uint32_t rgb) {
-	// Just painting to one buffer for this one, a little buggy
-	// TODO: Might be worthwhile to figure out double-buffering
-	uintptr_t *ptr = (uintptr_t *)(MEM_OPENGL_BUFFERS);
-	screen_buffer = ptr[0];
+	for (int i = 0; i < 3; i++) {
+		uintptr_t *ptr = (uintptr_t *)(MEM_OPENGL_BUFFERS);
+		screen_buffer = ptr[i];
 
-	uint32_t *buf = (uint32_t *)((uintptr_t)screen_buffer);
-	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-		buf[i] = rgb;
+		uint32_t *buf = (uint32_t *)((uintptr_t)screen_buffer);
+		for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
+			buf[i] = rgb;
+		}
 	}
 }
 
 int bmp_screen_height() {
-	return 480;
+	return SCREEN_HEIGHT;
 }
 
 int bmp_screen_width() {
-	return 720;
+	return SCREEN_WIDTH;
 }

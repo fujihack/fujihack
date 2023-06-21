@@ -15,7 +15,7 @@ ARMCFLAGS+=-I$(FRONTIER_JS)
 
 #WRAPS=--wrap=_malloc_r
 
-ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5 -fpic
+ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5 -fpic -mapcs-frame
 ARMLDFLAGS+=-T Linker.ld $(WRAPS) -lc -lgcc -lm
 
 ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
@@ -25,10 +25,10 @@ ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
 #ARMCFLAGS+=-fdata-sections -ffunction-sections
 #ARMLDFLAGS+=--gc-sections
 
-dummy: hack.bin
+copy: hack.bin
 	$(TOPL)/ptp/fuji -s hack.bin
 
-clean2:
+clean-all:
 	$(RM) $(HACK_BIN_DEPS)
 
 hack.bin: $(HACK_BIN_DEPS) build-frontier

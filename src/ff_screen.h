@@ -2,6 +2,8 @@
 #ifndef RST_H
 #define RST_H
 
+#include <stdint.h>
+
 #pragma pack(push, 1)
 
 // Fuji seems indecisive on what buffer to use - below is repeated 3 times @ MEM_OPENGL_BUFFERS

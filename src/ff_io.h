@@ -26,6 +26,17 @@ enum FujiKey {
 	KEY_FN = 0x2f,
 };
 
+struct FujiInputMap {
+	uint32_t key_code;
+	uint32_t x;
+	uint32_t key_status;
+	int gyro;
+	int accel;
+	uint32_t a;
+	uint32_t b;
+	uint32_t c;
+};
+
 void fuji_press_key(int code, int down);
 
 // Returns current drive (DOS style)
@@ -83,6 +94,16 @@ void fuji_file_reset();
 int fuji_dir_open(char *first, char *second, char *buffer);
 int fuji_dir_next(char *buffer);
 
+struct FujiEventReq {
+	uint16_t event_code;
+	uint8_t current_tsk_id;
+	uint8_t target_tsk_id;
+	uint32_t target_tsk_id2;
+	uint32_t *unknown;
+};
+
+int fuji_task_event(int id, struct FujiEventReq *req);
+
 // Task creation data struct
 struct FujiTask {
 	uint32_t a;
@@ -93,22 +114,13 @@ struct FujiTask {
 	uint32_t f;
 };
 
+int fuji_get_task_id();
+
 // (Found in script WAIT and WAIT_SET code)
 int fuji_task_sleep(int ms);
 
 // Called to init tasks on startup
 int fuji_create_task(int x, int y, struct FujiTask *task);
-
-struct FujiInputMap {
-	uint32_t key_code;
-	uint32_t x;
-	uint32_t key_status;
-	int gyro;
-	int accel;
-	uint32_t a;
-	uint32_t b;
-	uint32_t c;
-};
 
 struct FujiTaskBuffer {
 	int a;
