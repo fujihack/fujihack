@@ -7,11 +7,23 @@
 
 #include <sys.h>
 #include <ui.h>
+#include <bmp.h>
 
 #include <ff_io.h>
 #include <ff_screen.h>
+#include <ff_task.h>
 
 #include "fujihack.h"
+
+struct FujiTaskBuffer test_task = {0};
+int test_rgb = 0x0;
+void test_task_loop() {
+	char buffer[128];
+	sprintf(buffer, "Task: %d %d", test_task.a, test_task.b);
+	bmp_fill_rect(100, 100, 100, 100, test_rgb);
+	bmp_string(300, 250, buffer, -1);
+	test_rgb += 0x111111;
+}
 
 // TODO: Allow non UI hijack_menu states (modules, button presses)
 // Prevent binary from being loaded every time
@@ -21,12 +33,8 @@ int main_menu() {
 	ui_text("Fujihack pre-release - Written by Daniel Cook", 0xffffff);
 	ui_text("Running on the " MODEL_NAME, 0xffffff);
 
-	if (ui_button("Quit all")) {
-		return 1;
-	}
-
-	if (ui_button("Test button 1")) {
-		
+	if (ui_button("Test multitasking")) {
+		fuji_wait_task_start(100, FUJI_TASK_REPEAT, test_task_loop, &test_task);
 	}
 
 	if (ui_button("Test button 2")) {
@@ -58,7 +66,7 @@ int hijack_menu() {
 		// First keypress after pressing menu should be from "Press any key to continue"
 		// The menu will not be rendered until 
 		ui_reset();
-		main_menu();
+		bmp_clear(0);
 		return 1;
 	}
 
@@ -83,9 +91,15 @@ int hijack_menu() {
 	}
 
 	if (m->key_status == 0x0) {
-		if (ui_frame(main_menu) == 1) {
-			// Quit button does nothing for now
+		ui_reset();
+
+		int key = ui_process_key();
+		if (key == SYS_BUTTON_QUIT) {
+			return 1;
 		}
+
+		bmp_clear(0);
+		int rc = ui_update(main_menu);
 	}
 
 	return 1;
@@ -96,6 +110,8 @@ void intro_screen() {
 	bmp_clear(0);
 	//bmp_string(50, 10, "Press any button to continue.", 0xffffffff);
 }
+
+void entry();
 
 int menu_dont_load() {
 	fuji_rst_config1(0xf);

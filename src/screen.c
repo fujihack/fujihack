@@ -22,7 +22,8 @@ int bmp_apply() {
 }
 
 void bmp_pixel(int x, int y, uint32_t rgb) {
-	// Fuji is indecisive about which buffer to use, just painting to both is easier
+	// Fuji uses 3 buffers for double buffering. Need to paint to all 3 since I don't
+	// know how to do double buffering.
 	for (int i = 0; i < 3; i++) {
 		uintptr_t *ptr = (uintptr_t *)(MEM_OPENGL_BUFFERS);
 		screen_buffer = ptr[i];

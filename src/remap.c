@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include <ff_io.h>
+#include <ff_task.h>
 
 static struct FujiTaskBuffer buf;
 
@@ -13,8 +14,8 @@ static void remap_func() {
 	struct FujiInputMap *f = (struct FujiInputMap *)MEM_INPUT_MAP;
 	// Listen for OK
 	if (last_input == 0x816 && f->key_code == 1 && f->key_status == 0 && last_key_status == 0) {
-		fuji_press_key_keyword("S2", "ON");
-		fuji_press_key_keyword("S2", "OFF");
+		fuji_press_key_alias("S2", "ON");
+		fuji_press_key_alias("S2", "OFF");
 		last_input = 0;
 		last_key_status = -1;
 	}

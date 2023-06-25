@@ -5,6 +5,7 @@
 #include <bmp.h>
 
 #include "ff_io.h"
+#include "ff_task.h"
 #include "ff_screen.h"
 #include "ff_sqlite.h"
 
@@ -36,31 +37,9 @@ void fuji_screen_write_(char *text, int x, int y, int fg, int bg) {
 }
 #endif
 
-int stop_logs = 0;
-int col_y = 1;
-void screen_log(char *string) {
-	if (string == 0) return;
-	if (string[0] == '@') return;
 
-	char max[32];
-	memcpy(max, string, 32);
-	max[31] = '\0';
-
-	bmp_string(10, 10 + (18 * col_y), max, 0xffffff);
-
-	if (col_y == 24) {
-		col_y = 0;
-		bmp_clear(0);
-	} else {
-		col_y++;
-	}
-
-	fuji_task_sleep(0);
-	bmp_apply();
-}
-
-void uart_str(char *string) {
-	screen_log(string);
+void uart_str(const char *string) {
+	// TODO: Log?
 }
 
 int printf(const char *format, ...) {

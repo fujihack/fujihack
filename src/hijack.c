@@ -1,3 +1,4 @@
+// Handy on-the-fly asm hijacks
 #include <stdint.h>
 
 void generate_branch(void *base, void *to, void *buffer) {

@@ -4,12 +4,20 @@
 
 #include <stdint.h>
 
+#include "ff_sqlite.h"
+
+struct FujihackState {
+	uint32_t activated;
+	void *settings_ptr;
+};
+
 int fh_start_remap_shutter();
 int fh_infinite_record_limit();
 
-void memory_dump(char file[], uintptr_t location);
-int cardspeed();
-void enable_script_flag();
+void fh_dump_ram();
+
+//int cardspeed();
+//void enable_script_flag();
 
 #define SCREENWRT(x, y, ...) \
 	{char scdbg_buffer[64]; \

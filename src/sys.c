@@ -5,7 +5,9 @@
 #include <sys/stat.h>
 
 #include <sys.h>
-#include "ff_io.h"
+
+#include <ff_io.h>
+#include <ff_task.h>
 
 int sys_check_key(int key) {
 	if (key == SYS_BUTTON_QUIT) {
@@ -38,7 +40,7 @@ void msleep(int ms) {
 
 // TODO: move to assembly
 void exit(int status) {
-
+	while (1) {}
 }
 
 void abort() {

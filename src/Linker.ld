@@ -3,6 +3,7 @@ OUTPUT_ARCH(arm)
 ENTRY(_start)
 
 SECTIONS {
+	/* TODO: Make CPP symbol */
 	. = 0x0142a640;
 
 	.text : { *(.text) }
