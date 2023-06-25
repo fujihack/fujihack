@@ -42,7 +42,7 @@ build-fuji:
 	$(CD) $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
 
 build-frontier:
-	$(CD) $(TOPL)/frontier && $(MAKE) pack.o
+	$(CD) $(TOPL)/frontier/tool && $(MAKE)
 
 # phony target to load hack onto camera (PTP/USB)
 hack: build-fuji hack.bin
