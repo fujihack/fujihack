@@ -134,3 +134,23 @@ int _lseek(int fd, int offset, uint32_t whence) {
 
 	return opens[fd % sizeof(opens)];
 }
+
+int _stat(const char *path, struct stat *buf) {
+	fuji_file_wait();
+	int fd = fuji_fopen(file_handler, path, 0);
+	fuji_file_wait();
+	fuji_file_reset();
+
+	if (last_file_error != 0) return -1;
+
+	struct FujiStats stats;
+	fuji_fstats(fd, &stats, fd);	
+	buf->st_size = (int)stats.size;
+
+	fuji_file_wait();
+	fuji_fclose(file_handler, fd, 0, 0);
+	fuji_file_wait();
+	fuji_file_reset();
+
+	return 0;
+}

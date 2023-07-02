@@ -15,6 +15,10 @@
 
 #include "fujihack.h"
 
+// TODO: Allow non UI hijack_menu states (modules, button presses)
+// Prevent binary from being loaded every time
+struct FujihackState fh_state = {0};
+
 struct FujiTaskBuffer test_task = {0};
 int test_rgb = 0x0;
 void test_task_loop() {
@@ -25,10 +29,6 @@ void test_task_loop() {
 	test_rgb += 0x111111;
 }
 
-// TODO: Allow non UI hijack_menu states (modules, button presses)
-// Prevent binary from being loaded every time
-int loaded = 0;
-
 int main_menu() {
 	ui_text("Fujihack pre-release - Written by Daniel Cook", 0xffffff);
 	ui_text("Running on the " MODEL_NAME, 0xffffff);
@@ -37,8 +37,9 @@ int main_menu() {
 		fuji_wait_task_start(100, FUJI_TASK_REPEAT, test_task_loop, &test_task);
 	}
 
-	if (ui_button("Test button 2")) {
-		
+	if (ui_button("Test loading app")) {
+		sys_load_app("C:\\hello.elf");
+		ui_text(sys_get_error(), 0xffffff);
 	}
 
 	ui_text("Active hacks:", 0xffff11);
@@ -50,15 +51,22 @@ int main_menu() {
 	sprintf(buffer, "[-] Keys: %X %X", m->key_code, m->key_status);
 	ui_text(buffer, 0xffff11);
 
+	uint8_t *s = sym("bmp_clear");
+	sprintf(buffer, "Test sym for push inst -> %X: %02X %02X %02X %02X\n", s, s[0], s[1], s[2], s[3]);
+	ui_text(buffer, 0xffff11);
+
 	return 0;
 }
 
 int hijack_menu() {
-	if (!loaded) {
-		sys_init_bmp();
+	if (!fh_state.loaded) {
 		sys_init_mem();
+		sys_init_syms();
+		sys_init_bmp();
+
 		ui_reset();
-		loaded = 1;
+
+		fh_state.loaded = 1;
 
 		fh_infinite_record_limit();
 		fh_start_remap_shutter();
@@ -67,6 +75,7 @@ int hijack_menu() {
 		// The menu will not be rendered until 
 		ui_reset();
 		bmp_clear(0);
+		fh_state.active = 1;
 		return 1;
 	}
 
@@ -85,6 +94,7 @@ int hijack_menu() {
 			fuji_press_key_alias("DISP_B", "OFF");
 			fuji_press_key_alias("DISP_B", "ON");
 			fuji_press_key_alias("DISP_B", "OFF");
+			fh_state.active = 0;
 		}
 
 		return 1;

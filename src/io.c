@@ -37,7 +37,6 @@ void fuji_screen_write_(char *text, int x, int y, int fg, int bg) {
 }
 #endif
 
-
 void uart_str(const char *string) {
 	// TODO: Log?
 }
@@ -57,6 +56,23 @@ int printf(const char *format, ...) {
 	return w;
 }
 
+void fh_screendbg(const char *format, ...) {
+	char buffer[512];
+	va_list aptr;
+
+	va_start(aptr, format);
+	int w = vsnprintf(buffer, sizeof(buffer), format, aptr);
+	va_end(aptr);
+
+	buffer[sizeof(buffer) - 1] = '\0';
+
+	fuji_screen_write(buffer, 1, 1, 0, 7);
+}
+
+int sys_debug(const char *format, ...) {
+	// TODO: Optional log
+}
+
 int puts(const char *x) {
 	uart_str(x);
 	return 0;
@@ -65,3 +81,4 @@ int puts(const char *x) {
 int sys_putchar(int c) {
 	return 0;
 }
+

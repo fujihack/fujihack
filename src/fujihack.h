@@ -7,9 +7,13 @@
 #include "ff_sqlite.h"
 
 struct FujihackState {
-	uint32_t activated;
-	void *settings_ptr;
+	uint8_t loaded;
+	uint8_t active;
+	void *keypress_addr;
 };
+extern struct FujihackState fh_state;
+
+void fh_screendbg(const char *format, ...);
 
 int fh_start_remap_shutter();
 int fh_infinite_record_limit();

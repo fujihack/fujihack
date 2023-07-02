@@ -82,3 +82,7 @@ int system(char *x) {
 int mkdir(const char *_path, mode_t __mode) {
 	return -1;
 }
+
+int sys_segment(void *start, uint32_t length) {
+	
+}

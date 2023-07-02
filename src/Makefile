@@ -7,12 +7,12 @@ FRONTIER=$(TOPL)frontier
 FRONTIER_CORE=$(FRONTIER)/src/
 FRONTIER_JS=$(FRONTIER)/mjs/
 
-HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o remap.o video.o
-HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o ui.o)
+HACK_BIN_DEPS=boot.o stub.o file.o main.o sys.o mem.o io.o screen.o remap.o video.o dump.o
+HACK_BIN_DEPS+=$(addprefix $(FRONTIER_CORE),asm.o bmp.o ui.o linker.o sym.o error.o ml.o app.o)
 
 ARMCFLAGS+=-I$(FRONTIER_JS)
 
-ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5 -fpic -mapcs-frame
+ARMCFLAGS+=-include ../model/$(model).h -c -marm -O0 -I$(TOPL)/src -mcpu=cortex-a5 -fpic -mapcs-frame -mabi=aapcs
 ARMLDFLAGS+=-T Linker.ld $(WRAPS) -lc -lgcc -lm
 
 ARMCFLAGS+=-I$(FRONTIER_CORE) -DCS_PLATFORM=0
