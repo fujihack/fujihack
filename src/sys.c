@@ -26,7 +26,7 @@ int sys_check_key(int key) {
 		key = KEY_OK;
 	}
 
-	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
+	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	if (m->key_code == key && m->key_status == 0x0) {
 		return 1;
 	} else {
@@ -48,7 +48,7 @@ void abort() {
 }
 
 long int sys_get_ticks() {
-	return ((long int *)MEM_MS_TIMER)[0];
+	return ((volatile long int *)MEM_MS_TIMER)[0];
 }
 
 int _gettimeofday() {

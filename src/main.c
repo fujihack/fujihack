@@ -46,7 +46,7 @@ int main_menu() {
 	ui_text("- Shutter button remap", 0xffff11);
 	ui_text("- Extend record limit", 0xffff11);
 
-	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
+	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	char buffer[64];
 	sprintf(buffer, "[-] Keys: %X %X", m->key_code, m->key_status);
 	ui_text(buffer, 0xffff11);
@@ -79,7 +79,7 @@ int hijack_menu() {
 		return 1;
 	}
 
-	struct FujiInputMap *m = (struct FujiInputMap *)MEM_INPUT_MAP;
+	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	if (m->key_code == KEY_DISPBACK) {
 		if (m->key_status == 0x80) {
 			// NOP out dev mmode hijack function to disable menu

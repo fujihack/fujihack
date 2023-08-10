@@ -5,6 +5,7 @@
 #include <ff_io.h>
 
 static int record_limit() {
+	// 666 minutes
 	return 60 * 60 * 666;
 }
 

@@ -12,7 +12,7 @@
 // Custom implementation of fuji_screen_write
 #if 0
 void fuji_screen_write_(char *text, int x, int y, int fg, int bg) {
-	struct RstText *rst = (struct RstText *)MEM_TEXT_LAYERS;
+	struct RstText *rst = (volatile struct RstText *)MEM_TEXT_LAYERS;
 	struct RstTextEntry *entry = MEM_TEXT_LAYERS + sizeof(struct RstText);
 	entry[rst->length].y = y * 2 - 1;
 	entry[rst->length].x = x;
