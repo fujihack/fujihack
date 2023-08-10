@@ -3,8 +3,11 @@
 #include <stdint.h>
 
 #include <fujihack.h>
+#include <ff_io.h>
+#include <ff_screen.h>
+#include <hijack.h>
 
 void entry() {
-	// Load fujihack data
-	fh_load();
+	// Overwrite some ptp text
+	strcpy((char*)MEM_PTP_TEXT, "Hello, World");
 }
