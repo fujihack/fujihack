@@ -35,7 +35,7 @@ _start:
 
 	adr r0, handler
 	mov r1, r6 // fd
-	mov r2, #0xffffffff // read -1 bytes (?)
+	mov r2, #0xffffffff // read infinite bytes
 	ldr r3, temp_buf
 	ldr r8, _fuji_fread
 	blx r8 // fuji_fread()

@@ -1,10 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+
 #include <camlib.h>
-#include <ptpbackend.h>
-#include <operations.h>
-#include <ptp.h>
 
 #define FUJI_CREATE_FILE 0x900c // same as 0x100c?
 #define FUJI_UNKNOWN1 0x900d // same as 0x100d?
@@ -145,6 +144,36 @@ int test_upload(struct PtpRuntime *r, char *file) {
 	ptp_device_close(r);
 }
 
+int test_hacks(struct PtpRuntime *r) {
+    FILE* file = fopen("hijack_patch_fit", "rb");
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    unsigned char* buffer = (unsigned char*)malloc(size);
+    fread(buffer, size, 1, file);
+    fclose(file);
+
+	for (int i = 0; i < 15; i++) {
+		((uint32_t *)(buffer + 0x763a7))[i] = 0xfffffff0;
+	}
+
+	printf("Doing-ing special tests...\n");
+	//char data[(0x762f6 + 50)];
+	//memset(data, 0xff, sizeof(data));
+	//int rc = ptp_set_prop_value_data(r, 0xd406, data, sizeof(data));
+	int rc = ptp_set_prop_value_data(r, 0xd406, buffer, 0x80000);
+	if (rc) {
+		printf("Failure\n");
+	}
+	printf("Code: %X\n", ptp_get_return_code(r));
+
+	struct UintArray *arr;
+	rc = ptp_get_storage_ids(r, &arr);
+
+	rc = ptp_get_object_handles(r, arr->data[0], 0, 0, &arr);
+
+}
+
 int main(int argc, char *argv[]) {
 	struct PtpRuntime r;
 	ptp_generic_init(&r);
@@ -169,6 +198,8 @@ int main(int argc, char *argv[]) {
 			return run_code(&r, argv[i + 1]);
 		case 's':
 			return test_upload(&r, argv[i + 1]);
+		case 't':
+			return test_hacks(&r);
 		}
 	}
 }

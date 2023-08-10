@@ -26,7 +26,7 @@ help:
 endif
 
 clean:
-	$(RM) *.elf *.o *.bin $(TOPL)/src/*.elf $(TOPL)/src/*.o $(TOPL)/src/*.bin $(TOPL)/frontier/core/*.o $(TOPL)/frontier/mjs/*.o
+	$(RM) *.elf *.o *.bin $(TOPL)/src/*.elf $(TOPL)/src/*.o $(TOPL)/src/*.bin $(TOPL)/frontier/src/*.o $(TOPL)/frontier/mjs/*.o
 
 ifndef model
 $(error define model via CLI or by config.mak)

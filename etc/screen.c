@@ -3,34 +3,38 @@
 
 #include "../../rawdraw/rawdraw_sf.h"
 
-void HandleKey( int keycode, int bDown ) { }
+// "Seems to work" screen buffer
+#define SCREEN_WIDTH 720/2
+#define SCREEN_HEIGHT 480/2
+
+FILE *fp;
+uint32_t data[SCREEN_WIDTH * SCREEN_HEIGHT];
+int asd = 0;
+
+void HandleKey( int keycode, int bDown ) {
+#if 0
+	if (bDown) return;
+	fseek(fp, 0x20000000+((640 * 320 * 4) * asd), SEEK_SET);
+	printf("%08X\n", 0x20000000+((640 * 320 * 4) * asd));
+	fread(data, 1, sizeof(data), fp);
+	asd++;
+#endif
+}
+
 void HandleButton( int x, int y, int button, int bDown ) { }
 void HandleMotion( int x, int y, int mask ) { }
-void HandleDestroy() { }
-
-// "Seems to work" screen buffer
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 320
-
-#define MEM_SCREEN_BUFFER (0x01901800 + (640 * 4 * 167) - 520)
-#define GET_SCREEN_LAYER(x) (MEM_SCREEN_BUFFER + (SCREEN_WIDTH * SCREEN_HEIGHT * 4) * x)
-
-#define ALL 0x01cebe00
+void HandleDestroy() {}
 
 int main()
 {
-	printf("%X\n", ALL);
-
 	CNFGSetup("Fuji Emulator screen", SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	uint32_t data[SCREEN_WIDTH * SCREEN_HEIGHT];
+	fp = fopen("/home/daniel/Desktop/dump/lv/RAM2.BIN", "rb");
+	if (fp == NULL) return 0;
 
-	FILE *fp = fopen("/home/daniel/Documents/dump/RAM1.BIN", "r");
-	fseek(fp, ALL, SEEK_SET);
+	fseek(fp, 0x2341c000, SEEK_SET);
 	fread(data, 1, sizeof(data), fp);
 	fclose(fp);
-
-	printf("0x%x\n", ALL);
 
 	while(CNFGHandleInput())
 	{
@@ -42,4 +46,6 @@ int main()
 
 		CNFGSwapBuffers();
 	}
+
+	fclose(fp);
 }
