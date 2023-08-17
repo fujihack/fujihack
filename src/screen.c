@@ -5,6 +5,8 @@
 
 uintptr_t screen_buffer;
 int sys_init_bmp() {
+	// Since we write to all buffers, no initialization is needed
+
 	// Write some permanent text so that a new layer is always present
 	//fuji_screen_write("...", 1, 1, 0, 7);
 
@@ -19,10 +21,11 @@ int sys_init_bmp() {
 }
 
 int bmp_apply() {
+	// TODO: Figure out double-buffer
 }
 
 void bmp_pixel(int x, int y, uint32_t rgb) {
-	// Fuji uses 3 buffers for double buffering. Need to paint to all 3 since I don't
+	// Fuji uses 3 buffers for double (triple) buffering. Need to paint to all 3 since I don't
 	// know how to do double buffering.
 	for (int i = 0; i < 3; i++) {
 		volatile uintptr_t *ptr = (volatile uintptr_t *)(MEM_OPENGL_BUFFERS);

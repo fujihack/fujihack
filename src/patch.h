@@ -1,4 +1,4 @@
-// Defines assembly functions in patch files
+// Defines assembly functions in patch .S files
 #ifndef PATCH_H
 #define PATCH_H
 

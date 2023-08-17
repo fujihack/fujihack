@@ -1,3 +1,4 @@
+// Basic button remapping in a background task
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -17,6 +18,7 @@ static int seconds_held = 0;
 static void remap_func() {
 	struct FujiInputMap *f = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 
+	// Countdown to shutter after 7 seconds
 	if (f->key_code == 0x82e && f->key_status == 0) {
 		if (!fh_state.active) fh_screendbg("%d", seconds_held);
 		seconds_held--;

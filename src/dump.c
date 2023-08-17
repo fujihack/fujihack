@@ -19,7 +19,7 @@ void fh_dump_ram() {
 	fuji_file_reset();
 
 	fuji_file_wait();
-	fuji_fwrite(handler, fd, 0x40000000, 0x0);
+	fuji_fwrite(handler, fd, 0x10000000, 0x0);
 	fuji_file_wait();
 	fuji_file_reset();
 

@@ -9,6 +9,9 @@
 #include <hijack.h>
 
 int ping_playcont() {
+	// For some reason, all tasks must 'ping' the playcont task. Otherwise
+	// the camera will freeze. There is a function in the firmware to do this,
+	// but I wanted to understand how to send events properly.
 	uint32_t temp = 0;
 	struct FujiEventReq req = {
 		.event_code = 0xcf01,
@@ -20,6 +23,7 @@ int ping_playcont() {
 	fuji_task_event(4, &req);
 }
 
+// Drop in replacement hack for sqlite task hijack
 int test_task_hijack() {
 	int d = 0;
 	while (1) {

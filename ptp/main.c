@@ -1,3 +1,4 @@
+// Fujihack PTP/USB utility - based on camlib
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -5,8 +6,8 @@
 
 #include <camlib.h>
 
-#define FUJI_CREATE_FILE 0x900c // same as 0x100c?
-#define FUJI_UNKNOWN1 0x900d // same as 0x100d?
+#define FUJI_CREATE_FILE 0x900c
+#define FUJI_UNKNOWN1 0x900d // seems to be mostly similar to 901d
 #define FUJI_WRITE_FILE 0x901d
 
 #define FUJI_HIJACK 0x9805
@@ -82,8 +83,6 @@ int run_code(struct PtpRuntime *r, char *file) {
 	return 0;
 }
 
-#define PTP_OC_Fuji_CreateFile
-
 int test_upload(struct PtpRuntime *r, char *file) {
 	struct UintArray *ids;
 
@@ -104,6 +103,7 @@ int test_upload(struct PtpRuntime *r, char *file) {
 
 	char *string = "AUTO_ACT.SCR";
 
+	// Pack the ObjectInfo structure - this is probably just standard PTP, nothing special
 	char info[256];
 	memset(info, 0, sizeof(info));
 	((uint32_t *)(info))[0] = ids->data[0];
@@ -144,8 +144,9 @@ int test_upload(struct PtpRuntime *r, char *file) {
 	ptp_device_close(r);
 }
 
+// buffer overflow tests - crashes the camera easily
 int test_hacks(struct PtpRuntime *r) {
-    FILE* file = fopen("hijack_patch_fit", "rb");
+    FILE* file = fopen("hijack_patch_fit.bin", "rb");
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
     fseek(file, 0, SEEK_SET);

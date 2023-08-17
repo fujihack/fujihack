@@ -38,13 +38,12 @@ void msleep(int ms) {
 	fuji_task_sleep(ms);
 }
 
-// TODO: move to assembly
 void exit(int status) {
 	while (1) {}
 }
 
 void abort() {
-	
+	while (1) {}
 }
 
 long int sys_get_ticks() {

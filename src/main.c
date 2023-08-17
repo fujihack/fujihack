@@ -16,7 +16,6 @@
 #include "fujihack.h"
 
 // TODO: Allow non UI hijack_menu states (modules, button presses)
-// Prevent binary from being loaded every time
 struct FujihackState fh_state = {0};
 
 struct FujiTaskBuffer test_task = {0};
@@ -89,7 +88,7 @@ int hijack_menu() {
 			};
 			memcpy((void *)MEM_RUN_DEV_MODE, export, sizeof(export));
 
-			// Press back to exit instax menu, general menu
+			// Press back to exit instax menu, then to general menu
 			fuji_press_key_alias("DISP_B", "ON");
 			fuji_press_key_alias("DISP_B", "OFF");
 			fuji_press_key_alias("DISP_B", "ON");
@@ -118,7 +117,6 @@ int hijack_menu() {
 void intro_screen() {
 	sys_init_bmp();
 	bmp_clear(0);
-	//bmp_string(50, 10, "Press any button to continue.", 0xffffffff);
 }
 
 void entry();

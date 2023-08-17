@@ -1,3 +1,4 @@
+// Basic front-end for gnu libc allocation functions
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +9,7 @@
 uint8_t *heap_end = NULL;
 
 void sys_init_mem() {
+	// TODO: Allocate more, this is just a safe estimate
 	heap_end = (uint8_t *)MEM_UNUSED_SPACE + (1 * 1024 * 1024);
 }
 

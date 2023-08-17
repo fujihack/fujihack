@@ -1,3 +1,4 @@
+// Basic etc utils from over the years of research
 #include <string.h>
 
 #include "ff_io.h"

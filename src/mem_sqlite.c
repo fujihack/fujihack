@@ -1,4 +1,5 @@
 // SQLite only has ~2mb allocatable RAM
+// This is deprecated in favor of GNU libc allocation system
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
