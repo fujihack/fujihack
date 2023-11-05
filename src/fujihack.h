@@ -18,7 +18,7 @@ void fh_screendbg(const char *format, ...);
 int fh_start_remap_shutter();
 int fh_infinite_record_limit();
 
-void fh_dump_ram();
+void fh_dump_ram(void *ptr, int length);
 
 //int cardspeed();
 //void enable_script_flag();

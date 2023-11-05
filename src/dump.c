@@ -10,7 +10,7 @@ static void handler(int error, int x, int y, int z) {
 	fuji_file_reset();
 }
 
-void fh_dump_ram() {
+void fh_dump_ram(void *ptr, int length) {
 	fuji_screen_write("Will lock up", 1, 1, 0, 7);
 
 	fuji_file_wait();
@@ -19,7 +19,7 @@ void fh_dump_ram() {
 	fuji_file_reset();
 
 	fuji_file_wait();
-	fuji_fwrite(handler, fd, 0x10000000, 0x0);
+	fuji_fwrite(handler, fd, length, ptr);
 	fuji_file_wait();
 	fuji_file_reset();
 
