@@ -1,3 +1,4 @@
+// Decrypt the 'integers' that the debugger patch produces
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>

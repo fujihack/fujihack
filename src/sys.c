@@ -26,7 +26,7 @@ int sys_check_key(int key) {
 		key = KEY_OK;
 	}
 
-	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
+	volatile struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	if (m->key_code == key && m->key_status == 0x0) {
 		return 1;
 	} else {
@@ -80,8 +80,4 @@ int system(char *x) {
 
 int mkdir(const char *_path, mode_t __mode) {
 	return -1;
-}
-
-int sys_segment(void *start, uint32_t length) {
-	
 }
