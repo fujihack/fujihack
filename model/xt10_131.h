@@ -7,10 +7,10 @@ Fujifilm X-T10
 #define MODEL_CODE "0005100100051002000510040005100500051007000510090005101"
 
 // Code triggered when a picture is taken
-#define FIRM_TAKEPIC 0x0096cc80
+//#define FIRM_TAKEPIC 0x0096cc80
 
 // PTP/USB Code
-#define FIRM_PTP 0x01e7c718
+//#define FIRM_PTP 0x01e7c718
 
 /*
 
