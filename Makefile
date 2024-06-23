@@ -3,11 +3,11 @@
 # Used to get the top level, if in subdir
 TOPL?=.
 
-RUSTC=rustc
-RM=rm -rf
-CP=cp
-PYTHON3=python3
-CD=cd
+RUSTC := rustc
+RM := rm -rf
+CP := cp
+PYTHON3 := python3
+CD := cd
 
 ARMCC?=arm-none-eabi
 
@@ -33,23 +33,29 @@ $(error define model via CLI or by config.mak)
 endif
 
 ifdef WIN
-FUJI_OUT=fuji.exe
+FUJI_OUT := fuji.exe
 else
-FUJI_OUT=fuji
+FUJI_OUT := fuji
 endif
 
 build-fuji:
-	$(CD) $(TOPL)/ptp && $(MAKE) $(FUJI_OUT)
+	$(CD) $(TOPL)/usb && $(MAKE) $(FUJI_OUT)
 
 build-frontier:
 	$(CD) $(TOPL)/frontier/tool && $(MAKE)
 
 # phony target to load hack onto camera (PTP/USB)
 hack: build-fuji hack.bin
-	$(TOPL)/ptp/$(FUJI_OUT) -r hack.bin
+	$(TOPL)/usb/$(FUJI_OUT) -r hack.bin
+
+upload:
+	$(TOPL)/usb/$(FUJI_OUT) -s hack.bin
+
+hack2: hack.bin
+	sudo $(TOPL)/usb/fuji -8 hack.bin
 
 # Changing any of these could make compilation different
-EXTERN_DEPS=Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
+EXTERN_DEPS := Makefile ../model/$(model).h $(wildcard ../patch/*) $(wildcard *.h)
 
 # output rule for C files
 %.o: %.c $(EXTERN_DEPS)

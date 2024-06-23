@@ -1,8 +1,8 @@
 # Fujihack
-Fujihack is a research project that aims to reverse-engineer Fujifilm cameras in order to gain [interoperability](https://en.wikipedia.org/wiki/Interoperability).
+Fujihack is a research project that aims to reverse-engineer Fujifilm cameras in order to understand and improve the firmware.
 
 [Website](https://fujihack.org) &bull;
-[Wiki](https://wiki.fujihack.org/) &bull;
+[Wiki](https://fujihack.github.io/) &bull;
 [Discord server](https://discord.gg/UZXDktvAZP)
 
 This codebase consists of:  
@@ -12,8 +12,8 @@ This codebase consists of:
 - C header files with info & RAM/firmware stubs for each camera model
 - POSIX, Graphics, and I/O APIs over Fujifilm's RTOS API
 - Video record limit mod, button remapping
-- Unfinished UI and module/scripting system
-- Anything else needed to gain interoperability
+- *Frontier*, the UI and module/scripting system
+- Anything else needed to gain [interoperability](https://en.wikipedia.org/wiki/Interoperability)
 
 ## Patching firmware
 - Currently, the only way to run Fujihack is with a patched firmware.

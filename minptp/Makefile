@@ -2,11 +2,7 @@ TOPL=..
 -include ../config.mak
 include ../Makefile
 
-# Add in some files from ../src
-#HACK_BIN_DEPS=boot.o $(addprefix ../src/,lib.o load.o hijack.o dump.o)
-#HACK_BIN_DEPS+=stub.o main.o
-
-HACK_BIN_DEPS := boot2.o main.o stub.o
+HACK_BIN_DEPS := boot.o main.o stub.o
 
 # output rule for C files
 %.o: %.c $(EXTERN_DEPS)

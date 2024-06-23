@@ -29,7 +29,7 @@ void test_task_loop() {
 }
 
 int main_menu() {
-	ui_text("Fujihack pre-release - Written by Daniel Cook", 0xffffff);
+	ui_text("Fujihack - Written by Daniel Cook", 0xffffff);
 	ui_text("Running on the " MODEL_NAME, 0xffffff);
 
 	if (ui_button("Test multitasking")) {
@@ -45,14 +45,14 @@ int main_menu() {
 	ui_text("- Shutter button remap", 0xffff11);
 	ui_text("- Extend record limit", 0xffff11);
 
-	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
+	volatile volatile struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	char buffer[64];
 	sprintf(buffer, "[-] Keys: %X %X", m->key_code, m->key_status);
 	ui_text(buffer, 0xffff11);
 
-	uint8_t *s = sym("bmp_clear");
-	sprintf(buffer, "Test sym for push inst -> %X: %02X %02X %02X %02X\n", s, s[0], s[1], s[2], s[3]);
-	ui_text(buffer, 0xffff11);
+	// uint8_t *s = sym("bmp_clear");
+	// sprintf(buffer, "dlsym test: %X[0] = %02X %02X %02X %02X\n", s, s[0], s[1], s[2], s[3]);
+	// ui_text(buffer, 0xffff11);
 
 	return 0;
 }
@@ -78,7 +78,7 @@ int hijack_menu() {
 		return 1;
 	}
 
-	struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
+	volatile struct FujiInputMap *m = (volatile struct FujiInputMap *)MEM_INPUT_MAP;
 	if (m->key_code == KEY_DISPBACK) {
 		if (m->key_status == 0x80) {
 			// NOP out dev mmode hijack function to disable menu
