@@ -17,15 +17,14 @@ ARMLDFLAGS+=-T Linker.ld $(WRAPS) -lc -lgcc -lm
 #ARMLDFLAGS+=--gc-sections
 
 copy: hack.bin
-	$(TOPL)/ptp/fuji -s hack.bin
+	$(TOPL)/usb/fuji -s hack.bin
 
 clean-all:
 	$(RM) $(HACK_BIN_DEPS)
 
-hack.bin: $(HACK_BIN_DEPS) build-frontier
+hack.bin: $(HACK_BIN_DEPS)
 	$(ARMCC)-ld $(HACK_BIN_DEPS) $(ARMLDFLAGS) -lc -lgcc -o hack.elf
 	$(ARMCC)-objcopy -O binary hack.elf hack.bin
-	$(TOPL)/frontier/tool/frontier.o -i hack.elf -o hack.bin -s
 	$(ARMCC)-size --format=berkeley --target=binary hack.bin
 
 # Compiling rules are defined in ../Makefile

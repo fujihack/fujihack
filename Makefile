@@ -26,7 +26,7 @@ help:
 endif
 
 clean:
-	$(RM) *.elf *.o *.bin $(TOPL)/src/*.elf $(TOPL)/src/*.o $(TOPL)/src/*.bin $(TOPL)/frontier/src/*.o $(TOPL)/frontier/mjs/*.o
+	$(RM) *.elf *.o *.bin $(TOPL)/src/*.elf $(TOPL)/src/*.o $(TOPL)/src/*.bin
 
 ifndef model
 $(error define model via CLI or by config.mak)
@@ -40,9 +40,6 @@ endif
 
 build-fuji:
 	$(CD) $(TOPL)/usb && $(MAKE) $(FUJI_OUT)
-
-build-frontier:
-	$(CD) $(TOPL)/frontier/tool && $(MAKE)
 
 # phony target to load hack onto camera (PTP/USB)
 hack: build-fuji hack.bin
