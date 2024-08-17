@@ -18,12 +18,10 @@ static void remap_func() {
 		if ((port->input & (1 << 10)) == 0) {
 			fuji_press_key_alias("S2", "ON");
 			fuji_press_key_alias("S2", "OFF");
-			seconds_held = COUNTDOWN;
 		}
 	}
 }
 
 int fh_start_remap_shutter() {
-	seconds_held = COUNTDOWN;
 	fuji_wait_task_start(500, 1, &remap_func, &buf);
 }
